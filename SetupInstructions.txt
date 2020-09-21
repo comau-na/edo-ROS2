@@ -1,0 +1,83 @@
+1. set up gazebo9 and get the necessary packages (??)
+    Actually im not even sure that  this is necessary but I guess we'll see
+	With ros kinetic I had to install gazebo_ros_pkgs but with melodic im not sure
+
+2. set up a catkin workspace: 
+
+	$ mkdir -p catkin_ws/src
+	$ cd catkin_ws/src
+	$ catkin_init_workspace
+	$ cd ..
+	$ catkin_make
+	$ source ~/catkin_ws/devel/setup.bash
+
+3. build the github repos	
+	$ cd ~/catkin_ws/src    
+	$ git clone <edo_description, edo_moveit, and edo_gazebo>
+	$ cd ../        // you should be in the catkin_ws folder now
+	$ catkin_make -DCMAKE_BUILD_TYPE=Release
+	$ rosdep install --from-paths src --ignore-src -r -y
+	
+4. run gazebo
+	open 3 terminals
+	
+	in each terminal do "source ~/catkin_ws/devel/setup.bash"
+	then do these 3 commands each in one terminal
+	1. roslaunch edo_gazebo edo.launch
+	2. roslaunch edo_moveit edo_moveit_planning_execution.launch __ns:=edo sim:=true
+	3. roslaunch edo_moveit moveit_rviz.launch __ns:=edo config:=true
+
+5. set up ros1_bridge
+	I just set up a whole new workspace for this so I'll just write exactly what I did
+	
+	$ mkdir -p ~/bridge_ws/src
+	$ cd ../
+	$ colcon build 
+	$ cd src 
+	$ git clone https://github.com/ros2/ros1_bridge.git
+	$ cd ../
+	$ colcon build --symlink-install --packages-skip ros1_bridge  //nothing happened but it was in the tutorial
+	$ . /opt/ros/melodic/setup.bash
+	$ . /opt/ros/eloquent/local_setup.bash
+	$ colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
+	
+	// taken from a website and it seems really useful in setting up everything easily
+	$ echo "source ~/ros1_bridge_ws/install/setup.bash" >> ~/.bashrc
+	$ echo 'alias start_ros1_bridge="( source /opt/ros/melodic/setup.bash && ( roscore & source ~/ros1_bridge_ws/install/setup.bash && sleep 1 && ros2 run ros1_bridge dynamic_bridge --bridge-all-topics ) && killall roscore ) || killall roscore"' >> ~/.bashrc
+	$ source ~/.bashrc  # To enable it for the current terminal
+
+6. run ros1_bridge
+	
+	https://github.com/ros2/ros1_bridge/blob/master/README.md 
+	Read example 1a
+	
+	shell 1:
+	$ . /opt/ros/melodic/setup.bash
+	$ roscore
+	
+	shell 2: 
+	$ . /opt/ros/melodic/setup.bash
+	$ . ~/bridge_ws/install/setup.bash
+	$ export ROS_MASTER_URI=http://localhost:11311
+	$ ros2 run ros1_bridge dynamic_bridge
+	
+	shell 3 (optional just for testing if it works):
+	. /opt/ros/melodic/setup.bash
+	rosrun rospy_tutorials talker
+	
+	shell 4 (optional just for testing if it works):
+	$ . ~/bridge_ws/install/setup.bash
+	$ ros2 run demo_nodes_cpp listener
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
