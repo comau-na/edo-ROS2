@@ -1,0 +1,3 @@
+core_msgs/CartesianPose cartesian_pose
+---
+core_msgs/JointsPositions positions
