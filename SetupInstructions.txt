@@ -15,8 +15,9 @@
 	$ cd ~/catkin_ws/src    
 	$ git clone <edo_description, edo_moveit, and edo_gazebo>
 	$ cd ../        // you should be in the catkin_ws folder now
-	$ catkin_make -DCMAKE_BUILD_TYPE=Release
 	$ rosdep install --from-paths src --ignore-src -r -y
+	$ catkin_make -DCMAKE_BUILD_TYPE=Release
+	
 	
 4. run gazebo
 	open 3 terminals
