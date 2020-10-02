@@ -1,0 +1,13 @@
+[0.042s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.164s] [ 50%] [32mBuilding CXX object CMakeFiles/talker.dir/src/publisher_member_function.cpp.o[0m
+[0.242s] [01m[K/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/publisher_member_function.cpp:20:10:[m[K [01;31m[Kfatal error: [m[Krclcpp/rclcpp.hpp: No such file or directory
+[0.242s]  #include [01;31m[K"rclcpp/rclcpp.hpp"[m[K
+[0.243s]           [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[0.243s] compilation terminated.
+[0.244s] make[2]: *** [CMakeFiles/talker.dir/src/publisher_member_function.cpp.o] Error 1
+[0.244s] CMakeFiles/talker.dir/build.make:62: recipe for target 'CMakeFiles/talker.dir/src/publisher_member_function.cpp.o' failed
+[0.244s] make[1]: *** [CMakeFiles/talker.dir/all] Error 2
+[0.244s] CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/talker.dir/all' failed
+[0.245s] make: *** [all] Error 2
+[0.245s] Makefile:140: recipe for target 'all' failed
+[0.247s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
