@@ -1,0 +1,53 @@
+[0.067s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.075s] CMake Error: The current CMakeCache.txt directory /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeCache.txt is different than the directory /home/maclo4/basic_edo_pub/build/basic_edo_pub where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+[0.128s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[0.186s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.588s] -- Found ament_lint_auto: 0.8.1 (/opt/ros/eloquent/share/ament_lint_auto/cmake)
+[0.794s] -- Added test 'copyright' to check for copyright in CMake / C / C++ / Python code
+[0.819s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[0.822s] -- Configured cppcheck include dirs: 
+[0.839s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[0.846s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.853s] -- Added test 'lint_cmake' to check CMake code style
+[0.857s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[0.876s] -- Added test 'uncrustify' to check C / C++ code style
+[0.879s] -- Added test 'xmllint' to check XML markup files
+[0.889s] -- Configuring done
+[0.932s] -- Generating done
+[0.946s] -- Build files have been written to: /home/maclo4/basic_edo_pub/build/basic_edo_pub
+[1.066s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[1.228s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4
+[1.249s] CMake Error: The current CMakeCache.txt directory /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeCache.txt is different than the directory /home/maclo4/basic_edo_pub/build/basic_edo_pub where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+[1.277s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[1.330s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.678s] -- Found ament_lint_auto: 0.8.1 (/opt/ros/eloquent/share/ament_lint_auto/cmake)
+[1.842s] -- Added test 'copyright' to check for copyright in CMake / C / C++ / Python code
+[1.850s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.850s] -- Configured cppcheck include dirs: 
+[1.863s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[1.865s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.872s] -- Added test 'lint_cmake' to check CMake code style
+[1.873s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[1.881s] -- Added test 'uncrustify' to check C / C++ code style
+[1.884s] -- Added test 'xmllint' to check XML markup files
+[1.886s] -- Configuring done
+[1.893s] -- Generating done
+[1.896s] -- Build files have been written to: /home/maclo4/basic_edo_pub/build/basic_edo_pub
+[1.951s] [36mInstall the project...[0m
+[1.979s] -- Install configuration: ""
+[1.980s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/package_run_dependencies/basic_edo_pub
+[1.980s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/parent_prefix_path/basic_edo_pub
+[1.981s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.sh
+[1.981s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.dsv
+[1.981s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.sh
+[1.982s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.dsv
+[1.982s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.bash
+[1.982s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.sh
+[1.983s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.zsh
+[1.983s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.dsv
+[1.984s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.dsv
+[1.984s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/packages/basic_edo_pub
+[1.984s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig.cmake
+[1.984s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig-version.cmake
+[1.985s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.xml
+[1.994s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4

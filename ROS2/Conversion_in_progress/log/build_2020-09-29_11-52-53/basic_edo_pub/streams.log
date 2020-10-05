@@ -1,0 +1,23 @@
+[0.099s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.192s] CMake Error: The current CMakeCache.txt directory /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeCache.txt is different than the directory /home/maclo4/basic_edo_pub/build/basic_edo_pub where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+[0.382s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.504s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4
+[0.550s] CMake Error: The current CMakeCache.txt directory /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeCache.txt is different than the directory /home/maclo4/basic_edo_pub/build/basic_edo_pub where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+[0.832s] [36mInstall the project...[0m
+[0.851s] -- Install configuration: ""
+[0.858s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/package_run_dependencies/basic_edo_pub
+[0.859s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/parent_prefix_path/basic_edo_pub
+[0.861s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.sh
+[0.861s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.dsv
+[0.866s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.sh
+[0.867s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.dsv
+[0.867s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.bash
+[0.867s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.sh
+[0.868s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.zsh
+[0.869s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.dsv
+[0.870s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.dsv
+[0.870s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/packages/basic_edo_pub
+[0.875s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig.cmake
+[0.876s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig-version.cmake
+[0.877s] -- Up-to-date: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.xml
+[0.882s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4

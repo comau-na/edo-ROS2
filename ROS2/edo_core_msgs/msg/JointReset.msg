@@ -1,0 +1,3 @@
+uint64 joints_mask
+uint32 disengage_steps
+float32 disengage_offset

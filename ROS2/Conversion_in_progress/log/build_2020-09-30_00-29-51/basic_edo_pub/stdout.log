@@ -1,0 +1,6 @@
+-- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Configuring incomplete, errors occurred!
+See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeOutput.log".
+See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeError.log".
+Makefile:266: recipe for target 'cmake_check_build_system' failed

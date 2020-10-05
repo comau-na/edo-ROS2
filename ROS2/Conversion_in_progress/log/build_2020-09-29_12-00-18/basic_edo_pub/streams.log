@@ -1,0 +1,7 @@
+[0.036s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.053s] CMake Error: The current CMakeCache.txt directory /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeCache.txt is different than the directory /home/maclo4/basic_edo_pub/build/basic_edo_pub where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+[0.077s] CMake Error: The source directory "/home/maclo4/basic_edo_pub" does not exist.
+[0.078s] Specify --help for usage, or press the help button on the CMake GUI.
+[0.079s] make: *** [cmake_check_build_system] Error 1
+[0.080s] Makefile:222: recipe for target 'cmake_check_build_system' failed
+[0.083s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '2': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
