@@ -1,0 +1,25 @@
+[0.072s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.419s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[0.567s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[0.888s] Traceback (most recent call last):
+[0.888s]   File "/opt/ros/eloquent/share/ament_cmake_core/cmake/package_templates/templates_2_cmake.py", line 21, in <module>
+[0.889s]     from ament_package.templates import get_environment_hook_template_path
+[0.889s] ModuleNotFoundError: No module named 'ament_package'
+[0.927s] CMake Error at /opt/ros/eloquent/share/ament_cmake_core/cmake/ament_cmake_package_templates-extras.cmake:41 (message):
+[0.927s]   execute_process(/usr/bin/python3
+[0.927s]   /opt/ros/eloquent/share/ament_cmake_core/cmake/package_templates/templates_2_cmake.py
+[0.927s]   /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/ament_cmake_package_templates/templates.cmake)
+[0.927s]   returned error code 1
+[0.928s] Call Stack (most recent call first):
+[0.928s]   /opt/ros/eloquent/share/ament_cmake_core/cmake/ament_cmake_coreConfig.cmake:38 (include)
+[0.928s]   /opt/ros/eloquent/share/ament_cmake/cmake/ament_cmake_export_dependencies-extras.cmake:15 (find_package)
+[0.928s]   /opt/ros/eloquent/share/ament_cmake/cmake/ament_cmakeConfig.cmake:38 (include)
+[0.928s]   CMakeLists.txt:19 (find_package)
+[0.929s] 
+[0.929s] 
+[0.932s] -- Configuring incomplete, errors occurred!
+[0.932s] See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeOutput.log".
+[0.933s] See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeError.log".
+[0.974s] Makefile:266: recipe for target 'cmake_check_build_system' failed
+[0.974s] make: *** [cmake_check_build_system] Error 1
+[0.981s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '2': /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4

@@ -1,0 +1,51 @@
+[0.042s] Invoking command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake /home/maclo4/basic_edo_pub -DCMAKE_INSTALL_PREFIX=/home/maclo4/basic_edo_pub/install/basic_edo_pub
+[0.569s] -- The C compiler identification is GNU 7.5.0
+[0.875s] -- The CXX compiler identification is GNU 7.5.0
+[0.885s] -- Check for working C compiler: /usr/bin/cc
+[1.045s] -- Check for working C compiler: /usr/bin/cc -- works
+[1.047s] -- Detecting C compiler ABI info
+[1.163s] -- Detecting C compiler ABI info - done
+[1.169s] -- Detecting C compile features
+[1.476s] -- Detecting C compile features - done
+[1.479s] -- Check for working CXX compiler: /usr/bin/c++
+[1.620s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[1.621s] -- Detecting CXX compiler ABI info
+[1.737s] -- Detecting CXX compiler ABI info - done
+[1.742s] -- Detecting CXX compile features
+[2.205s] -- Detecting CXX compile features - done
+[2.228s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[2.271s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.9", minimum required is "3") 
+[2.271s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[2.567s] -- Found ament_lint_auto: 0.8.1 (/opt/ros/eloquent/share/ament_lint_auto/cmake)
+[2.732s] -- Added test 'copyright' to check for copyright in CMake / C / C++ / Python code
+[2.742s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[2.743s] -- Configured cppcheck include dirs: 
+[2.748s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[2.755s] -- Added test 'lint_cmake' to check CMake code style
+[2.762s] -- Added test 'uncrustify' to check C / C++ code style
+[2.764s] -- Added test 'xmllint' to check XML markup files
+[2.771s] -- Configuring done
+[2.779s] -- Generating done
+[2.783s] -- Build files have been written to: /home/maclo4/basic_edo_pub/build/basic_edo_pub
+[2.789s] Invoked command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake /home/maclo4/basic_edo_pub -DCMAKE_INSTALL_PREFIX=/home/maclo4/basic_edo_pub/install/basic_edo_pub
+[2.794s] Invoking command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[2.858s] Invoked command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[2.910s] Invoking command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4
+[2.981s] [36mInstall the project...[0m
+[2.995s] -- Install configuration: ""
+[2.996s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/package_run_dependencies/basic_edo_pub
+[2.996s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/parent_prefix_path/basic_edo_pub
+[2.997s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.sh
+[2.997s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.dsv
+[2.998s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.sh
+[2.998s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.dsv
+[2.999s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.bash
+[2.999s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.sh
+[2.999s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.zsh
+[3.000s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.dsv
+[3.000s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.dsv
+[3.001s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/packages/basic_edo_pub
+[3.001s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig.cmake
+[3.001s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig-version.cmake
+[3.002s] -- Installing: /home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.xml
+[3.009s] Invoked command in '/home/maclo4/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/basic_edo_pub/build/basic_edo_pub --target install -- -j4 -l4

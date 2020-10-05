@@ -1,0 +1,46 @@
+[0.045s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake /home/maclo4/edo_manual_ws/src/basic_edo_pub -DCMAKE_INSTALL_PREFIX=/home/maclo4/edo_manual_ws/src/basic_edo_pub/install/basic_edo_pub
+[0.328s] -- The C compiler identification is GNU 7.5.0
+[0.526s] -- The CXX compiler identification is GNU 7.5.0
+[0.531s] -- Check for working C compiler: /usr/bin/cc
+[0.635s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.636s] -- Detecting C compiler ABI info
+[0.730s] -- Detecting C compiler ABI info - done
+[0.737s] -- Detecting C compile features
+[1.088s] -- Detecting C compile features - done
+[1.091s] -- Check for working CXX compiler: /usr/bin/c++
+[1.228s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[1.229s] -- Detecting CXX compiler ABI info
+[1.360s] -- Detecting CXX compiler ABI info - done
+[1.370s] -- Detecting CXX compile features
+[1.850s] -- Detecting CXX compile features - done
+[1.857s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[1.894s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.6.9", minimum required is "3") 
+[1.894s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[2.220s] -- Found ament_lint_auto: 0.8.1 (/opt/ros/eloquent/share/ament_lint_auto/cmake)
+[2.400s] -- Added test 'copyright' to check for copyright in CMake / C / C++ / Python code
+[2.415s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[2.415s] -- Configured cppcheck include dirs: 
+[2.430s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[2.436s] -- Added test 'flake8' to check Python code syntax and style conventions
+[2.440s] -- Added test 'lint_cmake' to check CMake code style
+[2.441s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[2.456s] -- Added test 'uncrustify' to check C / C++ code style
+[2.458s] -- Added test 'xmllint' to check XML markup files
+[2.462s] -- Configuring done
+[2.476s] -- Generating done
+[2.480s] -- Build files have been written to: /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub
+[2.486s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '0': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake /home/maclo4/edo_manual_ws/src/basic_edo_pub -DCMAKE_INSTALL_PREFIX=/home/maclo4/edo_manual_ws/src/basic_edo_pub/install/basic_edo_pub
+[2.493s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[2.571s] [35m[1mScanning dependencies of target talker[0m
+[2.592s] [ 50%] [32mBuilding CXX object CMakeFiles/talker.dir/src/publisher_member_function.cpp.o[0m
+[2.821s] [01m[K/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/publisher_member_function.cpp:20:10:[m[K [01;31m[Kfatal error: [m[Krclcpp/rclcpp.hpp: No such file or directory
+[2.821s]  #include [01;31m[K"rclcpp/rclcpp.hpp"[m[K
+[2.821s]           [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[2.822s] compilation terminated.
+[2.824s] CMakeFiles/talker.dir/build.make:62: recipe for target 'CMakeFiles/talker.dir/src/publisher_member_function.cpp.o' failed
+[2.824s] make[2]: *** [CMakeFiles/talker.dir/src/publisher_member_function.cpp.o] Error 1
+[2.824s] make[1]: *** [CMakeFiles/talker.dir/all] Error 2
+[2.825s] CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/talker.dir/all' failed
+[2.825s] Makefile:140: recipe for target 'all' failed
+[2.825s] make: *** [all] Error 2
+[2.828s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '2': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4

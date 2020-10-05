@@ -1,0 +1,15 @@
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/package_run_dependencies/basic_edo_pub
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/parent_prefix_path/basic_edo_pub
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.sh
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/ament_prefix_path.dsv
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.sh
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/environment/path.dsv
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.bash
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.sh
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.zsh
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/local_setup.dsv
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.dsv
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/ament_index/resource_index/packages/basic_edo_pub
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig.cmake
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/cmake/basic_edo_pubConfig-version.cmake
+/home/maclo4/basic_edo_pub/install/basic_edo_pub/share/basic_edo_pub/package.xml
