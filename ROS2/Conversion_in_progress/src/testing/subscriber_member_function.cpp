@@ -31,19 +31,21 @@ public:
       "machine_state", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
   }
 
-
 private:
   void topic_callback(const edo_core_msgs::msg::MachineState::SharedPtr msg) const
   {
-    RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
+    std::cout << "Current state of machine: " << unsigned(msg->current_state) << std::endl;
+    std::cout << "Current opcode of machine: " << unsigned(msg->opcode) << std::endl;
+    //RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
   }
   rclcpp::Subscription<edo_core_msgs::msg::MachineState>::SharedPtr subscription_;
- 
 };
 
 int main(int argc, char * argv[])
 {
-  edo_core_msgs::msg::MachineState msg;
+
+  std::cout << "start of program" << std::endl;
+  //edo_core_msgs::msg::MachineState msg;
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalSubscriber>());
   rclcpp::shutdown();
