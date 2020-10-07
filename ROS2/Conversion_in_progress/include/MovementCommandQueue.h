@@ -31,7 +31,7 @@ struct MovementCommandQueueItem {
 /** @brief This class manages the timing of sending move commands to the e.DO's
  *  "/bridge_move" ROS topic by subscribing to the "/machine_movement_ack" ROS
  *  topic
- */ 
+ */
 class MovementCommandQueue : public rclcpp::Node{
 
 public:
@@ -58,9 +58,11 @@ private:
   std::queue<MovementCommandQueueItem> pendingQueue;          // Pending msg q
   std::queue<MovementCommandQueueItem> waitingReceiveQueue;   // Received msg q
   std::queue<MovementCommandQueueItem> waitingExecutedQueue;  // Executed msg q
-  ros::Subscriber move_ack_sub;                               //
-  ros::Publisher move_ctrl_pub;                               //
-  edo_core_msgs::MovementCommand resetCommand;                // Reset Command
+  rclcpp::Subscription<edo_core_msgs::msg::MovementCommand>::SharedPtr move_ack_sub;
+  rclcpp::Publisher<edo_core_msgs::msg::MovementCommand>::SharedPtr move_ctrl_pub;
+  //ros::Subscriber move_ack_sub;                               //
+  //ros::Publisher move_ctrl_pub;                               //
+  edo_core_msgs::msg::MovementCommand resetCommand;                // Reset Command
 
 };
 
