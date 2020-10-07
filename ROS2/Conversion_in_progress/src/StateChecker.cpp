@@ -5,7 +5,7 @@
  *  @date May 28, 2018
  */
 
-#include "StateChecker.hpp"
+#include "StateChecker.h"
 //#include <memory>
 using std::placeholders::_1;
 
@@ -20,12 +20,12 @@ using std::placeholders::_1;
  *  @return StateChecker object
  *  @exception None
  */
-StateChecker::StateChecker(rclcpp::Node baseNode){
+StateChecker::StateChecker(std::shared_ptr<rclcpp::Node>& baseNode){ //rclcpp::Node &baseNode
       //nh = nh_in;
       //machine_state_sub = nh.subscribe("/machine_state", 10,
       //  &StateChecker::stateCallback, this);
-      //node = baseNode;
-      machine_state_sub = baseNode->create_subscription<edo_core_msgs::msg::MachineState>
+      node = *baseNode;
+      machine_state_sub = node->create_subscription<edo_core_msgs::msg::MachineState>
         ("/machine_state", 10, std::bind(&StateChecker::stateCallback, this, _1));
 
       stateReceived = false;

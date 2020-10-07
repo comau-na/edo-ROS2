@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(basic_edo_pub)
+project(conversion_pkg)
 
 
 
@@ -20,20 +20,26 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(edo_core_msgs REQUIRED)
 
+
+
+
+#add_executable(talker src/publisher_member_function.cpp)
+#ament_target_dependencies(talker rclcpp std_msgs edo_core_msgs)
+
+
+#add_executable(StateCheckerTest src/testing/subscriber_member_function.cpp)
+#add_executable(StateChecker src/StateChecker.cpp)
+#ament_target_dependencies(StateCheckerTest rclcpp std_msgs edo_core_msgs)
+
 add_executable(edo_manual_ctrl src/SampleCLI.cpp)
 ament_target_dependencies(edo_manual_ctrl rclcpp std_msgs edo_core_msgs)
 
-add_executable(talker src/publisher_member_function.cpp)
-ament_target_dependencies(talker rclcpp std_msgs edo_core_msgs)
 
-
-add_executable(StateCheckerTest src/testing/subscriber_member_function.cpp)
-#add_executable(StateChecker src/StateChecker.cpp)
-ament_target_dependencies(StateCheckerTest rclcpp std_msgs edo_core_msgs)
 
 install(TARGETS
-  talker
+  #talker
   StateCheckerTest
+  #edo_manual_ctrl
   DESTINATION lib/${PROJECT_NAME})
 
 
