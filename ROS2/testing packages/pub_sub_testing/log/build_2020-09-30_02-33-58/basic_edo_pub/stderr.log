@@ -1,0 +1,18 @@
+CMake Error at CMakeLists.txt:22 (find_package):
+  By not providing "Findedo_core_msgs.cmake" in CMAKE_MODULE_PATH this
+  project has asked CMake to find a package configuration file provided by
+  "edo_core_msgs", but CMake did not find one.
+
+  Could not find a package configuration file provided by "edo_core_msgs"
+  with any of the following names:
+
+    edo_core_msgsConfig.cmake
+    edo_core_msgs-config.cmake
+
+  Add the installation prefix of "edo_core_msgs" to CMAKE_PREFIX_PATH or set
+  "edo_core_msgs_DIR" to a directory containing one of the above files.  If
+  "edo_core_msgs" provides a separate development package or SDK, be sure it
+  has been installed.
+
+
+make: *** [cmake_check_build_system] Error 1

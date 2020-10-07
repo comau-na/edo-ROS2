@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/publisher_member_function.cpp
+chrono
+-
+functional
+-
+memory
+-
+string
+-
+rclcpp/rclcpp.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/rclcpp/rclcpp.hpp
+std_msgs/msg/string.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/std_msgs/msg/string.hpp
+edo_core_msgs/MovementCommand.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/edo_core_msgs/MovementCommand.hpp
+edo_core_msgs/JointCalibration.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/edo_core_msgs/JointCalibration.hpp
+edo_core_msgs/JointReset.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/edo_core_msgs/JointReset.hpp
+edo_core_msgs/JointInit.hpp
+/home/maclo4/edo_manual_ws/src/basic_edo_pub/src/edo_core_msgs/JointInit.hpp
+

@@ -1,0 +1,31 @@
+[0.146s] Invoking command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4
+[0.501s] -- Found ament_cmake: 0.8.2 (/opt/ros/eloquent/share/ament_cmake/cmake)
+[0.599s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.532s] -- Found rclcpp: 0.8.4 (/opt/ros/eloquent/share/rclcpp/cmake)
+[1.616s] -- Found rosidl_adapter: 0.8.2 (/opt/ros/eloquent/share/rosidl_adapter/cmake)
+[1.859s] -- Found rmw_implementation_cmake: 0.8.1 (/opt/ros/eloquent/share/rmw_implementation_cmake/cmake)
+[1.870s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[2.042s] -- Found std_msgs: 0.8.1 (/opt/ros/eloquent/share/std_msgs/cmake)
+[2.127s] CMake Error at CMakeLists.txt:22 (find_package):
+[2.127s]   By not providing "Findedo_core_msgs.cmake" in CMAKE_MODULE_PATH this
+[2.127s]   project has asked CMake to find a package configuration file provided by
+[2.127s]   "edo_core_msgs", but CMake did not find one.
+[2.128s] 
+[2.128s]   Could not find a package configuration file provided by "edo_core_msgs"
+[2.128s]   with any of the following names:
+[2.129s] 
+[2.130s]     edo_core_msgsConfig.cmake
+[2.130s]     edo_core_msgs-config.cmake
+[2.131s] 
+[2.131s]   Add the installation prefix of "edo_core_msgs" to CMAKE_PREFIX_PATH or set
+[2.131s]   "edo_core_msgs_DIR" to a directory containing one of the above files.  If
+[2.131s]   "edo_core_msgs" provides a separate development package or SDK, be sure it
+[2.132s]   has been installed.
+[2.132s] 
+[2.132s] 
+[2.132s] -- Configuring incomplete, errors occurred!
+[2.132s] See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeOutput.log".
+[2.132s] See also "/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub/CMakeFiles/CMakeError.log".
+[2.153s] make: *** [cmake_check_build_system] Error 1
+[2.154s] Makefile:266: recipe for target 'cmake_check_build_system' failed
+[2.159s] Invoked command in '/home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub' returned '2': CMAKE_PREFIX_PATH=/opt/ros/eloquent /usr/bin/cmake --build /home/maclo4/edo_manual_ws/src/basic_edo_pub/build/basic_edo_pub -- -j4 -l4

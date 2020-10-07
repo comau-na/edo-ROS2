@@ -1,0 +1,4 @@
+source;share/basic_edo_pub/local_setup.bash
+source;share/basic_edo_pub/local_setup.dsv
+source;share/basic_edo_pub/local_setup.sh
+source;share/basic_edo_pub/local_setup.zsh
