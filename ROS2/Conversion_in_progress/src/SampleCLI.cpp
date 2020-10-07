@@ -5,7 +5,7 @@
 
 //#include "MovementCommandQueue.h"
 //#include "DataDisplay.h"
-#include "StateChecker.hpp"
+#include "StateChecker.h"
 
 #include "edo_core_msgs/msg/movement_command.hpp"
 #include "edo_core_msgs/msg/joint_calibration.hpp"

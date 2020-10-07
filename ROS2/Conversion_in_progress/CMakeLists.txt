@@ -31,15 +31,15 @@ find_package(edo_core_msgs REQUIRED)
 #add_executable(StateChecker src/StateChecker.cpp)
 #ament_target_dependencies(StateCheckerTest rclcpp std_msgs edo_core_msgs)
 
-add_executable(edo_manual_ctrl src/SampleCLI.cpp)
-ament_target_dependencies(edo_manual_ctrl rclcpp std_msgs edo_core_msgs)
+add_executable(sample_cli src/SampleCLI.cpp)
+ament_target_dependencies(sample_cli rclcpp std_msgs edo_core_msgs)
 
 
 
 install(TARGETS
   #talker
-  StateCheckerTest
-  #edo_manual_ctrl
+  #StateCheckerTest
+  sample_cli
   DESTINATION lib/${PROJECT_NAME})
 
 
