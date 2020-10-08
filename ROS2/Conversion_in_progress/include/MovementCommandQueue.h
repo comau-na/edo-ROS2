@@ -37,18 +37,26 @@ class MovementCommandQueue : public rclcpp::Node{
 public:
 
   // Class constructor takes in existing NodeHandle reference
-  MovementCommandQueue(rclcpp::Node& baseNode);
+  MovementCommandQueue()
+  : Node("movement_command_queue")
+  {
+    move_ack_sub = this->create_subscription("/machine_movement_ack", 100,
+      std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
+    move_ctrl_pub = this->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
+      10,true, this, _1);
+    resetCommand.move_command = 67;
+  }
 
   // Function to publish command to "/bridge_move"
-  void sendMoveCommand(edo_core_msgs::msg::MovementCommand cmd);
+  void sendMoveCommand(edo_core_msgs::msg::MovementCommand cmd){}
 
   // Function to manage sending cancel command which must precede move commands
-  void pushMoveCommand(edo_core_msgs::msg::MovementCommand cmd);
+  void pushMoveCommand(edo_core_msgs::msg::MovementCommand cmd){}
 
   // Callback function to manage queued commands based on MovementFeedback
   // messages from "/machine_movement_ack"
   // Mimics code found in ros.service.ts
-  void moveAckCallback(const edo_core_msgs::msg::MovementFeedback& fb);
+  void moveAckCallback(const edo_core_msgs::msg::MovementFeedback& fb){}
 
   bool stillRunning();
 

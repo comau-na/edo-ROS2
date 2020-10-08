@@ -5,7 +5,7 @@
  *  @date May 28, 2018
  */
 
-#include "MovementCommandQueue.hpp"
+#include "MovementCommandQueue.h"
 
 /***************************************************************
 **                Function(s) Definition
@@ -30,11 +30,24 @@
    resetCommand.move_command = 67;
  } */
 
- MovementCommandQueue::MovementCommandQueue(rclcpp::Node& baseNode) {
-   node = *baseNode;
-   auto move_ack_sub = node->create_subscription("/machine_movement_ack", 100,
-       &MovementCommandQueue::moveAckCallback, this);
-   auto move_ctrl_pub = node->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
-       10,true);
-   resetCommand.move_command = 67;
- }
+ // MovementCommandQueue::MovementCommandQueue(rclcpp::Node& baseNode) {
+ //   node = *baseNode;
+ //   auto move_ack_sub = node->create_subscription("/machine_movement_ack", 100,
+ //       &MovementCommandQueue::moveAckCallback, this);
+ //   auto move_ctrl_pub = node->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
+ //       10,true);
+ //   resetCommand.move_command = 67;
+ // }
+//
+// MovementCommandQueue::MovementCommandQueue()
+// : Node("movement_command_queue")
+// {
+//   move_ack_sub = this->create_subscription("/machine_movement_ack", 100,
+//     std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
+//   move_ctrl_pub = this->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
+//     10,true);
+//   resetCommand.move_command = 67;
+// }
+int main(){
+  return 0;
+}
