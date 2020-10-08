@@ -4,7 +4,7 @@
  *  @author Jack Shelata
  *  @date May 28, 2018
  */
-
+/*
 #include "StateChecker.h"
 //#include <memory>
 using std::placeholders::_1;
@@ -20,7 +20,8 @@ using std::placeholders::_1;
  *  @return StateChecker object
  *  @exception None
  */
-StateChecker::StateChecker(std::shared_ptr<rclcpp::Node>& baseNode){ //rclcpp::Node &baseNode
+/*
+StateChecker::StateChecker(std::__shared_ptr_access<rclcpp::Node, (__gnu_cxx::_Lock_policy)2, false, false>::element_type& baseNode){ //rclcpp::Node &baseNode
       //nh = nh_in;
       //machine_state_sub = nh.subscribe("/machine_state", 10,
       //  &StateChecker::stateCallback, this);
@@ -37,6 +38,8 @@ StateChecker::StateChecker(std::shared_ptr<rclcpp::Node>& baseNode){ //rclcpp::N
  *  @return void
  *  @exception None
  */
+
+ /*
 void StateChecker::stateCallback(const edo_core_msgs::msg::MachineState::SharedPtr state){
       stateReceived = true;
       machine_state = state.current_state;
@@ -47,6 +50,7 @@ void StateChecker::stateCallback(const edo_core_msgs::msg::MachineState::SharedP
  *  @return int - 
  *  @exception None
  */
+/*
 int StateChecker::getState(){
   return machine_state;
 }  // StateChecker::getState()
@@ -56,6 +60,8 @@ int StateChecker::getState(){
  *  @return bool - Value of stateReceived (true if state has been received)
  *  @exception None
  */
+
+/*
 bool StateChecker::getStateReceived(){
   return stateReceived;
 }  // StateChecker::getStateReceived()

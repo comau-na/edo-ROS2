@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(edo_manual_ctrl)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 99)
-endif()
+
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -15,11 +12,36 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+include_directories(include)
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(edo_core_msgs REQUIRED)
+
+
+
+
+#add_executable(talker src/publisher_member_function.cpp)
+#ament_target_dependencies(talker rclcpp std_msgs edo_core_msgs)
+
+
+#add_executable(StateCheckerTest src/testing/subscriber_member_function.cpp)
+#add_executable(StateChecker src/StateChecker.cpp)
+#ament_target_dependencies(StateCheckerTest rclcpp std_msgs edo_core_msgs)
+
+add_executable(sample_cli src/SampleCLI.cpp)
+ament_target_dependencies(sample_cli rclcpp std_msgs edo_core_msgs)
+
+
+
+install(TARGETS
+  #talker
+  #StateCheckerTest
+  sample_cli
+  DESTINATION lib/${PROJECT_NAME})
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

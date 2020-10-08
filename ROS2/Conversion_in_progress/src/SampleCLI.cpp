@@ -25,7 +25,7 @@
 using namespace std::chrono_literals;
 
 
-bool initialStartup(rclcpp::Node node){
+bool initialStartup(rclcpp::executors::SingleThreadedExecutor exec){ //rclcpp::Node node
   //ros::Rate loop_rate(100);
   rclcpp::Rate loop_rate(10);
   return 1;
@@ -112,6 +112,8 @@ int main(int argc, char **argv){
   //ros::NodeHandle nh;
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("edo_manual_ctrl"); 
+  rclcpp::executors::SingleThreadedExecutor exec;
+
 
   std::cout << std::fixed;                // Set precision of decimals to 
   std::cout << std::setprecision(2);      // 2 decimal places for output
@@ -124,7 +126,7 @@ int main(int argc, char **argv){
   }
   */
 
-  StateChecker check(*node);
+ auto subscriber_node = std::make_shared<StateChecker>();
   
   int choice = 0;
 
