@@ -12,8 +12,8 @@
 #include "rclcpp/rclcpp.hpp"
 
 
-#include "edo_core_msgs/MovementCommand.hpp"
-#include "edo_core_msgs/MovementFeedback.hpp"
+#include "edo_core_msgs/msg/movement_command.hpp"
+#include "edo_core_msgs/msg/movement_feedback.hpp"
 #include <iostream>
 #include <queue>
 using std::placeholders::_1;
@@ -37,7 +37,7 @@ class MovementCommandQueue : public rclcpp::Node{
 public:
 
   // Class constructor takes in existing NodeHandle reference
-  MovementCommandQueue(std::shared_ptr<rclcpp::Node>& baseNode);
+  MovementCommandQueue(rclcpp::Node& baseNode);
 
   // Function to publish command to "/bridge_move"
   void sendMoveCommand(edo_core_msgs::msg::MovementCommand cmd);
