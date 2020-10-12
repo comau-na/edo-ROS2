@@ -37,9 +37,10 @@ public:
 private:
   void stateCallback(const edo_core_msgs::msg::MachineState::SharedPtr msg) 
   {
-    stateReceived = true;
+    std::cout << "MachineState: " << msg->current_state << "\n";
+    //RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
+     stateReceived = true;
     machineState = msg->current_state;
-    RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
 
   }
   

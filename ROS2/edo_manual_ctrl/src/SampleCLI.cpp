@@ -6,7 +6,7 @@
 //#include "MovementCommandQueue.h"
 //#include "DataDisplay.h"
 #include "StateChecker.h"
-
+#include "MovementCommandQueue.h"
 #include "edo_core_msgs/msg/movement_command.hpp"
 #include "edo_core_msgs/msg/joint_calibration.hpp"
 #include "edo_core_msgs/msg/joint_reset.hpp"
@@ -27,94 +27,92 @@ using namespace std::chrono_literals;
 
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec){ //rclcpp::Node node
   //ros::Rate loop_rate(100);
-  rclcpp::Rate loop_rate(100);
+  //rclcpp::Rate loop_rate(10000);
 
   auto stateChecker = std::make_shared<StateChecker>();
   std::chrono::nanoseconds timeout;
-  timeout= std::chrono::nanoseconds { 100 };
+  timeout= std::chrono::nanoseconds { 2000000000 };
   exec.add_node(stateChecker);
-
-  int i = 0;
-  while(i<10){
-    exec.spin_once(timeout);
-
-    std::cout << "spun \n";
-    //std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    i++;
-  }
-  return 1;
-  /*
-  StateChecker check(node);
   char option = 'y';
-  do{ 
-    while(!check.getStateReceived()){
-      ros::spinOnce();
-      loop_rate.sleep();
-    }
-    int state = check.getState();
-    switch(state){
 
-      case 0:
-        std::cout << "eDO is in state INIT.\nLaunching calibration...\n";
-        //calibrate(nh, false);
-        return true;          // OK to continue
+  do{
+
+      while(!stateChecker->getStateReceived() ){
+          exec.spin_once(timeout);
+
+          std::cout << "checking machine state... \n";
+          
+          }
+ 
+  
+  
     
-      case 1:
-        std::cout << "eDO is in state NOT_CALIBRATE.\n"
-                  << "Launching calibration...\n";
-        //calibrate(nh, false);
-        return true;          // OK to continue
 
-      case 2:
-        std::cout << "eDO is in state CALIBRATE.\nNo need to calibrate.\n";
-        return true;          // OK to continue
+      //int state = check.getState();
+      int state = stateChecker->getState();
+      switch(state){
+
+        case 0:
+          std::cout << "eDO is in state INIT.\nLaunching calibration...\n";
+          //calibrate(nh, false);
+          return true;          // OK to continue
       
-      case 3:
-        std::cout << "eDO is in state MOVE.\nIs the tablet controller in use?\n"
-                  << "Fetch new state? Enter y/n: ";
-        std::cin >> option;
-        if(option != 'y'){
-          return false;       // Exit
-        }
-        break;                // Check state again
+        case 1:
+          std::cout << "eDO is in state NOT_CALIBRATE.\n"
+                    << "Launching calibration...\n";
+          //calibrate(nh, false);
+          return true;          // OK to continue
 
-      case 4:
-        std::cout << "eDO is in state JOG.\nIs the tablet controller in use?\n"
-                  << "Fetch new state? Enter y/n: ";
-        std::cin >> option;
-        if(option != 'y'){
-          return false;       // Exit
-        }
-        break;                // Check state again
-   
-      case 5:
-        std::cout << "eDO is in state MACHINE_ERROR.\nRestart reccommended.\n"
-                  << "Terminating edo_manual_ctrl";
-        return false;         // Exit
-      
-      case 6:
-        std::cout << "eDO is in state BRAKED.\nRestart reccommended.\n"
-                  << "Terminating edo_manual_ctrl";
-        return false;
+        case 2:
+          std::cout << "eDO is in state CALIBRATE.\nNo need to calibrate.\n";
+          return true;          // OK to continue
+        
+        case 3:
+          std::cout << "eDO is in state MOVE.\nIs the tablet controller in use?\n"
+                    << "Fetch new state? Enter y/n: ";
+          std::cin >> option;
+          if(option != 'y'){
+            return false;       // Exit
+          }
+          break;                // Check state again
 
-      case 255:
-        std::cout << "eDO is in state COMMAND_STATE.\n"
-                  << "Fetch new state? Enter y/n: ";
-        std::cin >> option;
-        if(option != 'y'){
-          return false;       // Exit
-        }
-        break;                // Check state again
+        case 4:
+          std::cout << "eDO is in state JOG.\nIs the tablet controller in use?\n"
+                    << "Fetch new state? Enter y/n: ";
+          std::cin >> option;
+          if(option != 'y'){
+            return false;       // Exit
+          }
+          break;                // Check state again
+     
+        case 5:
+          std::cout << "eDO is in state MACHINE_ERROR.\nRestart reccommended.\n"
+                    << "Terminating edo_manual_ctrl";
+          return false;         // Exit
+        
+        case 6:
+          std::cout << "eDO is in state BRAKED.\nRestart reccommended.\n"
+                    << "Terminating edo_manual_ctrl";
+          return false;
 
-      default:
-        std::cout << "eDO is in an unknown state.\nRestart recommended.\n"
-                  << "Terminating edo_manual_ctrl";
-        return false;
+        case 255:
+          std::cout << "eDO is in state COMMAND_STATE.\n"
+                    << "Fetch new state? Enter y/n: ";
+          std::cin >> option;
+          if(option != 'y'){
+            return false;       // Exit
+          }
+          break;                // Check state again
 
-    }  // switch(state)
+        default:
+          std::cout << "eDO is in an unknown state.\nRestart recommended.\n"
+                    << "Terminating edo_manual_ctrl";
+          return false;
+
+      }  // switch(state)
   } while(option == 'y');
-  */
-
+  
+return false;
 }  // initialStartup()
 
 
