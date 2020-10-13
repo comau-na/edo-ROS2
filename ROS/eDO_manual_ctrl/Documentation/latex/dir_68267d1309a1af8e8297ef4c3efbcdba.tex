@@ -1,0 +1,23 @@
+\hypertarget{dir_68267d1309a1af8e8297ef4c3efbcdba}{}\section{src Directory Reference}
+\label{dir_68267d1309a1af8e8297ef4c3efbcdba}\index{src Directory Reference@{src Directory Reference}}
+Directory dependency graph for src\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=134pt]{dir_68267d1309a1af8e8297ef4c3efbcdba_dep}
+\end{center}
+\end{figure}
+\subsection*{Files}
+\begin{DoxyCompactItemize}
+\item 
+file \hyperlink{DataDisplay_8cpp}{Data\+Display.\+cpp}
+\begin{DoxyCompactList}\small\item\em Class implementation for \hyperlink{classDataDisplay}{Data\+Display}. Used to get cartesian, joint, and machine state data from e.\+DO. \end{DoxyCompactList}\item 
+file \hyperlink{edo__manual__ctrl_8cpp}{edo\+\_\+manual\+\_\+ctrl.\+cpp}
+\begin{DoxyCompactList}\small\item\em R\+OS node allows for e.\+DO to be controlled via Linux terminal. This file and the classes that it uses were created to eliminate the e.\+DO\textquotesingle{}s dependency on its Android tablet application and allow it to be controlled via Linux terminal. This node has all of the basic functionality provided by the Android application and can be helpful in understanding how the e.\+DO Robot can be controlled by any R\+OS compatible program. \end{DoxyCompactList}\item 
+file \hyperlink{MovementCommandQueue_8cpp}{Movement\+Command\+Queue.\+cpp}
+\begin{DoxyCompactList}\small\item\em Class implementation for \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue}. Used to send move commands to the e.\+DO with proper timing as the Tablet H\+MI does. \end{DoxyCompactList}\item 
+file \hyperlink{Relay_8cpp}{Relay.\+cpp}
+\begin{DoxyCompactList}\small\item\em Class reads std\+\_\+msgs\+::\+Int8\+Multi\+Array published by e.\+DO simulation and translates them and sends them to e.\+DO via \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue} class. \end{DoxyCompactList}\item 
+file \hyperlink{StateChecker_8cpp}{State\+Checker.\+cpp}
+\begin{DoxyCompactList}\small\item\em Class implementation for \hyperlink{classStateChecker}{State\+Checker}. Used to check the state of e.\+DO. \end{DoxyCompactList}\end{DoxyCompactItemize}

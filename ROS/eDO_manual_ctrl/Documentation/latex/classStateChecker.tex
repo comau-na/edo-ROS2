@@ -1,0 +1,153 @@
+\hypertarget{classStateChecker}{}\section{State\+Checker Class Reference}
+\label{classStateChecker}\index{State\+Checker@{State\+Checker}}
+
+
+This class creates and stores a R\+OS Subscriber to get the state number of e.\+DO when the edo\+\_\+manual\+\_\+ctrl node is initially started.  
+
+
+
+
+{\ttfamily \#include $<$State\+Checker.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classStateChecker_af833704c06a5bf3ed0dbeac79647a467}{State\+Checker} (ros\+::\+Node\+Handle \&nh\+\_\+in)
+\begin{DoxyCompactList}\small\item\em Construct \hyperlink{classStateChecker}{State\+Checker} object. Constructor creates and initializes subscriber to check the e.\+DO\textquotesingle{}s Machine State. \end{DoxyCompactList}\item 
+void \hyperlink{classStateChecker_a5817a8be3dfba3f1cae465785475d6b0}{state\+Callback} (const edo\+\_\+core\+\_\+msgs\+::\+Machine\+State \&state)
+\begin{DoxyCompactList}\small\item\em Callback function to get and save state number from \char`\"{}/machine\+\_\+state\char`\"{} R\+OS topic. \end{DoxyCompactList}\item 
+int \hyperlink{classStateChecker_aef02374888e148c8bd99f175a73731b8}{get\+State} ()
+\begin{DoxyCompactList}\small\item\em Getter member function to return the saved machine state number. \end{DoxyCompactList}\item 
+bool \hyperlink{classStateChecker_a83de0c83302c06d0a10b358a6e734150}{get\+State\+Received} ()
+\begin{DoxyCompactList}\small\item\em Getter member function to return the state\+Received bool. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class creates and stores a R\+OS Subscriber to get the state number of e.\+DO when the edo\+\_\+manual\+\_\+ctrl node is initially started. 
+
+Definition at line 20 of file State\+Checker.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{State\+Checker@{State\+Checker}!State\+Checker@{State\+Checker}}
+\index{State\+Checker@{State\+Checker}!State\+Checker@{State\+Checker}}
+\subsubsection[{\texorpdfstring{State\+Checker(ros\+::\+Node\+Handle \&nh\+\_\+in)}{StateChecker(ros::NodeHandle &nh_in)}}]{\setlength{\rightskip}{0pt plus 5cm}State\+Checker\+::\+State\+Checker (
+\begin{DoxyParamCaption}
+\item[{ros\+::\+Node\+Handle \&}]{nh\+\_\+in}
+\end{DoxyParamCaption}
+)}\hypertarget{classStateChecker_af833704c06a5bf3ed0dbeac79647a467}{}\label{classStateChecker_af833704c06a5bf3ed0dbeac79647a467}
+
+
+Construct \hyperlink{classStateChecker}{State\+Checker} object. Constructor creates and initializes subscriber to check the e.\+DO\textquotesingle{}s Machine State. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nh\+\_\+in} & -\/ R\+OS Node\+Handle object by reference to create R\+OS Subscriber \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classStateChecker}{State\+Checker} object 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em None} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 20 of file State\+Checker.\+cpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{State\+Checker@{State\+Checker}!get\+State@{get\+State}}
+\index{get\+State@{get\+State}!State\+Checker@{State\+Checker}}
+\subsubsection[{\texorpdfstring{get\+State()}{getState()}}]{\setlength{\rightskip}{0pt plus 5cm}int State\+Checker\+::get\+State (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classStateChecker_aef02374888e148c8bd99f175a73731b8}{}\label{classStateChecker_aef02374888e148c8bd99f175a73731b8}
+
+
+Getter member function to return the saved machine state number. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em None} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em None} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 43 of file State\+Checker.\+cpp.
+
+\index{State\+Checker@{State\+Checker}!get\+State\+Received@{get\+State\+Received}}
+\index{get\+State\+Received@{get\+State\+Received}!State\+Checker@{State\+Checker}}
+\subsubsection[{\texorpdfstring{get\+State\+Received()}{getStateReceived()}}]{\setlength{\rightskip}{0pt plus 5cm}bool State\+Checker\+::get\+State\+Received (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classStateChecker_a83de0c83302c06d0a10b358a6e734150}{}\label{classStateChecker_a83de0c83302c06d0a10b358a6e734150}
+
+
+Getter member function to return the state\+Received bool. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em None} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ Value of state\+Received (true if state has been received) 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em None} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 52 of file State\+Checker.\+cpp.
+
+\index{State\+Checker@{State\+Checker}!state\+Callback@{state\+Callback}}
+\index{state\+Callback@{state\+Callback}!State\+Checker@{State\+Checker}}
+\subsubsection[{\texorpdfstring{state\+Callback(const edo\+\_\+core\+\_\+msgs\+::\+Machine\+State \&state)}{stateCallback(const edo_core_msgs::MachineState &state)}}]{\setlength{\rightskip}{0pt plus 5cm}void State\+Checker\+::state\+Callback (
+\begin{DoxyParamCaption}
+\item[{const edo\+\_\+core\+\_\+msgs\+::\+Machine\+State \&}]{state}
+\end{DoxyParamCaption}
+)}\hypertarget{classStateChecker_a5817a8be3dfba3f1cae465785475d6b0}{}\label{classStateChecker_a5817a8be3dfba3f1cae465785475d6b0}
+
+
+Callback function to get and save state number from \char`\"{}/machine\+\_\+state\char`\"{} R\+OS topic. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & -\/ Machine\+State message type from \char`\"{}/machine\+\_\+state\char`\"{} R\+OS topic \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em None} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 33 of file State\+Checker.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{StateChecker_8h}{State\+Checker.\+h}\item 
+src/\hyperlink{StateChecker_8cpp}{State\+Checker.\+cpp}\end{DoxyCompactItemize}

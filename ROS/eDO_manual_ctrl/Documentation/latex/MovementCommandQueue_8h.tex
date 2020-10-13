@@ -1,0 +1,45 @@
+\hypertarget{MovementCommandQueue_8h}{}\section{include/\+Movement\+Command\+Queue.h File Reference}
+\label{MovementCommandQueue_8h}\index{include/\+Movement\+Command\+Queue.\+h@{include/\+Movement\+Command\+Queue.\+h}}
+
+
+Class definition for \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue}.  
+
+
+{\ttfamily \#include $<$ros/ros.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}edo\+\_\+core\+\_\+msgs/\+Movement\+Command.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}edo\+\_\+core\+\_\+msgs/\+Movement\+Feedback.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$queue$>$}\\*
+Include dependency graph for Movement\+Command\+Queue.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{MovementCommandQueue_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{MovementCommandQueue_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structMovementCommandQueueItem}{Movement\+Command\+Queue\+Item}
+\begin{DoxyCompactList}\small\item\em Struct to hold information in the \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue} class object. \end{DoxyCompactList}\item 
+class \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue}
+\begin{DoxyCompactList}\small\item\em This class manages the timing of sending move commands to the e.\+DO\textquotesingle{}s \char`\"{}/bridge\+\_\+move\char`\"{} R\+OS topic by subscribing to the \char`\"{}/machine\+\_\+movement\+\_\+ack\char`\"{} R\+OS topic. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class definition for \hyperlink{classMovementCommandQueue}{Movement\+Command\+Queue}. 
+
+\begin{DoxyAuthor}{Author}
+Jack Shelata 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+May 28, 2018 
+\end{DoxyDate}
