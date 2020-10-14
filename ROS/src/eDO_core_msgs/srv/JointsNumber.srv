@@ -1,0 +1,4 @@
+---
+int8 counter
+uint32 joints_mask
+uint32 joints_aux_mask

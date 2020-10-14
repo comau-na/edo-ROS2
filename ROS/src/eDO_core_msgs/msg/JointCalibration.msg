@@ -1,0 +1,1 @@
+uint64 joints_mask
