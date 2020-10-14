@@ -1,0 +1,10 @@
+uint8 move_command
+uint8 move_type
+uint8 ovr
+uint8 delay
+uint8 remote_tool
+float32 cartesian_linear_speed
+edo_core_msgs/Point target
+edo_core_msgs/Point via
+edo_core_msgs/Frame tool
+edo_core_msgs/Frame frame

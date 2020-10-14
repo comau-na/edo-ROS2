@@ -1,0 +1,3 @@
+edo_core_msgs/CartesianPose cartesian_pose
+---
+edo_core_msgs/JointsPositions positions
