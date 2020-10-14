@@ -1,4 +1,4 @@
-
+iMxzv!ZG7EYs9X
 
 /***************************************************************
 **                Function(s) Definition
@@ -14,7 +14,7 @@
 
 #include "DataDisplay.h"
 
-
+using std::placeholders::_1;
 
 /**
 DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
@@ -33,12 +33,16 @@ DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
 
 */
 
-DataDisplay::DataDisplay(rclcpp::Node& baseNode){
+DataDisplay::DataDisplay()
+: Node("data_display")
+{
 
-  node = *baseNode;
-  auto cartesian_pose_sub = node->create_subscription("/cartesian_pose", 10, &DataDisplay::printPoseData, this);
-  auto machine_state_sub = node->create_subscription("/macine_state"), 10, &DataDisplay::printState, this);
-  auto joint_pose_sub = node->create_subscription("/machine_algo_jnt_state", 10, &DataDisplay::printJointPose, this);
+  auto cartesian_pose_sub = this->create_subscription<edo_core_msgs::msg::CartesianPose>(
+    "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
+  auto machine_state_sub = this->create_subscription<edo_core_msgs::msg::MachineState>(
+    "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
+  auto joint_pose_sub = this->create_subscription<edo_core_msgs::msg::JointStateArray>(
+    "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose, this,_1));
   cartesianPrinted = false;
   statePrinted = false;
   jointPrinted = false;

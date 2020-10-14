@@ -38,7 +38,7 @@ public:
   // for completion
   // DataDisplay(ros::NodeHandle& nh_in);
 
-  DataDisplay(std::shared_ptr<rclcpp::Node>& baseNode);
+  DataDisplay();;
 
   // Callback function to print CartesianPose message 
   //void printPoseData(const edo_core_msgs::CartesianPose& pose);
