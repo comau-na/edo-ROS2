@@ -1,4 +1,4 @@
-iMxzv!ZG7EYs9X
+
 
 /***************************************************************
 **                Function(s) Definition
@@ -14,7 +14,7 @@ iMxzv!ZG7EYs9X
 
 #include "DataDisplay.h"
 
-using std::placeholders::_1;
+//using std::placeholders::_1;
 
 /**
 DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
@@ -33,15 +33,14 @@ DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
 
 */
 
-DataDisplay::DataDisplay()
-: Node("data_display")
+DataDisplay::DataDisplay(std::shared_ptr<rclcpp::Node> node)
 {
 
-  auto cartesian_pose_sub = this->create_subscription<edo_core_msgs::msg::CartesianPose>(
+  cartesian_pose_sub_ = node->create_subscription<edo_core_msgs::msg::CartesianPose>(
     "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
-  auto machine_state_sub = this->create_subscription<edo_core_msgs::msg::MachineState>(
+  machine_state_sub_ = node->create_subscription<edo_core_msgs::msg::MachineState>(
     "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
-  auto joint_pose_sub = this->create_subscription<edo_core_msgs::msg::JointStateArray>(
+  joint_pose_sub_ = node->create_subscription<edo_core_msgs::msg::JointStateArray>(
     "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose, this,_1));
   cartesianPrinted = false;
   statePrinted = false;
@@ -54,7 +53,7 @@ DataDisplay::DataDisplay()
  *  @return void
  *  @exception None
  */
-void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose& pose){
+void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose){
   if(!cartesianPrinted){
     std::cout << pose << "\n";
     cartesianPrinted = true;
@@ -66,7 +65,7 @@ void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose& pose){
  *  @return void
  *  @exception None
  */
-void DataDisplay::printState(const edo_core_msgs::msg::MachineState& state){
+void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr state){
   if(!statePrinted){
     std::cout << state << "\n";
     statePrinted = true;
@@ -79,11 +78,11 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState& state){
  *  @return void
  *  @exception None
  */
-void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray& pose){
+void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
     std::cout << pose << "\n";
     jointPrinted = true;
-  }
+ }
 }  // DataDisplay::printJointPose()
 
 /** @brief Getter member function to tell whether cartesian data has been
@@ -92,6 +91,7 @@ void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray& pose
  *  @return bool - Value of cartesianPrinted (true if data was printed)
  *  @exception None
  */
+
 bool DataDisplay::getCartesianPrinted(){
   return cartesianPrinted;
 }  // DataDisplay::getCartesianPrinted()
@@ -101,7 +101,7 @@ bool DataDisplay::getCartesianPrinted(){
  *  @param None 
  *  @return bool - Value of statePrinted (true if data was printed)
  *  @exception None
- */
+*/
 bool DataDisplay::getStatePrinted(){
   return statePrinted;
 }  // DataDisplay::getStatePrinted()
@@ -111,7 +111,8 @@ bool DataDisplay::getStatePrinted(){
  *  @param None 
  *  @return bool - Value of jointPrinted (true if data was printed)
  *  @exception None
- */
+*/
 bool DataDisplay::getJointPrinted(){
   return jointPrinted;
 }  // DataDisplay::getJointPrinted()
+ 
