@@ -10,6 +10,7 @@
 #include "edo_core_msgs/msg/joint_calibration.hpp"
 #include "edo_core_msgs/msg/joint_reset.hpp"
 #include "edo_core_msgs/msg/joint_init.hpp"
+
 #include <thread>
 #include <chrono>
 #include <iostream>
@@ -17,216 +18,11 @@
 #include <queue>
 #include <string>
 #include <iomanip>    // Used to set precision of output to 2 decimal places
-#include <ncurses.h>  // Used in the jog function to allow for keystrokes to
+//#include <ncurses.h>  // Used in the jog function to allow for keystrokes to
                       // be captured without an enter press
 
 using namespace std::chrono_literals;
 
-/** @brief Function manages jog command creation. Fills in Jog type values
- *  and returns a message to be filled with velocity values on scale from
- *  -1.0 to 1.0.
- *  @param None
- *  @return MovementCommand - Message defined in edo_core_msgs ROS package
- *  @exception None
- */  
-edo_core_msgs::msg::MovementCommand createJog(){
-  edo_core_msgs::msg::MovementCommand msg;
-  msg.move_command = 74;
-  msg.move_type = 74;
-  msg.ovr = 100;
-  msg.target.data_type = 74;
-  msg.target.joints_mask = 127;
-  msg.target.joints_data.resize(10, 0.0);
-  return msg;
-
-}  // createJog()
-
-/** @brief Function to carry out each button press jog command
- *  @param msg - existing MovementCommand to be edited and sent
- *  @param joint_number - int number of the joint to be moved (1-6)
- *  @param jog_ctrl_pub - ROS Publisher to publish the jog message
- *  "/bridge_jog" ROS topic
- *  @param loop_rate - ROS Rate message for set sleep time
- *  @param velocity - double velocity value for jog
- *  @return void
- *  @exception None
- */  
-void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
-    std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){ 
-  msg.target.joints_data.clear();     
-  msg.target.joints_data.resize(10,0.0);
-  if(joint_number > 0){
-    std::cout << "\rJoint " << joint_number << " + " << velocity << std::flush;
-    msg.target.joints_data[joint_number - 1] = velocity;
-  }
-  else{
-    std::cout << "\rJoint " << -1 * joint_number << " - "
-              << velocity << std::flush;
-    msg.target.joints_data[(-1 * joint_number) - 1] = -1 * velocity;
-  }
-  jog_ctrl_pub->publish(msg);
- // rclcpp::spin_once();
-  loop_rate.sleep();
-}  // jogHelper()
-
-/** @brief Function manages sending jog commands using ncurses library for
- *  push-button key capturing
- *  @param nh - ROS NodeHangle for creating jog publisher
- *  @return void
- *  @exception None
- */  
-void jog(std::shared_ptr<rclcpp::Node> node){
-
-  //ros::Rate loop_rate(100);
-  rclcpp::WallRate loop_rate(100);
-  //ros::Publisher jog_ctrl_pub =  nh.advertise<edo_core_msgs::MovementCommand>("/bridge_jog",10);
-  auto jog_ctrl_pub = node->create_publisher<edo_core_msgs::msg::MovementCommand>("/bridge_jog", 10);
-  edo_core_msgs::msg::MovementCommand msg = createJog();
-  char ch = '\n';     // Char to hold keypress value (Ncurses)
-
-  // Output control information
-  std::cout << "-----\nJog Controls (Press and Hold):\n"
-      << "Joint 1 +/-: 'q'/'a'\n"
-      << "Joint 2 +/-: 'w'/'s'\n" 
-      << "Joint 3 +/-: 'e'/'d'\n"
-      << "Joint 4 +/-: 'r'/'f'\n" 
-      << "Joint 5 +/-: 't'/'g'\n"
-      << "Joint 6 +/-: 'y'/'h'\n"
-      << "gripper open/close-: 'i'/'k'\n"
-      << "Set Velocity +/-: 'u'/'j'\n"
-      << "Exit: 'x'\n-----\n"
-      << "NOTE: VELOCITY STARTS AT 100%\n";
-  while(ch != 'y'){
-    std::cout << "Enter 'y' to continue: ";
-    std::cin >> ch;
-  }
-  ch = '\n';
-  bool last = false;
-  double velocity = 1.0;
-  
-  
-  doupdate();     // Ncurses function to reset window after endwin() has been
-             // called
-  initscr();      // Ncurses function initializes key capture
-  timeout(0);     // Ncurses function set to 0 forces getch() to return
-                  // ERR when no key is pressed instead of waiting for key
-  curs_set(0);    // Ncurses makes the cursor invisible
-  noecho();       // Ncurses function hides pressed keys
- 
-   do {
-    ch = getch(); // Ncurses function returns char of key pressed
-                  // returns ERR when no key press
-    //std::cin >> ch;
-    // Switch decides which joint to move and which direction
-    switch(ch) {
-
-      case 'q':
-      case 'Q':
-        jogHelper(msg, 1, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'a':
-      case 'A':
-        jogHelper(msg, -1, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-            
-      case 'w':
-      case 'W':
-        jogHelper(msg, 2, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 's':
-      case 'S':
-        jogHelper(msg, -2, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;    
-        
-      case 'e':
-      case 'E':
-        jogHelper(msg, 3, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'd':
-      case 'D':
-        jogHelper(msg, -3, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;    
-            
-      case 'r':
-      case 'R':
-        jogHelper(msg, 4, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'f':
-      case 'F':
-        jogHelper(msg, -4, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-        
-      case 't':
-      case 'T':
-        jogHelper(msg, 5, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'g':
-      case 'G':
-        jogHelper(msg, -5, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;    
-  
-      case 'y':
-      case 'Y':
-        jogHelper(msg, 6, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'h':
-      case 'H':
-        jogHelper(msg, -6, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-
-      //Gripper moves
-      case 'i':
-      case 'I':
-        jogHelper(msg, 7, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-          
-      case 'k':
-      case 'K':
-        jogHelper(msg, -7, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
-        break;
-      
-      case 'u':
-      case 'U':
-        if(velocity < 1.0){
-          velocity += 0.05;
-        }
-        std::cout << "\rVelocity: " << velocity << std::flush;
-        break;
-      
-      case 'j':
-      case 'J':
-        if(velocity > 0.05){
-          velocity -= 0.05;
-        }
-        std::cout << "\rVelocity: " << velocity << std::flush;
-        break;
-      
-      
-    }  // switch(choice)
-  } while(ch != 'X' && ch != 'x');
-  endwin(); // Ends ncurses window
-
-}  // jog()
 
 /** @brief Function handles initial callibration
  *  @param nh - ROS NodeHandle for creating Publishers for initializaiton,
@@ -314,7 +110,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   }  
   proceed = '\n';         // Reset char for next prompt
   
-  jog(node);
+  //jog(nh);
   
   while(proceed != 'y'){
     std::cout << "Enter 'y' to send calibration command: ";
@@ -343,11 +139,11 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
   //ros::Rate loop_rate(100);
   //rclcpp::Rate loop_rate(10000);
 
-  auto stateChecker = std::make_shared<StateChecker>(node);
+  auto stateChecker = std::make_shared<StateChecker>();
   //auto stateChecker2 = std::make_shared<StateChecker>();
   std::chrono::nanoseconds timeout;
   timeout= std::chrono::nanoseconds { 2000000000 };
-  exec.add_node(node);
+  exec.add_node(stateChecker);
   char option = 'y';
 
   do{
@@ -429,4 +225,78 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
   
 return false;
 }  // initialStartup()
+
+
+int main(int argc, char **argv){
+  
+  // Initialize "edo_manual_ctrl" ROS node and NodeHandle for Publishers and
+  // Subscribers
+ // ros::init(argc, argv, "edo_manual_ctrl");
+  //ros::NodeHandle nh;
+  rclcpp::init(argc, argv);
+  auto node = rclcpp::Node::make_shared("edo_manual_ctrl"); 
+  rclcpp::executors::SingleThreadedExecutor exec;
+ 
+ // uncomment this if you want to test calibrate alone
+ //calibrate(node, false);
+
+  std::cout << std::fixed;                // Set precision of decimals to 
+  std::cout << std::setprecision(2);      // 2 decimal places for output
+
+  
+ // calibrate(node->get_node_base_interface(), false);
+
+  // Create/run initial startup to check e.DO state and calibrate if necessary
+  // If bad state, exit and return -1
+  // COMMENT THIS OUT IF YOU WANT TO AVOID HAVING TO MANUALLY PUBLISH MESSAGES 
+  // AND ECHO TOPICS. iF YOU WANT TO TEST THAT THIS IS WORKING, OPEN A DIFFERENT 
+  // TERMINAL OR TERMINALS AND USE THE FOLLOWING COMMANDS TO SIMULATE THE SUBSCRIBERS
+  // AND PUBLISHERS THAT WOULD BE IN THE REAL EDO ROBOT:
+  // TERMINAL1: ros2 topic pub /machine_state edo_core_msgs/msg/MachineState '{current_state: 1, opcode: 4}'
+  // TERMINAL2: ros2 topic echo /bridge_init
+  // TERMINAL3: ros2 topic echo /bridge_jnt_reset
+  // TERMINAL4: ros2 topic echo /bridge_jnt_calib
+  // NOTE: IF YOU GET THE ERROR THAT ROS2 CANT FIGURE OUT THE TYPE FOR THE TOPICS, THEN RUN THE COMMANDS 
+  // AFTER YOU HAVE STARTED THIS PROGRAM BUT BEFORE YOU TYPE 'Y' FOR ANY OF THE PROMPTS
+  if(!initialStartup(exec, node)){
+    return -1;
+  }
+  
+
+ 
+  
+  int choice = 0;
+
+  do {
+    std::cout << "1 for jog control\n"
+              << "2 for move control\n"
+              << "3 to re-calibrate\n"
+              << "4 to print eDO data\n"
+              << "-1 to exit: ";
+    std::cin >> choice;
+
+    switch(choice){
+
+    case 1:
+      //jog(nh);
+      break;
+    
+    case 2:
+     // move(nh);
+      break;
+      
+    case 3:
+     // calibrate(nh, true);
+      break;
+
+    case 4:
+     // getData(nh);
+      break;
+ 
+    } // switch(choice)
+  } while(choice != -1);
+
+  return 0;
+}  // main() 
+
 

@@ -1,13 +1,13 @@
 /** @file StateChecker.cpp
  *  @brief Class implementation for StateChecker. Used to check the state of
  *  e.DO
- *  @author Scott Howard, based on work by Jack Shelata
- *  @date 10/15/2020
+ *  @author Jack Shelata
+ *  @date May 28, 2018
  */
-
+/*
 #include "StateChecker.h"
 //#include <memory>
-//using std::placeholders::_1;
+using std::placeholders::_1;
 
 
 /***************************************************************
@@ -20,11 +20,17 @@
  *  @return StateChecker object
  *  @exception None
  */
-  StateChecker::StateChecker(std::shared_ptr<rclcpp::Node> node) //: Node("machine_state_sub")
-  {
-    subscription_ = node->create_subscription<edo_core_msgs::msg::MachineState>(
-      "/machine_state", 10, std::bind(&StateChecker::stateCallback, this, _1));
-  }
+/*
+StateChecker::StateChecker(std::__shared_ptr_access<rclcpp::Node, (__gnu_cxx::_Lock_policy)2, false, false>::element_type& baseNode){ //rclcpp::Node &baseNode
+      //nh = nh_in;
+      //machine_state_sub = nh.subscribe("/machine_state", 10,
+      //  &StateChecker::stateCallback, this);
+      node = *baseNode;
+      machine_state_sub = node->create_subscription<edo_core_msgs::msg::MachineState>
+        ("/machine_state", 10, std::bind(&StateChecker::stateCallback, this, _1));
+
+      stateReceived = false;
+    }  // StateChecker::StateChecker()
 
 /** @brief Callback function to get and save state number from "/machine_state"
  *  ROS topic.
@@ -33,30 +39,43 @@
  *  @exception None
  */
 
- void StateChecker::stateCallback(const edo_core_msgs::msg::MachineState::SharedPtr msg) 
-  {
-    std::cout << "MachineState: " << msg->current_state << "\n";
-    //RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
-     stateReceived = true;
-    machineState = msg->current_state;
+ /*
+void StateChecker::stateCallback(const edo_core_msgs::msg::MachineState::SharedPtr state){
+      stateReceived = true;
+      machine_state = state.current_state;
+    }  // StateChecker::stateCallback()
 
-  }
-  
 /** @brief Getter member function to return the saved machine state number.
  *  @param None
  *  @return int - 
  *  @exception None
  */
+/*
+int StateChecker::getState(){
+  return machine_state;
+}  // StateChecker::getState()
 
-int StateChecker::getState(){return machineState;}
 /** @brief Getter member function to return the stateReceived bool
  *  @param None
  *  @return bool - Value of stateReceived (true if state has been received)
  *  @exception None
  */
 
-int StateChecker::getStateReceived(){return stateReceived;}
+/*
+bool StateChecker::getStateReceived(){
+  return stateReceived;
+}  // StateChecker::getStateReceived()
 
+/*
+int main(int argc, char * argv[])
+{
+  edo_core_msgs::msg::MachineState state;
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<MachineState>());
+  rclcpp::shutdown();
+  return 0;
+}
+*/
 
 
 
