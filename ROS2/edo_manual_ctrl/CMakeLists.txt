@@ -12,46 +12,63 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-include_directories(include)
+
+#######################################################
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(edo_core_msgs REQUIRED)
+find_package(Curses REQUIRED)
+
+#######################################################
+
+include_directories(
+include
+${CURSES_INCLUDE_DIR})
+
+#######################################################
+#    cpp files for classes ############################
+#######################################################
+add_library(CLASS_CPP_FILES SHARED 
+src/StateChecker.cpp
+src/EdoFunctions.cpp)
+
+target_compile_definitions(CLASS_CPP_FILES
+  PRIVATE "MINIMAL_COMPOSITION_DLL")
+target_link_libraries(CLASS_CPP_FILES ${CURSES_LIBRARY})
+ament_target_dependencies(CLASS_CPP_FILES rclcpp edo_core_msgs)
 
 
 
+#######################################################
+#      edo functions ##################################
+#######################################################
+#add_library(EDO_FUNCTIONS SHARED src/EdoFunctions.cpp)
 
-#add_executable(talker src/publisher_member_function.cpp)
-#ament_target_dependencies(talker rclcpp std_msgs edo_core_msgs)
+#target_compile_definitions(EDO_FUNCTIONS
+  #PRIVATE "MINIMAL_COMPOSITION_DLL")
+
+#ament_target_dependencies(EDO_FUNCTIONS rclcpp edo_core_msgs)
 
 
-#add_executable(StateCheckerTest src/testing/subscriber_member_function.cpp)
-#add_executable(StateChecker src/StateChecker.cpp)
-#ament_target_dependencies(StateCheckerTest rclcpp std_msgs edo_core_msgs)
+#######################################################
 
 add_executable(sample_cli src/SampleCLI.cpp)
-ament_target_dependencies(sample_cli rclcpp std_msgs edo_core_msgs)
-
-
+target_link_libraries(sample_cli ${CURSES_LIBRARY} CLASS_CPP_FILES)
+ament_target_dependencies(sample_cli rclcpp std_msgs edo_core_msgs ) 
 
 install(TARGETS
-  #talker
-  #StateCheckerTest
+  CLASS_CPP_FILES
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+install(TARGETS
+
   sample_cli
   DESTINATION lib/${PROJECT_NAME})
 
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
 
 ament_package()
