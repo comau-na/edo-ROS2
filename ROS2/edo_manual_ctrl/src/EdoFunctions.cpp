@@ -4,7 +4,7 @@
 #include "rclcpp/rclcpp.hpp" //ros2
 
 //#include "MovementCommandQueue.h"
-//#include "DataDisplay.h"
+#include "DataDisplay.h"
 #include "StateChecker.h"
 #include "edo_core_msgs/msg/movement_command.hpp"
 #include "edo_core_msgs/msg/joint_calibration.hpp"
@@ -338,6 +338,19 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
 
   
 }  // calibrate()
+
+void getData(std::shared_ptr<rclcpp::Node> node){
+
+  auto dataDisplay = std::make_shared<DataDisplay>(node); 
+
+  DataDisplay data(node);
+  while(rclcpp::ok() && !(data.getCartesianPrinted() &&
+        data.getStatePrinted() && data.getJointPrinted())){
+    rclcpp::spin(node);
+
+    }
+
+  }
 
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){ //rclcpp::Node node
   //ros::Rate loop_rate(100);
