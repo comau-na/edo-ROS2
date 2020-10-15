@@ -39,7 +39,7 @@ MovementCommandQueue::MovementCommandQueue()
 
 
   move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementCommand>(
-    "/machine_movement_ack", 100, std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
+    "/machine_movement_ack", 10, std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
 
     // move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementCommand>(
       // "/machine_movement_ack", 100);
@@ -85,9 +85,8 @@ void MovementCommandQueue::pushMoveCommand(edo_core_msgs::msg::MovementCommand c
  *  @return void
  *  @exception None
  */
-void MovementCommandQueue::moveAckCallback(
-                                    const edo_core_msgs::msg::MovementFeedback::SharedPtr fb){
-  switch(unsigned(fb.type)){
+void MovementCommandQueue::moveAckCallback(const edo_core_msgs::msg::MovementFeedback::SharedPtr fb){
+  switch(unsigned(fb->type)){
 
     case 0:     //Command Received
 
