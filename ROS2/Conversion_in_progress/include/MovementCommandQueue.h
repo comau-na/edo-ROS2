@@ -71,30 +71,9 @@ private:
   //ros::Subscriber move_ack_sub;                               //
   //ros::Publisher move_ctrl_pub;                               //
   edo_core_msgs::msg::MovementCommand resetCommand;                // Reset Command
-  //rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::TimerBase::SharedPtr timer_;
 
-//   void timer_callback()
-//  {
-// //    auto message = std_msgs::msg::String();
-// //    message.data = "Hello, world! " + std::to_string(count_++);
-// //      edo_core_msgs::msg::MovementCommand msg;
-// //
-// //       msg.move_command = 77;
-// //    msg.move_type = 74;
-// //    msg.ovr = 100;
-// //    msg.delay = 1;
-// //    msg.target.data_type = 74;
-// //    msg.target.joints_mask = 63;
-// //    msg.target.joints_data.resize(6, 0.0);
-// //
-// // std::cout << "joint angles as follows and press enter: J1 J2 J3 J4 J5 J6\n";
-// //
-// //    for(int x = 0; x < 6; ++x){
-// //        scanf("%f", &msg.target.joints_data[x]);
-// //      }
-//
-//    //publisher_->publish(msg);
-//  }
+
 
 };
 

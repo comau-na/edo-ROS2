@@ -34,24 +34,11 @@
 MovementCommandQueue::MovementCommandQueue()
 : Node("movement_command_queue")
 {
-
-
-
-
   move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementCommand>(
     "/machine_movement_ack", 100, std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
 
-    // move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementCommand>(
-      // "/machine_movement_ack", 100);
-
-
-  move_ctrl_pub = this->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
+  move_ctrl_pub = this->create_publisher<edo_core_msgs::msg::MovementCommand>("/bridge_move",
     10);
-
-  // timer_ = this->create_wall_timer(
-  //       500ms, std::bind(&MovementCommandQueue::timer_callback, this));
-  // move_ctrl_pub = this->create_publisher<edo_core_msgs::msg:MovementCommand>("/bridge_move",
-  //   10);
   resetCommand.move_command = 67;
 }
 
