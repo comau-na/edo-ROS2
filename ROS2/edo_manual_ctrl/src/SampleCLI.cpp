@@ -59,7 +59,7 @@ int main(int argc, char **argv){
       break;
 
     case 4:
-     // getData(nh);
+      getData(node);
       break;
  
     } // switch(choice)
