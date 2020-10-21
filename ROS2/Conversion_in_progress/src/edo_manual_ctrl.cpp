@@ -415,27 +415,42 @@ void move(): Node ("move")
  *        default:
  *          Output state and provide helpful information
  */ 
-void calibrate(ros::NodeHandle& nh, bool recalib){
+void calibrate(ros::NodeHandle& nh, bool recalib) : Node ("calibrate"){
   
-  ros::Publisher calib_pub =
-    nh.advertise<edo_core_msgs::JointCalibration>("/bridge_jnt_calib",10);
-  
-  ros::Rate loop_rate(100);
+//  ros::Publisher calib_pub =
+//    nh.advertise<edo_core_msgs::JointCalibration>("/bridge_jnt_calib",10);
+   rclcpp::Publisher<edo_core_msgs::msg::JointCalibration>::SharedPtr calib_pub;
 
-  edo_core_msgs::JointCalibration calib_msg;
+    calib_pub = this->create_publisher<edo_core_msgs::msg::JointCalibration>("/bridge_move",
+    10);
+  
+  //ros::Rate loop_rate(100);
+  rclcpp::Rate loop_rate(100);
+
+  edo_core_msgs::msg::JointCalibration calib_msg;
   std::chrono::milliseconds timespan(10000);   // To sleep program for 10 sec
 
   char proceed = '\n';  // Char to allow user to control when commands are sent
 
   if(!recalib){
 
-    ros::Publisher reset_pub =
+   /* ros::Publisher reset_pub =
       nh.advertise<edo_core_msgs::JointReset>("/bridge_jnt_reset",10);
     ros::Publisher init_pub =
       nh.advertise<edo_core_msgs::JointInit>("/bridge_init",10);  
+    */
+
+    rclcpp::Publisher<edo_core_msgs::msg::JointReset>::SharedPtr reset_pub;
+    reset_pub = this->create_publisher<edo_core_msgs::msg::JointReset>("/bridge_move",
+    10);
     
-    edo_core_msgs::JointReset reset_msg;
-    edo_core_msgs::JointInit init_msg;
+    rclcpp::Publisher<edo_core_msgs::msg::JointInit>::SharedPtr init_pub;
+    init_pub = this->create_publisher<edo_core_msgs::msg::JointInit>("/bridge_move",
+    10);
+    
+    
+    edo_core_msgs::msg::JointReset reset_msg;
+    edo_core_msgs::msg::JointInit init_msg;
     while(proceed != 'y'){
       std::cout << "Enter 'y' to initialize 6-Axis eDO with gripper: ";
       std::cin >> proceed;
