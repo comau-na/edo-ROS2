@@ -520,7 +520,7 @@ void calibrate(ros::NodeHandle& nh, bool recalib) : Node ("calibrate"){
  *  @return void
  *  @exception None
  */
-void getData(ros::NodeHandle& nh){
+void getData(ros::NodeHandle& nh): Node("getData"){
   DataDisplay data(nh);
   while(ros::ok() && !(data.getCartesianPrinted() &&
         data.getStatePrinted() && data.getJointPrinted())){
@@ -537,8 +537,11 @@ void getData(ros::NodeHandle& nh){
 /*  TODO
  *    -Once calibrate todo is complete, remove this function
  */    
-bool initialStartup(ros::NodeHandle& nh){
-  ros::Rate loop_rate(100);
+bool initialStartup(ros::NodeHandle& nh):Node("initialStartup"){
+
+  //ros::Rate loop_rate(100);
+  rclcpp::Rate loop_rate(100);
+
   StateChecker check(nh);
   char option = 'y';
   do{ 
