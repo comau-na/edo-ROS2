@@ -33,7 +33,8 @@ ${CURSES_INCLUDE_DIR})
 #######################################################
 add_library(CLASS_CPP_FILES SHARED 
 src/StateChecker.cpp
-src/EdoFunctions.cpp)
+src/EdoFunctions.cpp
+src/DataDisplay.cpp)
 
 target_compile_definitions(CLASS_CPP_FILES
   PRIVATE "MINIMAL_COMPOSITION_DLL")
