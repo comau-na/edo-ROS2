@@ -313,8 +313,10 @@ void jog(): Node ("jog")
  *  @return void
  *  @exception None
  */  
-void move(ros::NodeHandle& nh){
-
+//void move(ros::NodeHandle& nh)
+void move(): Node ("move") 
+{
+  //debug 
   MovementCommandQueue move_ctrl(nh);
       
   int anglesOrCartesian, numEntries = 0, delay = 0;   // Vars to save user input
@@ -338,11 +340,11 @@ void move(ros::NodeHandle& nh){
     std::cout << "cartesian coordinates as follows and press enter: "
               << "X Y Z A E R\n";
   }
-  std::vector<edo_core_msgs::MovementCommand> pointVec;
+  std::vector<edo_core_msgs::msg::MovementCommand> pointVec;
   
   // Read each entry
   for(int i = 0; i < numEntries; ++i){
-    edo_core_msgs::MovementCommand msg = createMove(anglesOrCartesian, delay);
+    edo_core_msgs::msg::MovementCommand msg = createMove(anglesOrCartesian, delay);
     if(anglesOrCartesian == 0 || anglesOrCartesian == 10){
       for(int x = 0; x < 6; ++x){
         scanf("%f", &msg.target.joints_data[x]);
@@ -370,7 +372,7 @@ void move(ros::NodeHandle& nh){
   }  
   // Push waypoints from vector to queue system in MoveCommandQueue class    
   for(int i = 0; i < numLoops; ++i){
-    std::vector<edo_core_msgs::MovementCommand>::iterator it = pointVec.begin();
+    std::vector<edo_core_msgs::msg::MovementCommand>::iterator it = pointVec.begin();
     while(it != pointVec.end()){
       move_ctrl.pushMoveCommand(*it);
       it++;
