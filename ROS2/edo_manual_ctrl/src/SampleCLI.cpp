@@ -60,7 +60,11 @@ int main(int argc, char **argv){
       break;
 
     case 4:
+<<<<<<< HEAD
      getData(node);
+=======
+     getData(node);
+>>>>>>> 2cacb86780ab6d2c43f0f90da4d498fdcac97069
       break;
  
     } // switch(choice)
