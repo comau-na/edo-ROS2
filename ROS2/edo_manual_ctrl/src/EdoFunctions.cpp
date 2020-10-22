@@ -273,7 +273,10 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     init_msg.mode = 0;
     init_msg.joints_mask = 63;
     init_msg.reduction_factor = 0.0;
-    while(init_pub->get_subscription_count() == 0){
+
+    std::cout << "/bridge_init sub count: " << init_pub->get_subscription_count() << "\n";
+    
+    while(init_pub->get_subscription_count() == 0 ){
       loop_rate.sleep();
       std::cout << "checking for Subscribers to /bridge_init... \n";
     }
@@ -323,7 +326,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   proceed = '\n';  
   calib_msg.joints_mask = 63;
 
-  while(calib_pub->get_subscription_count() == 0){
+  while(calib_pub->get_subscription_count() == 0 ){
     loop_rate.sleep();
     std::cout << "checking subscribers to /bridge_jnt_calib... \n";
   }
@@ -346,8 +349,8 @@ void getData(std::shared_ptr<rclcpp::Node> node){
   DataDisplay data(node);
   while(rclcpp::ok() && !(data.getCartesianPrinted() &&
         data.getStatePrinted() && data.getJointPrinted())){
-    rclcpp::spin(node);
-
+    //rclcpp::spin_once(node);
+    //std::cout << data.printState() << "\n";
     }
 
   }
