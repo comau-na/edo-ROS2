@@ -60,7 +60,7 @@ int main(int argc, char **argv){
       break;
 
     case 4:
-     getData(node);
+     getData(exec, node);
       break;
  
     } // switch(choice)

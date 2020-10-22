@@ -342,15 +342,18 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   
 }  // calibrate()
 
-void getData(std::shared_ptr<rclcpp::Node> node){
+void getData(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){
 
   auto dataDisplay = std::make_shared<DataDisplay>(node); 
 
   DataDisplay data(node);
-  while(rclcpp::ok() && !(data.getCartesianPrinted() &&
-        data.getStatePrinted() && data.getJointPrinted())){
-    //rclcpp::spin_once(node);
+  exec.add_node(node);
+  std::chrono::nanoseconds timeout;
+  timeout= std::chrono::nanoseconds { 200000000 };
+  while(rclcpp::ok() && !(data.getCartesianPrinted() && data.getStatePrinted())){ //&& data.getJointPrinted() ADD THIS BACK IN FOR THE REAL THING
+    //rclcpp::spin_some(node);
     //std::cout << data.printState() << "\n";
+    exec.spin_once(timeout);
     }
 
   }
@@ -374,7 +377,7 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
           std::cout << "checking machine state... \n";
           
           }
- 
+ exec.remove_node(node);
   
   
     
