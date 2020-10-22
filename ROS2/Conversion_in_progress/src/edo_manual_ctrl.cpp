@@ -126,7 +126,9 @@ edo_core_msgs::msg::MovementCommand createMove(int type, int delay){
  */  
 void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
    //debug
- ros::Publisher& jog_ctrl_pub, ros::Rate& loop_rate, double velocity){ 
+ //ros::Publisher& jog_ctrl_pub, ros::Rate& loop_rate, double velocity){ 
+
+  std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){ 
   msg.target.joints_data.clear();     
   msg.target.joints_data.resize(10,0.0);
   if(joint_number > 0){
@@ -139,7 +141,7 @@ void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
     msg.target.joints_data[(-1 * joint_number) - 1] = -1 * velocity;
   }
   jog_ctrl_pub.publish(msg);
-  ros::spinOnce();
+  rclcpp::spinOnce();
   loop_rate.sleep();
 }  // jogHelper()
 
@@ -520,8 +522,11 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ {
  *  @return void
  *  @exception None
  */
-void getData(ros::NodeHandle& nh): Node("getData"){
-  DataDisplay data(nh);
+void getData(std::shared_ptr<rclcpp::Node> node){
+
+  auto dataDisplay = std::make_shared<DataDisplay>(node); 
+
+  DataDisplay data(node);
   while(ros::ok() && !(data.getCartesianPrinted() &&
         data.getStatePrinted() && data.getJointPrinted())){
     ros::spinOnce();
@@ -537,16 +542,16 @@ void getData(ros::NodeHandle& nh): Node("getData"){
 /*  TODO
  *    -Once calibrate todo is complete, remove this function
  */    
-bool initialStartup(ros::NodeHandle& nh):Node("initialStartup"){
+bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){
 
   //ros::Rate loop_rate(100);
   rclcpp::Rate loop_rate(100);
 
-  StateChecker check(nh);
+  StateChecker check(node);
   char option = 'y';
   do{ 
     while(!check.getStateReceived()){
-      ros::spinOnce();
+      rclcpp::spinOnce();
       loop_rate.sleep();
     }
     int state = check.getState();
