@@ -314,10 +314,10 @@ void jog(): Node ("jog")
  *  @exception None
  */  
 //void move(ros::NodeHandle& nh)
-void move(): Node ("move") 
+void move(std::shared_ptr<rclcpp::Node> node)
 {
   //debug 
-  MovementCommandQueue move_ctrl(nh);
+  MovementCommandQueue move_ctrl(node);
       
   int anglesOrCartesian, numEntries = 0, delay = 0;   // Vars to save user input
   
@@ -379,8 +379,8 @@ void move(): Node ("move")
     }
   }
   // While loop exits when move queue is done running
-  while(ros::ok() && move_ctrl.stillRunning()){
-    ros::spinOnce();
+  while(rclcpp::ok() && move_ctrl.stillRunning()){
+    rclcpp::spinOnce();
   }
 
 }  // move()
@@ -415,7 +415,7 @@ void move(): Node ("move")
  *        default:
  *          Output state and provide helpful information
  */ 
-void calibrate(ros::NodeHandle& nh, bool recalib) : Node ("calibrate"){
+void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ {
   
 //  ros::Publisher calib_pub =
 //    nh.advertise<edo_core_msgs::JointCalibration>("/bridge_jnt_calib",10);
