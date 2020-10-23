@@ -623,8 +623,11 @@ int main(int argc, char **argv){
   
   // Initialize "edo_manual_ctrl" ROS node and NodeHandle for Publishers and
   // Subscribers
-  ros::init(argc, argv, "edo_manual_ctrl");
-  ros::NodeHandle nh;
+ // ros::init(argc, argv, "edo_manual_ctrl");
+ // ros::NodeHandle nh;
+    rclcpp::init(argc, argv);
+  auto node = rclcpp::Node::make_shared("edo_manual_ctrl");
+
 
   std::cout << std::fixed;                // Set precision of decimals to 
   std::cout << std::setprecision(2);      // 2 decimal places for output
