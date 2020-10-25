@@ -3,7 +3,7 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp" //ros2
 
-//#include "MovementCommandQueue.h"
+#include "MovementCommandQueue.h"
 #include "DataDisplay.h"
 #include "StateChecker.h"
 #include "edo_core_msgs/msg/movement_command.hpp"
@@ -51,6 +51,64 @@ edo_core_msgs::msg::MovementCommand createJog(){
  *  @return void
  *  @exception None
  */  
+
+edo_core_msgs::msg::MovementCommand createMove(int type, int delay){
+  
+  edo_core_msgs::msg::MovementCommand msg;
+  // Joint movement to joint point
+  if(type == 0){
+    msg.move_command = 77;
+    msg.move_type = 74;
+    msg.ovr = 100;
+    msg.delay = delay;
+    msg.target.data_type = 74;
+    msg.target.joints_mask = 127;//63;
+    msg.target.joints_data.resize(6, 0.0);
+  }
+  // Joint movement to cartesian point
+  else if(type == 1){
+    msg.move_command = 77;
+    msg.move_type = 74;
+    msg.ovr = 100;
+    msg.delay = delay;
+    msg.target.data_type = 88;
+    msg.target.joints_mask = 127;//63;
+    msg.target.joints_data.resize(10, 0.0);
+  }
+  // Linear movement to joint point
+  else if(type == 10){
+    msg.move_command = 77;
+    msg.move_type = 76;
+    msg.ovr = 100;
+    msg.delay = delay;
+    msg.target.data_type = 74;
+    msg.target.joints_mask = 127;//63;
+    msg.target.joints_data.resize(6, 0.0);
+  }
+  // Linear movement to cartesian point
+  else if(type == 11){
+    msg.move_command = 77;
+    msg.move_type = 76;
+    msg.ovr = 100;
+    msg.delay = delay;
+    msg.target.data_type = 88;
+    msg.target.joints_mask = 127;//63;
+    msg.target.joints_data.resize(10, 0.0);
+  }
+  // Reset
+  else if(type == -1){
+    msg.move_command = 67;
+    msg.target.joints_data.clear();
+  }
+  return msg;
+}  // createMove()
+
+
+
+
+
+
+
 void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
     std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){ 
   msg.target.joints_data.clear();     
@@ -448,4 +506,79 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
   
 return false;
 }  // initialStartup()
+
+
+
+void move(std::shared_ptr<rclcpp::Node> node)
+{
+  //debug 
+auto move_ctrl = std::make_shared<MovementCommandQueue>();
+ // MovementCommandQueue move_ctrl();
+      
+  int anglesOrCartesian, numEntries = 0, delay = 0;   // Vars to save user input
+  
+  // Output control information
+  std::cout << "Select move type:\n"
+            << "0 - joint movement to joint point\n"
+            << "1 - joint movement to cartesian point\n"
+            << "10 - cartesian movement to joint point\n"
+            << "11 - cartesian movement to cartesian point\n";
+  std::cin  >> anglesOrCartesian;
+  std::cout << "Enter number of entries: ";
+  std::cin  >> numEntries;
+  std::cout << "Enter delay: ";
+  std::cin  >> delay;
+  std::cout << "Enter ";
+  if(anglesOrCartesian == 0 || anglesOrCartesian == 10){
+    std::cout << "joint angles as follows and press enter: J1 J2 J3 J4 J5 J6\n";
+  }
+  else{
+    std::cout << "cartesian coordinates as follows and press enter: "
+              << "X Y Z A E R\n";
+  }
+  std::vector<edo_core_msgs::msg::MovementCommand> pointVec;
+  
+  // Read each entry
+  for(int i = 0; i < numEntries; ++i){
+    edo_core_msgs::msg::MovementCommand msg = createMove(anglesOrCartesian, delay);
+    if(anglesOrCartesian == 0 || anglesOrCartesian == 10){
+      for(int x = 0; x < 6; ++x){
+        scanf("%f", &msg.target.joints_data[x]);
+      }
+    }
+    else{ 
+      scanf("%f", &msg.target.cartesian_data.x);
+      scanf("%f", &msg.target.cartesian_data.y);
+      scanf("%f", &msg.target.cartesian_data.z);
+      scanf("%f", &msg.target.cartesian_data.a);
+      scanf("%f", &msg.target.cartesian_data.e);
+      scanf("%f", &msg.target.cartesian_data.r);
+    }
+    pointVec.push_back(msg);        // Store all waypoints in vector
+                                    // to be executed
+  }
+  
+  int numLoops = 0;
+  while (numLoops < 1){
+    std::cout << "Enter number of loops: ";
+    std::cin >> numLoops;
+    if (numLoops < 1){
+      std::cout << "Number of loops must be at least 1.\n";
+    }
+  }  
+  // Push waypoints from vector to queue system in MoveCommandQueue class    
+  for(int i = 0; i < numLoops; ++i){
+    std::vector<edo_core_msgs::msg::MovementCommand>::iterator it = pointVec.begin();
+    while(it != pointVec.end()){
+      move_ctrl->pushMoveCommand(*it);
+      it++;
+    }
+  }
+  // While loop exits when move queue is done running
+  while(rclcpp::ok() && move_ctrl->stillRunning()){
+    rclcpp::spin_some(move_ctrl);
+  }
+
+}  // move()
+
 

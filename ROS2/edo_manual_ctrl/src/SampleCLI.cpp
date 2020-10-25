@@ -29,9 +29,9 @@ int main(int argc, char **argv){
   // NOTE: IF YOU GET THE ERROR THAT ROS2 CANT FIGURE OUT THE TYPE FOR THE TOPICS, THEN RUN THE COMMANDS 
   // AFTER YOU HAVE STARTED THIS PROGRAM BUT BEFORE YOU TYPE 'Y' FOR ANY OF THE PROMPTS
   
-  if(!initialStartup(exec, node)){
-    return -1;
-  }
+ // if(!initialStartup(exec, node)){
+  //  return -1;
+  //}
   
   
   
@@ -52,7 +52,7 @@ int main(int argc, char **argv){
       break;
     
     case 2:
-     // move(nh);
+     move(node);
       break;
       
     case 3:
