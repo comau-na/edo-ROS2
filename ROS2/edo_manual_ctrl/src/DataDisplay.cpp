@@ -33,18 +33,20 @@ DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
 
 */
 
-DataDisplay::DataDisplay(std::shared_ptr<rclcpp::Node> node)
+DataDisplay::DataDisplay() : Node("data_display")
 {
 
-  cartesian_pose_sub_ = node->create_subscription<edo_core_msgs::msg::CartesianPose>(
-    "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
-  machine_state_sub_ = node->create_subscription<edo_core_msgs::msg::MachineState>(
-    "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
-  joint_pose_sub_ = node->create_subscription<edo_core_msgs::msg::JointStateArray>(
-    "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose, this,_1));
-  cartesianPrinted = false;
-  statePrinted = false;
-  jointPrinted = false;
+  cartesian_pose_sub_ =
+  this->create_subscription<edo_core_msgs::msg::CartesianPose>(
+  "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
+  machine_state_sub_ =
+  this->create_subscription<edo_core_msgs::msg::MachineState>(
+  "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
+  joint_pose_sub_ =
+  this->create_subscription<edo_core_msgs::msg::JointStateArray>(
+  "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose,
+  this,_1)); cartesianPrinted = false; statePrinted = false; jointPrinted =
+  false;
 
 }
 

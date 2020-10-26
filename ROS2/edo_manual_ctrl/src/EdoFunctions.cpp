@@ -400,31 +400,32 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   
 }  // calibrate()
 
-void getData(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){
+void getData(rclcpp::executors::SingleThreadedExecutor& exec){
 
-  auto dataDisplay = std::make_shared<DataDisplay>(node); 
+  auto dataDisplay = std::make_shared<DataDisplay>(); 
 
-  DataDisplay data(node);
-  exec.add_node(node);
+  //DataDisplay data(node);
+  exec.add_node(dataDisplay);
   std::chrono::nanoseconds timeout;
   timeout= std::chrono::nanoseconds { 200000000 };
-  while(rclcpp::ok() && !(data.getCartesianPrinted() && data.getStatePrinted())){ //&& data.getJointPrinted() ADD THIS BACK IN FOR THE REAL THING
+  while(rclcpp::ok() && !(dataDisplay->getCartesianPrinted() && dataDisplay->getStatePrinted())){ //&& data.getJointPrinted() ADD THIS BACK IN FOR THE REAL THING
     //rclcpp::spin_some(node);
     //std::cout << data.printState() << "\n";
     exec.spin_once(timeout);
     }
 
+  exec.remove_node(dataDisplay);
   }
 
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){ //rclcpp::Node node
   //ros::Rate loop_rate(100);
   //rclcpp::Rate loop_rate(10000);
 
-  auto stateChecker = std::make_shared<StateChecker>(node);
+  auto stateChecker = std::make_shared<StateChecker>();
   //auto stateChecker2 = std::make_shared<StateChecker>();
   std::chrono::nanoseconds timeout;
   timeout= std::chrono::nanoseconds { 2000000000 };
-  exec.add_node(node);
+  exec.add_node(stateChecker);
   char option = 'y';
 
   do{

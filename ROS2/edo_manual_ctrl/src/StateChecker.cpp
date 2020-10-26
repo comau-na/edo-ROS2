@@ -20,9 +20,9 @@
  *  @return StateChecker object
  *  @exception None
  */
-  StateChecker::StateChecker(std::shared_ptr<rclcpp::Node> node) //: Node("machine_state_sub")
+  StateChecker::StateChecker() : Node("machine_state")
   {
-    subscription_ = node->create_subscription<edo_core_msgs::msg::MachineState>(
+    subscription_ = this->create_subscription<edo_core_msgs::msg::MachineState>(
       "/machine_state", 10, std::bind(&StateChecker::stateCallback, this, _1));
   }
 
