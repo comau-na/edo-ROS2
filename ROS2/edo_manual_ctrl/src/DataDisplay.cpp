@@ -45,8 +45,10 @@ DataDisplay::DataDisplay() : Node("data_display")
   joint_pose_sub_ =
   this->create_subscription<edo_core_msgs::msg::JointStateArray>(
   "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose,
-  this,_1)); cartesianPrinted = false; statePrinted = false; jointPrinted =
-  false;
+  this,_1)); 
+  cartesianPrinted = false; 
+  statePrinted = false; 
+  jointPrinted =false;
 
 }
 
@@ -57,7 +59,8 @@ DataDisplay::DataDisplay() : Node("data_display")
  */
 void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose){
   if(!cartesianPrinted){
-    std::cout << "CartesianPose/x: " << pose->x << "\n";
+    std::cout << "CartesianPose/x: " << pose->x << ", CartesianPose/y: " 
+      << pose->y << ", CartesianPose/z: " << pose->z <<"\n";
     cartesianPrinted = true;
   }
 }  // DataDisplay::printPoseData()
@@ -83,7 +86,8 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr s
  */
 void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
-    std::cout << pose << "\n";
+     std::cout << "JointStateArray/joints_mask: " << pose->joints_mask << "\n";
+    //std::cout << "edo_core_msgs/JointState[] joints: " << pose->joints[] << "\n";
     jointPrinted = true;
  }
 }  // DataDisplay::printJointPose()
