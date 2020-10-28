@@ -403,16 +403,14 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
 void getData(rclcpp::executors::SingleThreadedExecutor& exec){
 
   DataDisplay data(node);
-  exec.add_node(dataDisplay);
+  exec.add_node(node);
   //std::chrono::nanoseconds timeout;
   //timeout= std::chrono::nanoseconds { 200000000 };
-  while(rclcpp::ok() && !(dataDisplay->getCartesianPrinted() && dataDisplay->getStatePrinted()&& data.getJointPrinted())){ 
+  while(rclcpp::ok() && !(data.getCartesianPrinted() && data.getStatePrinted()&& data.getJointPrinted())){ 
     //rclcpp::spin_some(node);
     //std::cout << data.printState() << "\n";
     exec.spin_some();
     }
-
-  exec.remove_node(dataDisplay);
   }
 
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){ //rclcpp::Node node
