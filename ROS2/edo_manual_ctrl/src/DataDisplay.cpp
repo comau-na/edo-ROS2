@@ -33,18 +33,22 @@ DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
 
 */
 
-DataDisplay::DataDisplay(std::shared_ptr<rclcpp::Node> node)
+DataDisplay::DataDisplay() : Node("data_display")
 {
 
-  cartesian_pose_sub_ = node->create_subscription<edo_core_msgs::msg::CartesianPose>(
-    "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
-  machine_state_sub_ = node->create_subscription<edo_core_msgs::msg::MachineState>(
-    "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
-  joint_pose_sub_ = node->create_subscription<edo_core_msgs::msg::JointStateArray>(
-    "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose, this,_1));
-  cartesianPrinted = false;
-  statePrinted = false;
-  jointPrinted = false;
+  cartesian_pose_sub_ =
+  this->create_subscription<edo_core_msgs::msg::CartesianPose>(
+  "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
+  machine_state_sub_ =
+  this->create_subscription<edo_core_msgs::msg::MachineState>(
+  "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
+  joint_pose_sub_ =
+  this->create_subscription<edo_core_msgs::msg::JointStateArray>(
+  "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose,
+  this,_1)); 
+  cartesianPrinted = false; 
+  statePrinted = false; 
+  jointPrinted =false;
 
 }
 
@@ -55,7 +59,8 @@ DataDisplay::DataDisplay(std::shared_ptr<rclcpp::Node> node)
  */
 void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose){
   if(!cartesianPrinted){
-    std::cout << "CartesianPose/x: " << pose->x << "\n";
+    std::cout << "CartesianPose/x: " << pose->x << ", CartesianPose/y: " 
+      << pose->y << ", CartesianPose/z: " << pose->z <<"\n";
     cartesianPrinted = true;
   }
 }  // DataDisplay::printPoseData()
@@ -81,7 +86,8 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr s
  */
 void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
-    std::cout << pose << "\n";
+     std::cout << "JointStateArray/joints_mask: " << pose->joints_mask << "\n";
+    //std::cout << "edo_core_msgs/JointState[] joints: " << pose->joints[] << "\n";
     jointPrinted = true;
  }
 }  // DataDisplay::printJointPose()

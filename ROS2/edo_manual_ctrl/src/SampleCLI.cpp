@@ -5,7 +5,11 @@ int main(int argc, char **argv){
   // Initialize "edo_manual_ctrl" ROS node and NodeHandle for Publishers and
   // Subscribers
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("edo_manual_ctrl"); 
+  auto calibrate_node = rclcpp::Node::make_shared("calibrate_node"); 
+  auto jog_node = rclcpp::Node::make_shared("jog_ctrl"); 
+  auto move_node = rclcpp::Node::make_shared("move_ctrl"); 
+  //auto data_node = rclcpp::Node::make_shared("data_display"); 
+  
   rclcpp::executors::SingleThreadedExecutor exec;
  
  // uncomment this if you want to test calibrate alone
@@ -29,9 +33,9 @@ int main(int argc, char **argv){
   // NOTE: IF YOU GET THE ERROR THAT ROS2 CANT FIGURE OUT THE TYPE FOR THE TOPICS, THEN RUN THE COMMANDS 
   // AFTER YOU HAVE STARTED THIS PROGRAM BUT BEFORE YOU TYPE 'Y' FOR ANY OF THE PROMPTS
   
- // if(!initialStartup(exec, node)){
-  //  return -1;
-  //}
+  if(!initialStartup(exec, calibrate_node)){
+    return -1;
+    }
   
   
   
@@ -48,19 +52,19 @@ int main(int argc, char **argv){
     switch(choice){
 
     case 1:
-      jog(node);
+      jog(jog_node);
       break;
     
     case 2:
-     move(node);
+     move(move_node);
       break;
       
     case 3:
-     calibrate(node, true);
+     calibrate(calibrate_node, true);
       break;
 
     case 4:
-     getData(exec, node);
+     getData(exec);
       break;
  
     } // switch(choice)

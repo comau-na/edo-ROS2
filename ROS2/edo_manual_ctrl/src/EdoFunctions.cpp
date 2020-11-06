@@ -28,7 +28,7 @@ using namespace std::chrono_literals;
  *  @param None
  *  @return MovementCommand - Message defined in edo_core_msgs ROS package
  *  @exception None
- */  
+ */
 edo_core_msgs::msg::MovementCommand createJog(){
   edo_core_msgs::msg::MovementCommand msg;
   msg.move_command = 74;
@@ -50,10 +50,10 @@ edo_core_msgs::msg::MovementCommand createJog(){
  *  @param velocity - double velocity value for jog
  *  @return void
  *  @exception None
- */  
+ */
 
 edo_core_msgs::msg::MovementCommand createMove(int type, int delay){
-  
+
   edo_core_msgs::msg::MovementCommand msg;
   // Joint movement to joint point
   if(type == 0){
@@ -110,8 +110,8 @@ edo_core_msgs::msg::MovementCommand createMove(int type, int delay){
 
 
 void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
-    std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){ 
-  msg.target.joints_data.clear();     
+    std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){
+  msg.target.joints_data.clear();
   msg.target.joints_data.resize(10,0.0);
   if(joint_number > 0){
     std::cout << "\rJoint " << joint_number << " + " << velocity << std::flush;
@@ -132,7 +132,7 @@ void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
  *  @param nh - ROS NodeHangle for creating jog publisher
  *  @return void
  *  @exception None
- */  
+ */
 void jog(std::shared_ptr<rclcpp::Node> node){
 
   //ros::Rate loop_rate(100);
@@ -145,9 +145,9 @@ void jog(std::shared_ptr<rclcpp::Node> node){
   // Output control information
   std::cout << "-----\nJog Controls (Press and Hold):\n"
       << "Joint 1 +/-: 'q'/'a'\n"
-      << "Joint 2 +/-: 'w'/'s'\n" 
+      << "Joint 2 +/-: 'w'/'s'\n"
       << "Joint 3 +/-: 'e'/'d'\n"
-      << "Joint 4 +/-: 'r'/'f'\n" 
+      << "Joint 4 +/-: 'r'/'f'\n"
       << "Joint 5 +/-: 't'/'g'\n"
       << "Joint 6 +/-: 'y'/'h'\n"
       << "gripper open/close-: 'i'/'k'\n"
@@ -161,8 +161,8 @@ void jog(std::shared_ptr<rclcpp::Node> node){
   ch = '\n';
   bool last = false;
   double velocity = 1.0;
-  
-  
+
+
   doupdate();     // Ncurses function to reset window after endwin() has been
              // called
   initscr();      // Ncurses function initializes key capture
@@ -170,7 +170,7 @@ void jog(std::shared_ptr<rclcpp::Node> node){
                   // ERR when no key is pressed instead of waiting for key
   curs_set(0);    // Ncurses makes the cursor invisible
   noecho();       // Ncurses function hides pressed keys
- 
+
    do {
     ch = getch(); // Ncurses function returns char of key pressed
                   // returns ERR when no key press
@@ -183,67 +183,67 @@ void jog(std::shared_ptr<rclcpp::Node> node){
         jogHelper(msg, 1, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'a':
       case 'A':
         jogHelper(msg, -1, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-            
+
       case 'w':
       case 'W':
         jogHelper(msg, 2, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 's':
       case 'S':
         jogHelper(msg, -2, jog_ctrl_pub, loop_rate, velocity);
         last = true;
-        break;    
-        
+        break;
+
       case 'e':
       case 'E':
         jogHelper(msg, 3, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'd':
       case 'D':
         jogHelper(msg, -3, jog_ctrl_pub, loop_rate, velocity);
         last = true;
-        break;    
-            
+        break;
+
       case 'r':
       case 'R':
         jogHelper(msg, 4, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'f':
       case 'F':
         jogHelper(msg, -4, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-        
+
       case 't':
       case 'T':
         jogHelper(msg, 5, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'g':
       case 'G':
         jogHelper(msg, -5, jog_ctrl_pub, loop_rate, velocity);
         last = true;
-        break;    
-  
+        break;
+
       case 'y':
       case 'Y':
         jogHelper(msg, 6, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'h':
       case 'H':
         jogHelper(msg, -6, jog_ctrl_pub, loop_rate, velocity);
@@ -256,13 +256,13 @@ void jog(std::shared_ptr<rclcpp::Node> node){
         jogHelper(msg, 7, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-          
+
       case 'k':
       case 'K':
         jogHelper(msg, -7, jog_ctrl_pub, loop_rate, velocity);
         last = true;
         break;
-      
+
       case 'u':
       case 'U':
         if(velocity < 1.0){
@@ -270,7 +270,7 @@ void jog(std::shared_ptr<rclcpp::Node> node){
         }
         std::cout << "\rVelocity: " << velocity << std::flush;
         break;
-      
+
       case 'j':
       case 'J':
         if(velocity > 0.05){
@@ -278,8 +278,8 @@ void jog(std::shared_ptr<rclcpp::Node> node){
         }
         std::cout << "\rVelocity: " << velocity << std::flush;
         break;
-      
-      
+
+
     }  // switch(choice)
   } while(ch != 'X' && ch != 'x');
   endwin(); // Ends ncurses window
@@ -295,8 +295,8 @@ void jog(std::shared_ptr<rclcpp::Node> node){
  *  @exception None
 */
 void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::executors::SingleThreadedExecutor& exec
-  
-  
+
+
   //ros::Publisher calib_pub = nh.advertise<edo_core_msgs::JointCalibration>("/bridge_jnt_calib",10);
   auto calib_pub = node->create_publisher<edo_core_msgs::msg::JointCalibration>("/bridge_jnt_calib", 1000);
   rclcpp::executors::SingleThreadedExecutor exec;
@@ -305,7 +305,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
 
   edo_core_msgs::msg::JointCalibration calib_msg;
   std::chrono::milliseconds timespan(10000);   // To sleep program for 10 sec
-  
+
 
   char proceed = '\n';  // Char to allow user to control when commands are sent
 
@@ -316,7 +316,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     auto reset_pub = node->create_publisher<edo_core_msgs::msg::JointReset>("/bridge_jnt_reset", 10);
 
 
-    //ros::Publisher init_pub = nh.advertise<edo_core_msgs::JointInit>("/bridge_init",10);  
+    //ros::Publisher init_pub = nh.advertise<edo_core_msgs::JointInit>("/bridge_init",10);
     auto init_pub = node->create_publisher<edo_core_msgs::msg::JointInit>("/bridge_init", 10);
 
 
@@ -333,7 +333,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     init_msg.reduction_factor = 0.0;
 
     std::cout << "/bridge_init sub count: " << init_pub->get_subscription_count() << "\n";
-    
+
     while(init_pub->get_subscription_count() == 0 ){
       loop_rate.sleep();
       std::cout << "checking for Subscribers to /bridge_init... \n";
@@ -341,13 +341,13 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     init_pub->publish(init_msg);
     //ros::spinOnce();
     //loop_rate.sleep();
-  
+
     std::this_thread::sleep_for(timespan);      // while e.DO initializes
 
     while(proceed != 'y'){
       std::cout << "Enter 'y' to disengage brakes: ";
       std::cin >> proceed;
-    }  
+    }
     proceed = '\n';                             // Reset char for next prompt
     reset_msg.joints_mask = 63;
     reset_msg.disengage_steps = 2000;
@@ -361,10 +361,10 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     //loop_rate.sleep();
     //std::this_thread::sleep_for(timespan);
   }
-  
-  
+
+
   std::cout << "Calibration Procedure\n-----\n"
-            << "Rotate joints so that each slot is aligned with its\n" 
+            << "Rotate joints so that each slot is aligned with its\n"
             << "corresponding white mark\nBE SURE TO MOVE AT LEAST ONE JOINT "
             << "BACKWARDS AND FORWARDS A FEW DEGREES!\nIF YOU DO NOT "
             << "THE EDO WILL NOT CALIBRATE CORRECTLY AND WILL NEED TO BE "
@@ -372,24 +372,24 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   while(proceed != 'y'){
     std::cout << "Enter 'y' to enter JogMode and calibrate each joint: ";
     std::cin >> proceed;
-  }  
+  }
   proceed = '\n';         // Reset char for next prompt
-  
+
   jog(node);
-  
+
   while(proceed != 'y'){
     std::cout << "Enter 'y' to send calibration command: ";
     std::cin >> proceed;
   }
-  proceed = '\n';  
+  proceed = '\n';
   calib_msg.joints_mask = 63;
 
   while(calib_pub->get_subscription_count() == 0 ){
     loop_rate.sleep();
     std::cout << "checking subscribers to /bridge_jnt_calib... \n";
   }
-  
-  
+
+
   calib_pub->publish(calib_msg);
   //ros::spinOnce();
   // rclcpp::spin(node);
@@ -397,34 +397,36 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   //std::this_thread::sleep_for(timespan);
 
 
-  
+
 }  // calibrate()
 
-void getData(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){
+void getData(rclcpp::executors::SingleThreadedExecutor& exec){
 
-  auto dataDisplay = std::make_shared<DataDisplay>(node); 
-
-  DataDisplay data(node);
-  exec.add_node(node);
-  std::chrono::nanoseconds timeout;
-  timeout= std::chrono::nanoseconds { 200000000 };
-  while(rclcpp::ok() && !(data.getCartesianPrinted() && data.getStatePrinted())){ //&& data.getJointPrinted() ADD THIS BACK IN FOR THE REAL THING
+  //DataDisplay data(node);
+  auto data = std::make_shared<DataDisplay>();
+  exec.add_node(data);
+  //std::chrono::nanoseconds timeout;
+  //timeout= std::chrono::nanoseconds { 200000000 };
+  while(rclcpp::ok() && !(data->getCartesianPrinted() && data->getStatePrinted()&& data->getJointPrinted())){
     //rclcpp::spin_some(node);
     //std::cout << data.printState() << "\n";
-    exec.spin_once(timeout);
+    exec.spin_some();
     }
 
+    exec.remove_node(data);
   }
+
+
 
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){ //rclcpp::Node node
   //ros::Rate loop_rate(100);
   //rclcpp::Rate loop_rate(10000);
 
-  auto stateChecker = std::make_shared<StateChecker>(node);
+  auto stateChecker = std::make_shared<StateChecker>();
   //auto stateChecker2 = std::make_shared<StateChecker>();
   std::chrono::nanoseconds timeout;
   timeout= std::chrono::nanoseconds { 2000000000 };
-  exec.add_node(node);
+  exec.add_node(stateChecker);
   char option = 'y';
 
   do{
@@ -433,12 +435,12 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
           exec.spin_once(timeout);
 
           std::cout << "checking machine state... \n";
-          
+
           }
  exec.remove_node(node);
-  
-  
-    
+
+
+
 
       //int state = check.getState();
       int state = stateChecker->getState();
@@ -448,7 +450,7 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
           std::cout << "eDO is in state INIT.\nLaunching calibration...\n";
           calibrate(node, false);
           return true;          // OK to continue
-      
+
         case 1:
           std::cout << "eDO is in state NOT_CALIBRATE.\n"
                     << "Launching calibration...\n";
@@ -458,7 +460,7 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
         case 2:
           std::cout << "eDO is in state CALIBRATE.\nNo need to calibrate.\n";
           return true;          // OK to continue
-        
+
         case 3:
           std::cout << "eDO is in state MOVE.\nIs the tablet controller in use?\n"
                     << "Fetch new state? Enter y/n: ";
@@ -476,12 +478,12 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
             return false;       // Exit
           }
           break;                // Check state again
-     
+
         case 5:
           std::cout << "eDO is in state MACHINE_ERROR.\nRestart reccommended.\n"
                     << "Terminating edo_manual_ctrl";
           return false;         // Exit
-        
+
         case 6:
           std::cout << "eDO is in state BRAKED.\nRestart reccommended.\n"
                     << "Terminating edo_manual_ctrl";
@@ -503,7 +505,7 @@ bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared
 
       }  // switch(state)
   } while(option == 'y');
-  
+
 return false;
 }  // initialStartup()
 
@@ -511,12 +513,12 @@ return false;
 
 void move(std::shared_ptr<rclcpp::Node> node)
 {
-  //debug 
+  //debug
 auto move_ctrl = std::make_shared<MovementCommandQueue>();
  // MovementCommandQueue move_ctrl();
-      
+
   int anglesOrCartesian, numEntries = 0, delay = 0;   // Vars to save user input
-  
+
   // Output control information
   std::cout << "Select move type:\n"
             << "0 - joint movement to joint point\n"
@@ -537,7 +539,7 @@ auto move_ctrl = std::make_shared<MovementCommandQueue>();
               << "X Y Z A E R\n";
   }
   std::vector<edo_core_msgs::msg::MovementCommand> pointVec;
-  
+
   // Read each entry
   for(int i = 0; i < numEntries; ++i){
     edo_core_msgs::msg::MovementCommand msg = createMove(anglesOrCartesian, delay);
@@ -546,7 +548,7 @@ auto move_ctrl = std::make_shared<MovementCommandQueue>();
         scanf("%f", &msg.target.joints_data[x]);
       }
     }
-    else{ 
+    else{
       scanf("%f", &msg.target.cartesian_data.x);
       scanf("%f", &msg.target.cartesian_data.y);
       scanf("%f", &msg.target.cartesian_data.z);
@@ -557,7 +559,7 @@ auto move_ctrl = std::make_shared<MovementCommandQueue>();
     pointVec.push_back(msg);        // Store all waypoints in vector
                                     // to be executed
   }
-  
+
   int numLoops = 0;
   while (numLoops < 1){
     std::cout << "Enter number of loops: ";
@@ -565,8 +567,8 @@ auto move_ctrl = std::make_shared<MovementCommandQueue>();
     if (numLoops < 1){
       std::cout << "Number of loops must be at least 1.\n";
     }
-  }  
-  // Push waypoints from vector to queue system in MoveCommandQueue class    
+  }
+  // Push waypoints from vector to queue system in MoveCommandQueue class
   for(int i = 0; i < numLoops; ++i){
     std::vector<edo_core_msgs::msg::MovementCommand>::iterator it = pointVec.begin();
     while(it != pointVec.end()){
@@ -580,5 +582,3 @@ auto move_ctrl = std::make_shared<MovementCommandQueue>();
   }
 
 }  // move()
-
-

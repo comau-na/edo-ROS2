@@ -30,11 +30,11 @@ using std::placeholders::_1;
 /** @brief This class creates and stores ROS2 Subscribers to
  *  output the e.DO's Cartesian Position, Machine State, and Joint Angle Data.
  */
-class DataDisplay 
+class DataDisplay : public rclcpp::Node
 {
   
 public:
-  DataDisplay(std::shared_ptr<rclcpp::Node> node);
+  DataDisplay(); //std::shared_ptr<rclcpp::Node> node
   // Constructor creates and initializes subscribers and bools for checking
   // for completion
   // DataDisplay(ros::NodeHandle& nh_in);
