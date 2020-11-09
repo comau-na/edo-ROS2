@@ -1,0 +1,24 @@
+-
+  ros1_package_name: 'edo_core_msgs'
+  ros1_message_name: 'JointState'
+  ros2_package_name: 'edo_core_msgs'
+  ros2_message_name: 'JointState'
+  fields_1_to_2:
+    position: 'position'
+    velocity: 'velocity'
+    current: 'current'
+    commandFlag: 'command_flag'
+    R_jnt: 'r_jnt'
+
+-
+  ros1_package_name: 'edo_core_msgs'
+  ros1_message_name: 'JointFwVersion'
+  ros2_package_name: 'edo_core_msgs'
+  ros2_message_name: 'JointFwVersion'
+  fields_1_to_2:
+    id: 'id'
+    majorRev: 'major_rev'
+    minorRev: 'minor_rev'
+    revision: 'revision'
+    svn: 'svn'
+
