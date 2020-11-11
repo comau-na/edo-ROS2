@@ -34,7 +34,7 @@
 MovementCommandQueue::MovementCommandQueue()
 : Node("movement_command_queue")
 {
-  move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementCommand>(
+  move_ack_sub = this->create_subscription<edo_core_msgs::msg::MovementFeedback>(
     "/machine_movement_ack", 100, std::bind(&MovementCommandQueue::moveAckCallback, this, _1));
 
   move_ctrl_pub = this->create_publisher<edo_core_msgs::msg::MovementCommand>("/bridge_move",
