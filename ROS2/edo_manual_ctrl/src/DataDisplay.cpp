@@ -87,7 +87,12 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr s
 void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
      std::cout << "JointStateArray/joints_mask: " << pose->joints_mask << "\n";
-    //std::cout << "edo_core_msgs/JointState[] joints: " << pose->joints[] << "\n";
+   for(edo_core_msgs::msg::JointState joint : pose->joints)
+    {
+      std::cout << "edo_core_msgs/JointState[] joints: " << joint.position << "\n";
+    }
+
+
     jointPrinted = true;
  }
 }  // DataDisplay::printJointPose()
