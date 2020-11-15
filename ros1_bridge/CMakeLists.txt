@@ -16,6 +16,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rmw_implementation_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(edo_core_msgs REQUIRED)
 
 # find ROS 1 packages
 set(cmake_extras_files cmake/find_ros1_package.cmake cmake/find_ros1_interface_packages.cmake)
@@ -40,6 +41,7 @@ if(NOT ros1_roscpp_FOUND)
 endif()
 
 find_ros1_package(std_msgs REQUIRED)
+#find_ros1_interface_package(edo_core_msgs REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -143,11 +145,13 @@ function(custom_executable target)
     ${ARG_UNPARSED_ARGUMENTS})
   ament_target_dependencies(${target}
     "rclcpp"
+    "edo_core_msgs"
     ${ARG_TARGET_DEPENDENCIES})
   if(ARG_ROS1_DEPENDENCIES)
     ament_target_dependencies(${target}
       "ros1_roscpp"
-      "ros1_std_msgs")
+      "ros1_std_msgs"
+      "ros1_edo_core_msgs")
   endif()
   if(ARG_DEPENDENCIES)
     add_dependencies(${target} ${ARG_DEPENDENCIES})
@@ -157,9 +161,11 @@ function(custom_executable target)
   DESTINATION lib/${PROJECT_NAME})
 endfunction()
 
+#"edo_core_msgs"
 custom_executable(simple_bridge_1_to_2 "src/simple_bridge_1_to_2.cpp"
-  ROS1_DEPENDENCIES
+  ROS1_DEPENDENCIES 
   TARGET_DEPENDENCIES "std_msgs")
+#ament_target_dependencies(simple_bridge_1_to_2 edo_core_msgs ) 
 custom_executable(simple_bridge_2_to_1 "src/simple_bridge_2_to_1.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")

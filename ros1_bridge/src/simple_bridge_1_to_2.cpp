@@ -23,6 +23,9 @@
 #endif
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+
+#include "edo_core_msgs/JointStateArray.h"
+#include "edo_core_msgs/JointState.h"
 #ifdef __clang__
 # pragma clang diagnostic pop
 #endif
@@ -30,17 +33,22 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "edo_core_msgs/msg/joint_state_array.hpp"
+#include "edo_core_msgs/msg/joint_state.hpp"
 
 
-rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub;
+rclcpp::Publisher<edo_core_msgs::msg::JointStateArray>::SharedPtr pub;
 
-void chatterCallback(const std_msgs::String::ConstPtr & ros1_msg)
+void jointStateArrayCallback(const edo_core_msgs::JointStateArray::ConstPtr & ros1_msg)
 {
-  std::cout << "I heard: [" << ros1_msg->data << "]" << std::endl;
+   for(edo_core_msgs::JointState joint : ros1_msg->joints)
+    {
+      std::cout << "edo_core_msgs/JointState[] joints: " << joint.position << "\n";
+    }
 
-  auto ros2_msg = std::make_unique<std_msgs::msg::String>();
-  ros2_msg->data = ros1_msg->data;
-  std::cout << "Passing along: [" << ros2_msg->data << "]" << std::endl;
+  auto ros2_msg = std::make_unique<edo_core_msgs::msg::JointStateArray>();
+  ros2_msg->joints_mask = ros1_msg->joints_mask;
+  std::cout << "Passing along: [" << ros2_msg->joints_mask << "]" << std::endl;
   pub->publish(std::move(ros2_msg));
 }
 
@@ -48,13 +56,13 @@ int main(int argc, char * argv[])
 {
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("talker");
-  pub = node->create_publisher<std_msgs::msg::String>("chatter", 10);
+  auto node = rclcpp::Node::make_shared("simple_1_to_2_bridge");
+  pub = node->create_publisher<edo_core_msgs::msg::JointStateArray>("machine_algo_jnt_state_bridge", 10);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "listener");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("chatter", 10, chatterCallback);
+  ros::Subscriber sub = n.subscribe("machine_algo_jnt_state", 10, jointStateArrayCallback);
 
   ros::spin();
 
