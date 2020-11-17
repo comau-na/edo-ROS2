@@ -59,8 +59,12 @@ DataDisplay::DataDisplay() : Node("data_display")
  */
 void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose){
   if(!cartesianPrinted){
-    std::cout << "CartesianPose/x: " << pose->x << ", CartesianPose/y: " 
-      << pose->y << ", CartesianPose/z: " << pose->z <<"\n";
+    std::cout << "CartesianPose/x: " << pose->x <<"\n" 
+    << "CartesianPose/y: " << pose->y <<"\n" 
+    << "CartesianPose/z: " << pose->z <<"\n"
+    <<"CartesianPose/a: " << pose->a << "\n" 
+    <<"CartesianPose/e: " << pose->e << "\n"
+    <<"CartesianPose/r: " << pose->r << "\n";
     cartesianPrinted = true;
   }
 }  // DataDisplay::printPoseData()
