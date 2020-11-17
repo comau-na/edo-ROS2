@@ -1,7 +1,0 @@
-<map id="include/StateChecker.h" name="include/StateChecker.h">
-<area shape="rect" id="node2" href="$Relay_8h.html" title="Class definition for Relay. " alt="" coords="71,80,183,107"/>
-<area shape="rect" id="node5" href="$edo__manual__ctrl_8cpp.html" title="ROS node allows for e.DO to be controlled via Linux terminal. This file and the classes that it uses ..." alt="" coords="208,80,372,107"/>
-<area shape="rect" id="node6" href="$StateChecker_8cpp.html" title="Class implementation for StateChecker. Used to check the state of e.DO. " alt="" coords="397,80,546,107"/>
-<area shape="rect" id="node3" href="$Relay_8cpp.html" title="Class reads std_msgs::Int8MultiArray published by e.DO simulation and translates them and sends them ..." alt="" coords="5,155,108,181"/>
-<area shape="rect" id="node4" href="$temp__node_8cpp_source.html" title="src/temp_node.cpp" alt="" coords="133,155,266,181"/>
-</map>

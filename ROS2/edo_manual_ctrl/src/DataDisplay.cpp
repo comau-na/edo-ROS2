@@ -44,7 +44,7 @@ DataDisplay::DataDisplay() : Node("data_display")
   "/machine_state", 10, std::bind(&DataDisplay::printState, this,_1));
   joint_pose_sub_ =
   this->create_subscription<edo_core_msgs::msg::JointStateArray>(
-  "/machine_algo_jnt_state", 10, std::bind(&DataDisplay::printJointPose,
+  "/machine_algo_jnt_state_bridge", 10, std::bind(&DataDisplay::printJointPose,
   this,_1)); 
   cartesianPrinted = false; 
   statePrinted = false; 
@@ -87,9 +87,17 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr s
 void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
      std::cout << "JointStateArray/joints_mask: " << pose->joints_mask << "\n";
+    //std::cout << "JointStateArray/joints: " << pose->joints[0].position << endl;
+     int i = 0;
    for(edo_core_msgs::msg::JointState joint : pose->joints)
     {
-      std::cout << "edo_core_msgs/JointState[] joints: " << joint.position << "\n";
+      std::cout << "edo_core_msgs/msg/JointState[" << i << "] position: " << joint.position << "\n";
+      std::cout << "edo_core_msgs/msg/JointState[" << i << "] velocity: " << joint.velocity << "\n";
+      std::cout << "edo_core_msgs/msg/JointState[" << i << "] current: " << joint.current << "\n";
+      std::cout << "edo_core_msgs/msg/JointState[" << i << "] command_flag: " << joint.command_flag << "\n";
+      std::cout << "edo_core_msgs/msg/JointState[" << i << "] r_jnt: " << joint.r_jnt << "\n";
+
+      i++;
     }
 
 

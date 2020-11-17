@@ -41,13 +41,26 @@ rclcpp::Publisher<edo_core_msgs::msg::JointStateArray>::SharedPtr pub;
 
 void jointStateArrayCallback(const edo_core_msgs::JointStateArray::ConstPtr & ros1_msg)
 {
+
+	auto ros2_msg = std::make_unique<edo_core_msgs::msg::JointStateArray>();
+  	ros2_msg->joints_mask = ros1_msg->joints_mask;
+  	ros2_msg->joints.resize(6);
+	int i = 0;
    for(edo_core_msgs::JointState joint : ros1_msg->joints)
     {
-      std::cout << "edo_core_msgs/JointState[] joints: " << joint.position << "\n";
+        
+        ros2_msg->joints[i].position = joint.position;
+		ros2_msg->joints[i].velocity = joint.velocity;
+		ros2_msg->joints[i].current = joint.current;
+		ros2_msg->joints[i].command_flag = joint.commandFlag;
+		ros2_msg->joints[i].r_jnt = joint.R_jnt;         
+		std::cout << "edo_core_msgs/msg/JointState[] joints: " << ros2_msg->joints[i].position << "\n";
+
+        i++;
     }
 
-  auto ros2_msg = std::make_unique<edo_core_msgs::msg::JointStateArray>();
-  ros2_msg->joints_mask = ros1_msg->joints_mask;
+ 
+
   std::cout << "Passing along: [" << ros2_msg->joints_mask << "]" << std::endl;
   pub->publish(std::move(ros2_msg));
 }

@@ -34,15 +34,15 @@ int main(int argc, char **argv)
 	private_nh.param<double>("controller_frequency", controller_frequency_, 100);
 
 	edo_core_msgs::JointState state[6];
-	state[0].position = 0;
+	state[0].position = 1;
 	state[0].velocity = 0;
 	state[0].current = 0;
 
-	state[1].position = 0;
+	state[1].position = 2;
 	state[1].velocity = 0;
 	state[1].current = 0;
 
-	state[2].position = 0;//90;
+	state[2].position = 90;//90;
 	state[2].velocity = 0;
 	state[2].current = 0;
 
