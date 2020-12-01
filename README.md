@@ -22,3 +22,7 @@ This is a package that is currently being developed to create a wrapper class fo
 - ROS2 Eloquent
 - Installation of the ros1_bridge package
 - edo_core_msgs package, along with the updated, ROS2 friendly, version of the package included in this repository
+- ncurses
+
+# Setup Instructions
+
