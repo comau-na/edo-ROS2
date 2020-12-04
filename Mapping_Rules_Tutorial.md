@@ -89,6 +89,7 @@ The general structure of how to build the bridge with custom messages is:
 5. Build the bridge
 		
 The specific commands for rebuilding will look similar to this:
+			
 			. /opt/ros/melodic/setup.bash
 			. /opt/ros/eloquent/setup.bash
 			. <workspace-parent-path>/ros1_msgs_ws/install_isolated/setup.bash
@@ -97,5 +98,6 @@ The specific commands for rebuilding will look similar to this:
 			colcon build --packages-select ros1_bridge --cmake-force-configure
 		
 Now, run this command to ensure that the message was paired: ros2 run ros1_bridge dynamic_bridge --print-pairs
+
 - your message should now show up on this list
 		
