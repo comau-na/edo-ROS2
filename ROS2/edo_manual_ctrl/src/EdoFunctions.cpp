@@ -159,7 +159,6 @@ void jog(std::shared_ptr<rclcpp::Node> node){
     std::cin >> ch;
   }
   ch = '\n';
-  bool last = false;
   double velocity = 1.0;
 
 
@@ -181,86 +180,72 @@ void jog(std::shared_ptr<rclcpp::Node> node){
       case 'q':
       case 'Q':
         jogHelper(msg, 1, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'a':
       case 'A':
         jogHelper(msg, -1, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'w':
       case 'W':
         jogHelper(msg, 2, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 's':
       case 'S':
         jogHelper(msg, -2, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'e':
       case 'E':
         jogHelper(msg, 3, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'd':
       case 'D':
         jogHelper(msg, -3, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'r':
       case 'R':
         jogHelper(msg, 4, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'f':
       case 'F':
         jogHelper(msg, -4, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 't':
       case 'T':
         jogHelper(msg, 5, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'g':
       case 'G':
         jogHelper(msg, -5, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'y':
       case 'Y':
         jogHelper(msg, 6, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'h':
       case 'H':
         jogHelper(msg, -6, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       //Gripper moves
       case 'i':
       case 'I':
         jogHelper(msg, 7, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'k':
       case 'K':
         jogHelper(msg, -7, jog_ctrl_pub, loop_rate, velocity);
-        last = true;
         break;
 
       case 'u':
@@ -511,7 +496,7 @@ return false;
 
 
 
-void move(std::shared_ptr<rclcpp::Node> node)
+void move()
 {
   //debug
 auto move_ctrl = std::make_shared<MovementCommandQueue>();
