@@ -5,7 +5,7 @@
 
 echo "Neat! The bridge should run now!"
 roscore & 
-source ~/newgithub/edo-ROS2/install/setup.bash
+. install/setup.bash
 sleep 1 
 
 
