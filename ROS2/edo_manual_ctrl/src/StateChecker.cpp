@@ -6,55 +6,42 @@
  */
 
 #include "StateChecker.h"
-//#include <memory>
-//using std::placeholders::_1;
 
-
-/***************************************************************
-**                Function(s) Definition
-****************************************************************/
-
-/** @brief Construct StateChecker object. Constructor creates and initializes
- *  subscriber to check the e.DO's Machine State
- *  @param nh_in - ROS NodeHandle object by reference to create ROS Subscriber
- *  @return StateChecker object
- *  @exception None
- */
+// ===============================================================
+// Constructor for StateChecker. Inherits from rclcpp Node.
+// Simply creates the subscription.
+// ===============================================================
   StateChecker::StateChecker() : Node("machine_state")
   {
     subscription_ = this->create_subscription<edo_core_msgs::msg::MachineState>(
       "/machine_state", 10, std::bind(&StateChecker::stateCallback, this, _1));
   }
 
-/** @brief Callback function to get and save state number from "/machine_state"
- *  ROS topic.
- *  @param state - MachineState message type from "/machine_state" ROS topic
- *  @return void
- *  @exception None
- */
+
+// ===============================================================
+// Callback function to get and save state number from "/machine_state".
+// It also sets the stateReceived variable to true to indicate that
+// a machine state has been received.
+// ===============================================================
 
  void StateChecker::stateCallback(const edo_core_msgs::msg::MachineState::SharedPtr msg) 
   {
-    std::cout << "MachineState: " << msg->current_state << "\n";
-    //RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->current_state);
-     stateReceived = true;
+    std::cout << "MachineState: " << (uint) msg->current_state << "\n";
+    
+    stateReceived = true;
     machineState = msg->current_state;
 
   }
   
-/** @brief Getter member function to return the saved machine state number.
- *  @param None
- *  @return int - 
- *  @exception None
- */
 
+// ===============================================================
+// Getter member function to return the saved machine state number.
+// ===============================================================
 int StateChecker::getState(){return machineState;}
-/** @brief Getter member function to return the stateReceived bool
- *  @param None
- *  @return bool - Value of stateReceived (true if state has been received)
- *  @exception None
- */
 
+// ===============================================================
+// Getter member function to return the stateReceived bool
+// ===============================================================
 int StateChecker::getStateReceived(){return stateReceived;}
 
 

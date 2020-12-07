@@ -1,5 +1,9 @@
 #include "EdoFunctions.cpp"
 
+// ===============================================================
+// This file is meant to be an example of how this library of functions can be used
+// It can also just be used as a standalone executable if that is preferrable.
+// ===============================================================
 int main(int argc, char **argv){
   
   // Initialize "edo_manual_ctrl" ROS node and NodeHandle for Publishers and
@@ -8,12 +12,11 @@ int main(int argc, char **argv){
   auto calibrate_node = rclcpp::Node::make_shared("calibrate_node"); 
   auto jog_node = rclcpp::Node::make_shared("jog_ctrl"); 
   auto move_node = rclcpp::Node::make_shared("move_ctrl"); 
-  //auto data_node = rclcpp::Node::make_shared("data_display"); 
+ 
   
   rclcpp::executors::SingleThreadedExecutor exec;
  
- // uncomment this if you want to test calibrate alone
- //calibrate(node, false);
+ 
 
   std::cout << std::fixed;                // Set precision of decimals to 
   std::cout << std::setprecision(2);      // 2 decimal places for output

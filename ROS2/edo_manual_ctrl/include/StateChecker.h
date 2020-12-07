@@ -10,18 +10,17 @@
 
 #include <functional>
 #include <memory>
-#include "rclcpp/rclcpp.hpp" //ros2
-//#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp" 
+
 #include "edo_core_msgs/msg/machine_state.hpp"
 #include <iostream>
 using std::placeholders::_1;
-/***************************************************************
-**                Class(es) Definition
-****************************************************************/
 
-/** @brief This class creates and stores a ROS Subscriber to get the state
- *  number of e.DO when the edo_manual_ctrl node is initially started
- */
+
+// ===============================================================
+// This class creates a subscriber that listens for the machine state
+// and stores the result
+// ===============================================================
 class StateChecker : public rclcpp::Node
 {
 public:

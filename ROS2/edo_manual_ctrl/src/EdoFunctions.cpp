@@ -22,13 +22,9 @@
 
 using namespace std::chrono_literals;
 
-/** @brief Function manages jog command creation. Fills in Jog type values
- *  and returns a message to be filled with velocity values on scale from
- *  -1.0 to 1.0.
- *  @param None
- *  @return MovementCommand - Message defined in edo_core_msgs ROS package
- *  @exception None
- */
+// ===============================================================
+// Simply creates a MovementCommand message with values that correllate to a jog message
+// ===============================================================
 edo_core_msgs::msg::MovementCommand createJog(){
   edo_core_msgs::msg::MovementCommand msg;
   msg.move_command = 74;
@@ -108,9 +104,12 @@ edo_core_msgs::msg::MovementCommand createMove(int type, int delay){
 
 
 
-
+// ===============================================================
+// This function actually publishes the message
+// ===============================================================
 void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
     std::shared_ptr<rclcpp::Publisher<edo_core_msgs::msg::MovementCommand_<std::allocator<void> >, std::allocator<void> > > jog_ctrl_pub, rclcpp::WallRate& loop_rate, double velocity){
+ 
   msg.target.joints_data.clear();
   msg.target.joints_data.resize(10,0.0);
   if(joint_number > 0){
@@ -122,22 +121,22 @@ void jogHelper(edo_core_msgs::msg::MovementCommand& msg, int joint_number,
               << velocity << std::flush;
     msg.target.joints_data[(-1 * joint_number) - 1] = -1 * velocity;
   }
+
+  // now publish the message
   jog_ctrl_pub->publish(msg);
- // rclcpp::spin_once();
+
   loop_rate.sleep();
 }  // jogHelper()
 
-/** @brief Function manages sending jog commands using ncurses library for
- *  push-button key capturing
- *  @param nh - ROS NodeHangle for creating jog publisher
- *  @return void
- *  @exception None
- */
+// ===============================================================
+// This function allows the user to move each joint in real-time
+// ===============================================================
 void jog(std::shared_ptr<rclcpp::Node> node){
 
-  //ros::Rate loop_rate(100);
+ 
   rclcpp::WallRate loop_rate(100);
-  //ros::Publisher jog_ctrl_pub =  nh.advertise<edo_core_msgs::MovementCommand>("/bridge_jog",10);
+
+  // create publisher for bridge_jog topic
   auto jog_ctrl_pub = node->create_publisher<edo_core_msgs::msg::MovementCommand>("/bridge_jog", 10);
   edo_core_msgs::msg::MovementCommand msg = createJog();
   char ch = '\n';     // Char to hold keypress value (Ncurses)
@@ -173,7 +172,7 @@ void jog(std::shared_ptr<rclcpp::Node> node){
    do {
     ch = getch(); // Ncurses function returns char of key pressed
                   // returns ERR when no key press
-    //std::cin >> ch;
+
     // Switch decides which joint to move and which direction
     switch(ch) {
 
@@ -271,25 +270,20 @@ void jog(std::shared_ptr<rclcpp::Node> node){
 
 }  // jog()
 
-/** @brief Function handles initial callibration
- *  @param nh - ROS NodeHandle for creating Publishers for initializaiton,
- *  reset, and calibration
- *  @param recalib - bool is true if the e.DO has aleady been calibrated and
- *  is being recalibrated so that initialization and reset are not repeated
- *  @return void
- *  @exception None
-*/
-void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::executors::SingleThreadedExecutor& exec
+// ================================================================
+// Calibrate function: This publishes messages to initialize the robot and disengage the brakes
+// It uses the jog function to allow the user to manually move each joint to is home location
+// ================================================================
+void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ 
 
 
-  //ros::Publisher calib_pub = nh.advertise<edo_core_msgs::JointCalibration>("/bridge_jnt_calib",10);
+  // create ros2 publisher
   auto calib_pub = node->create_publisher<edo_core_msgs::msg::JointCalibration>("/bridge_jnt_calib", 1000);
-  rclcpp::executors::SingleThreadedExecutor exec;
+  //rclcpp::executors::SingleThreadedExecutor exec;
 
   rclcpp::WallRate loop_rate(10);
-
   edo_core_msgs::msg::JointCalibration calib_msg;
-  std::chrono::milliseconds timespan(10000);   // To sleep program for 10 sec
+  std::chrono::milliseconds timespan(10000);   // To sleep program for x seconds
 
 
   char proceed = '\n';  // Char to allow user to control when commands are sent
@@ -297,54 +291,60 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
 
   if(!recalib){
 
-    //ros::Publisher reset_pub = nh.advertise<edo_core_msgs::JointReset>("/bridge_jnt_reset",10);
+    // use this to publish the reset message
     auto reset_pub = node->create_publisher<edo_core_msgs::msg::JointReset>("/bridge_jnt_reset", 10);
-
-
-    //ros::Publisher init_pub = nh.advertise<edo_core_msgs::JointInit>("/bridge_init",10);
-    auto init_pub = node->create_publisher<edo_core_msgs::msg::JointInit>("/bridge_init", 10);
-
-
     edo_core_msgs::msg::JointReset reset_msg;
+
+    // use this to publish the initialization message
+    auto init_pub = node->create_publisher<edo_core_msgs::msg::JointInit>("/bridge_init", 10);
     edo_core_msgs::msg::JointInit init_msg;
+
 
     while(proceed != 'y'){
       std::cout << "Enter 'y' to initialize 6-Axis eDO w/o gripper: ";
       std::cin >> proceed;
     }
-    proceed = '\n';                             // Reset char for next prompt
+    proceed = '\n'; // Reset char for next prompt
+
+    // set the values for the init message
     init_msg.mode = 0;
     init_msg.joints_mask = 63;
     init_msg.reduction_factor = 0.0;
 
     std::cout << "/bridge_init sub count: " << init_pub->get_subscription_count() << "\n";
 
+    // wait until there is a subscriber before you publish the message
     while(init_pub->get_subscription_count() == 0 ){
       loop_rate.sleep();
       std::cout << "checking for Subscribers to /bridge_init... \n";
     }
-    init_pub->publish(init_msg);
-    //ros::spinOnce();
-    //loop_rate.sleep();
 
+    // now publish the message
+    init_pub->publish(init_msg);
+ 
     std::this_thread::sleep_for(timespan);      // while e.DO initializes
+
 
     while(proceed != 'y'){
       std::cout << "Enter 'y' to disengage brakes: ";
       std::cin >> proceed;
     }
-    proceed = '\n';                             // Reset char for next prompt
+    proceed = '\n'; // Reset char for next prompt
+
+    // initialize the reset message values
     reset_msg.joints_mask = 63;
     reset_msg.disengage_steps = 2000;
     reset_msg.disengage_offset = 3.5;
+
+    // wait until there is a subscriber listening
     while(reset_pub->get_subscription_count() == 0){
       loop_rate.sleep();
       std::cout << "Checking for Subscribers to /bridge_jnt_reset... \n";
     }
+
+    // now publish the message
     reset_pub->publish(reset_msg);
-    //ros::spinOnce();
-    //loop_rate.sleep();
-    //std::this_thread::sleep_for(timespan);
+
   }
 
 
@@ -360,6 +360,7 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
   }
   proceed = '\n';         // Reset char for next prompt
 
+  // call the jog function to allow the user to manually calibrate
   jog(node);
 
   while(proceed != 'y'){
@@ -367,23 +368,21 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){ //rclcpp::exec
     std::cin >> proceed;
   }
   proceed = '\n';
+
+  // set the value for the calibration message
   calib_msg.joints_mask = 63;
 
+  // wait until there is a subscriber listening
   while(calib_pub->get_subscription_count() == 0 ){
     loop_rate.sleep();
     std::cout << "checking subscribers to /bridge_jnt_calib... \n";
   }
 
 
+  // now publish the message
   calib_pub->publish(calib_msg);
-  //ros::spinOnce();
-  // rclcpp::spin(node);
-  //loop_rate.sleep();
-  //std::this_thread::sleep_for(timespan);
 
-
-
-}  // calibrate()
+}  
 
 void getData(rclcpp::executors::SingleThreadedExecutor& exec){
 
@@ -402,32 +401,37 @@ void getData(rclcpp::executors::SingleThreadedExecutor& exec){
   }
 
 
-
+// ========================================================================
+// This function should be called before going to the main menu of this program.
+// It checks if the machine is in use by another program or if it has already been calibrated.
+// ========================================================================
 bool initialStartup(rclcpp::executors::SingleThreadedExecutor& exec, std::shared_ptr<rclcpp::Node> node){ //rclcpp::Node node
-  //ros::Rate loop_rate(100);
-  //rclcpp::Rate loop_rate(10000);
 
+  // initialize state checker class
   auto stateChecker = std::make_shared<StateChecker>();
-  //auto stateChecker2 = std::make_shared<StateChecker>();
+ 
+
   std::chrono::nanoseconds timeout;
   timeout= std::chrono::nanoseconds { 2000000000 };
+
+  // executors allow for more options with spinning nodes
   exec.add_node(stateChecker);
   char option = 'y';
 
   do{
-
+      // error handling that says do not move forward until the machine state has been received
       while(!stateChecker->getStateReceived() ){
           exec.spin_once(timeout);
 
           std::cout << "checking machine state... \n";
 
           }
+
+  // always remove nodes from an executor once you are done using it
  exec.remove_node(node);
 
 
-
-
-      //int state = check.getState();
+    // switch statement that selects the correct option based on machine state
       int state = stateChecker->getState();
       switch(state){
 
