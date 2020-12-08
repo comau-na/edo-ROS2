@@ -1,5 +1,8 @@
 # How to create map custom messages manually using yaml
 	
+		Note: https://github.com/ros2/ros1_bridge/blob/master/doc/index.rst is the tutorial that most of 
+		this information is based on
+		
 ### When to make a custom mapping rule:
 
 Most of the time, messages are automatically mapped by the dynamic bridge. If messages do not share the same name or have different field names, you must create a yaml file to tell the bridge to pair the messages and fields. It is sometimes necessary to have different names for the ROS and ROS2 versions of a message because ROS allows capital letters in message names while ROS2 does not.
