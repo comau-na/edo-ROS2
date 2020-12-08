@@ -13,7 +13,7 @@
 
 # edo-ROS2
 
-This is a package that is currently being developed to create a wrapper class for the e.DO robot. The project will allow users to controll the e.DO directly from the command line.
+This package allows users to control an e.DO robot from a linux command line terminal. 
 
 
 # Dependencies
@@ -24,5 +24,10 @@ This is a package that is currently being developed to create a wrapper class fo
 - edo_core_msgs package, along with the updated, ROS2 friendly, version of the package included in this repository
 - ncurses
 
-# Setup Instructions
+# Tutorials and Usage
 
+There are tutorials to help set up this project located in the tutorials and documentation folder.
+The following videos also provide examples of how to build and run this package.
+
+Building the package: https://www.youtube.com/watch?v=9bkkFNz5Bs8
+Using the package: https://youtu.be/egTKGkaJMBs
