@@ -14,9 +14,8 @@
 
 #include "DataDisplay.h"
 
-//using std::placeholders::_1;
 
-/**
+/**ROS1**
 DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
   nh = nh_in;
   cartesian_pose_sub = nh.subscribe("/cartesian_pose", 10,
@@ -33,9 +32,10 @@ DataDisplay::DataDisplay(ros::NodeHandle& nh_in){
 
 */
 
+//**ROS2**
 DataDisplay::DataDisplay() : Node("data_display")
 {
-
+  //create three subscibers on instantiation of an object
   cartesian_pose_sub_ =
   this->create_subscription<edo_core_msgs::msg::CartesianPose>(
   "/cartesian_pose", 10, std::bind(&DataDisplay::printPoseData, this,_1));
@@ -46,17 +46,27 @@ DataDisplay::DataDisplay() : Node("data_display")
   this->create_subscription<edo_core_msgs::msg::JointStateArray>(
   "/machine_algo_jnt_state_bridge", 10, std::bind(&DataDisplay::printJointPose,
   this,_1)); 
+
   cartesianPrinted = false; 
   statePrinted = false; 
   jointPrinted =false;
 
 }
-
+//=======================================================================================
 /** @brief Callback function to print CartesianPose message
  *  @param pose - CartesianPose message type from "/cartesian_pose" ROS topic
  *  @return void
  *  @exception None
  */
+
+/**ROS1**
+void DataDisplay::printPoseData(const edo_core_msgs::CartesianPose& pose){
+  if(!cartesianPrinted){
+    std::cout << pose << "\n";
+    cartesianPrinted = true;
+*/
+
+//**ROS2**
 void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose){
   if(!cartesianPrinted){
     std::cout << "CartesianPose/x: " << pose->x <<"\n" 
@@ -69,11 +79,23 @@ void DataDisplay::printPoseData(const edo_core_msgs::msg::CartesianPose::SharedP
   }
 }  // DataDisplay::printPoseData()
 
+//=======================================================================================
 /** @brief Callback function to print MachineState message
  *  @param pose - MachineState message type from "/machine_state" ROS topic
  *  @return void
  *  @exception None
  */
+
+/**ROS1**
+void DataDisplay::printState(const edo_core_msgs::MachineState& state){
+  if(!statePrinted){
+    std::cout << state << "\n";
+    statePrinted = true;
+  }
+} */
+
+
+//**ROS2**
 void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr state){
   if(!statePrinted){
     std::cout << "MachineState/current_state: " << unsigned(state->current_state) << "\n";
@@ -82,17 +104,32 @@ void DataDisplay::printState(const edo_core_msgs::msg::MachineState::SharedPtr s
   }
 }  // DataDisplay::printState()
 
+
+//=======================================================================================
 /** @brief Callback function to print JointStateArray message
  *  @param pose - MachineState message type from "/machine_algo_jnt_state"
  *  ROS topic
  *  @return void
  *  @exception None
  */
+
+/**ROS1**
+void DataDisplay::printJointPose(const edo_core_msgs::JointStateArray& pose){
+  if(!jointPrinted){
+    std::cout << pose << "\n";
+    jointPrinted = true;
+  }
+}*/
+
+
+//**ROS2**
 void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose){
   if(!jointPrinted){
      std::cout << "JointStateArray/joints_mask: " << pose->joints_mask << "\n";
     //std::cout << "JointStateArray/joints: " << pose->joints[0].position << endl;
      int i = 0;
+
+  //loop through all e.DO joints and print out JointState message within JointStateArray
    for(edo_core_msgs::msg::JointState joint : pose->joints)
     {
       std::cout << "edo_core_msgs/msg/JointState[" << i << "] position: " << joint.position << "\n";
@@ -103,11 +140,12 @@ void DataDisplay::printJointPose(const edo_core_msgs::msg::JointStateArray::Shar
 
       i++;
     }
-
-
     jointPrinted = true;
  }
 }  // DataDisplay::printJointPose()
+
+
+//=======================================================================================
 
 /** @brief Getter member function to tell whether cartesian data has been
  *  printed
@@ -120,6 +158,7 @@ bool DataDisplay::getCartesianPrinted(){
   return cartesianPrinted;
 }  // DataDisplay::getCartesianPrinted()
 
+//=======================================================================================
 /** @brief Getter member function to tell whether State data has been
  *  printed
  *  @param None 
@@ -130,6 +169,8 @@ bool DataDisplay::getStatePrinted(){
   return statePrinted;
 }  // DataDisplay::getStatePrinted()
 
+
+//=======================================================================================
 /** @brief Getter member function to tell whether Joint data has been
  *  printed
  *  @param None 

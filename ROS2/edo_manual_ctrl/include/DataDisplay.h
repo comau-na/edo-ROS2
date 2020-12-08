@@ -42,17 +42,21 @@ public:
 
 
   // Callback function to print CartesianPose message 
+  //**ROS1**
   //void printPoseData(const edo_core_msgs::CartesianPose& pose);
+  //**ROS2**
   void printPoseData(const edo_core_msgs::msg::CartesianPose::SharedPtr pose);
   
-
-
   // Callback function to print MachineState message
+  //**ROS1**
   //void printState(const edo_core_msgs::MachineState& state);
+  //**ROS2**
   void printState(const edo_core_msgs::msg::MachineState::SharedPtr state);
 
   // Callback function to print JointStateArray message
+  //**ROS1**
   // void printJointPose(const edo_core_msgs::JointStateArray& pose);
+  //**ROS2**
   void printJointPose(const edo_core_msgs::msg::JointStateArray::SharedPtr pose);
 
   // Member function to tell whether cartesian data has been printed
@@ -66,15 +70,20 @@ public:
   bool getJointPrinted();
 
 private:
-
-  //ros::NodeHandle nh;                                 // ROS Node Handle
-  //rclcpp::Node node;
+  //**ROS1**
   //ros::Subscriber cartesian_pose_sub;                 // ROS subscriber
-  rclcpp::Subscription<edo_core_msgs::msg::CartesianPose>::SharedPtr cartesian_pose_sub_;                 // ROS subscriber
-  //ros::Subscriber machine_state_sub;                  // ROS subscriber
-  rclcpp::Subscription<edo_core_msgs::msg::MachineState>::SharedPtr machine_state_sub_;                  // ROS subscriber
-  //ros::Subscriber joint_pose_sub;                     // ROS subscriber
-  rclcpp::Subscription<edo_core_msgs::msg::JointStateArray>::SharedPtr joint_pose_sub_;                     // ROS subscriber
+  //**ROS2**
+  rclcpp::Subscription<edo_core_msgs::msg::CartesianPose>::SharedPtr cartesian_pose_sub_;     // ROS subscriber
+  
+  //**ROS1**
+  //ros::Subscriber machine_state_sub;                                                        // ROS subscriber
+  //**ROS2**
+  rclcpp::Subscription<edo_core_msgs::msg::MachineState>::SharedPtr machine_state_sub_;       // ROS subscriber
+
+  //**ROS1**
+  //ros::Subscriber joint_pose_sub;                                                           // ROS subscriber
+  //**ROS2**
+  rclcpp::Subscription<edo_core_msgs::msg::JointStateArray>::SharedPtr joint_pose_sub_;       // ROS subscriber
 
   bool cartesianPrinted, statePrinted, jointPrinted;  // True when printed
   

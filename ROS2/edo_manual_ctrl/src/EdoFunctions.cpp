@@ -384,20 +384,20 @@ void calibrate(std::shared_ptr<rclcpp::Node> node, bool recalib){
 
 }  
 
+
+// ================================================================
+// Print e.DO Data function: This function prints the current e.DO data and returns it to the commmand line.
+// ================================================================
 void getData(rclcpp::executors::SingleThreadedExecutor& exec){
 
-  //DataDisplay data(node);
-  auto data = std::make_shared<DataDisplay>();
-  exec.add_node(data);
-  //std::chrono::nanoseconds timeout;
-  //timeout= std::chrono::nanoseconds { 200000000 };
-  while(rclcpp::ok() && !(data->getCartesianPrinted() && data->getStatePrinted()&& data->getJointPrinted())){
-    //rclcpp::spin_some(node);
-    //std::cout << data.printState() << "\n";
-    exec.spin_some();
-    }
+  auto data = std::make_shared<DataDisplay>();  // instantiates a DataDisplay object
+  exec.add_node(data); //creates a ROS2 node from the object
 
-    exec.remove_node(data);
+  //stay in loop until data has been printed back to the user in the command line
+  while(rclcpp::ok() && !(data->getCartesianPrinted() && data->getStatePrinted()&& data->getJointPrinted())){
+    exec.spin_some(); //complete queued work in the SingleThreadedExecutor 
+    }
+    exec.remove_node(data);  //destroys node after data has been printed ot the command line
   }
 
 
