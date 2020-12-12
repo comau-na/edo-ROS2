@@ -29,7 +29,7 @@ This package allows users to control an e.DO robot from a linux command line ter
 There are tutorials to help set up this project located in the tutorials and documentation folder.
 The following videos also provide examples of how to build and run this package.
 
-**Building the package:** https://www.youtube.com/watch?v=9bkkFNz5Bs8
+**Building the package:** https://youtu.be/r9rDI4yP-Us
 
 **Using the package:** https://youtu.be/egTKGkaJMBs
 
