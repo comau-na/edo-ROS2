@@ -34,3 +34,8 @@ The following videos also provide examples of how to build and run this package.
 **Using the package:** https://youtu.be/egTKGkaJMBs
 
 **Explanation of code base:** https://youtu.be/z64mXXk3P70
+
+# Vision Package
+
+Uses Nvidia vision for object detection.
+https://github.com/NVIDIA-AI-IOT/ros2_torch_trt
