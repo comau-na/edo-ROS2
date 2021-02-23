@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gui" default="false" doc="We disable empty world in edo.launch file to load our custom sorting world"/>
+  <arg name="origin_xyz" default="'0 0 1.02'"/>
+  <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
+
+  <!-- startup simulated world -->
+  <include file="$(find edo_gazebo)/launch/edo_gripper.launch">
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="origin_xyz" value="$(arg origin_xyz)"/>
+    <arg name="paused" value="$(arg paused)"/>
+  </include>
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find edo_sorting)/worlds/tablesheet1.world"/>
+    <!-- more default parameters can be changed here -->
+  </include>
+  <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_description)/urdf/baxter.urdf -urdf -z 1 -model baxter" /> -->
+</launch>
