@@ -5,7 +5,7 @@
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
 
   <!-- startup simulated world -->
-  <include file="$(find edo_gazebo)/launch/edo_gripper.launch">
+  <include file="$(find edo_gripper)/launch/edo_gripper_dummy.launch">
     <arg name="gui" value="$(arg gui)"/>
     <arg name="origin_xyz" value="$(arg origin_xyz)"/>
     <arg name="paused" value="$(arg paused)"/>
