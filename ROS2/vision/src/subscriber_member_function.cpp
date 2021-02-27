@@ -21,7 +21,7 @@
 
 using std::placeholders::_1;
 
-class EdoObjDetection : public rclcpp::Node
+class EdoVision : public rclcpp::Node
 {
 public:
   EdoObjDetection()
@@ -29,15 +29,12 @@ public:
   {
     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
       "/detection", 10, std::bind(&EdoObjDetection::detectionCallback, this, _1));
-  }
-class EdoClassification : public rclcpp::Node
-{
-public:
-  EdoClassification()
+        EdoClassification()
   : Node("edo_Classification")
-  {
+  
     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
       "/detection", 10, std::bind(&EdoClassification::detectionCallback, this, _1));
+  
   }
 
 
