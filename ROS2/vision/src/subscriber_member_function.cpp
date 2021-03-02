@@ -28,14 +28,34 @@ public:
   : Node("edo_ObjectDetection")
   {
     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
-      "/detection", 10, std::bind(&EdoObjDetection::detectionCallback, this, _1));
-        EdoClassification()
-  : Node("edo_Classification")
-  
-    subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
-      "/detection", 10, std::bind(&EdoClassification::detectionCallback, this, _1));
-  
+      "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
   }
+
+  EdoClassification()
+  : Node("edo_Classification")
+  {
+     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
+      "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
+  }
+
+private:
+  void detectionCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg) 
+  {
+    std::cout << "test" << std::endl;
+    for(vision_msgs::msg::Detection2D detection : msg->detections){
+      // just for testing. print out values
+      std::cout << "test" << std::endl;
+    }    
+
+  }
+}
+
+
+class readEnviroment : public rclcpp::Node
+{
+  
+}
+
 
 
 int main(int argc, char * argv[])
