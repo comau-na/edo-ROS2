@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <cv_bridge/cv_bridge.h>
+#include "common.hpp"
 #include <functional>
 #include <memory>
+#include <blocks_buckets.h>
 
 #include "rclcpp/rclcpp.hpp"
 #include "vision_msgs/msg/detection2_d_array.hpp"
@@ -27,14 +33,14 @@ public:
   EdoObjDetection()
   : Node("edo_ObjectDetection")
   {
-    subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
+    subscription_obj = this->create_subscription<vision_msgs::msg::Detection2DArray>(
       "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
   }
 
   EdoClassification()
   : Node("edo_Classification")
   {
-     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
+     subscription_class = this->create_subscription<vision_msgs::msg::Classification2DArray>(
       "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
   }
 
@@ -48,13 +54,53 @@ private:
     }    
 
   }
+
 }
 
 
-class readEnviroment : public rclcpp::Node
+class EdoSorting
 {
-  
-}
+public:
+
+  void readEnvironment()
+  {
+    Blocks block; 
+    detections = vision_msgs::msg::Detection2DArray;
+
+    if(detections =! NULL)
+    {
+      //loop thru detection array
+      for (i=0; i<1;i++)
+      {
+        //if(detection == block)
+        //create block obj
+        //get block lcoation
+        //block class
+        detections[i] = Blocks block;
+      }
+      //if(detection == bucket)
+      // create bucket obj
+      //get bucket location
+      //bucket class
+
+    }
+  }
+
+
+  void ExecuteCommand(Blocks block, Buckets bucket)
+  {
+     //take in all buckets, blocks from readEnvironment
+   
+     //recieve block current postion, bucket postion is declared as destination coordinate(center of bucket) if block is not inside bucket
+      //matches block and bucket classes
+      //send messege to movement wrapper to navigate block to bucket destination
+      //gripper logic
+ 
+  }
+
+
+};
+
 
 
 
@@ -85,4 +131,4 @@ int main(int argc, char * argv[])
   */
   rclcpp::shutdown();
   return 0;
-}
+};
