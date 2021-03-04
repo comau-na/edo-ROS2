@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+#include <string>
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -20,13 +20,13 @@
 #include <functional>
 #include <memory>
 #include <blocks_buckets.h>
-
+#include <vector>
 #include "rclcpp/rclcpp.hpp"
 #include "vision_msgs/msg/detection2_d_array.hpp"
 
 
 using std::placeholders::_1;
-
+//Subscriber nodes
 class EdoVision : public rclcpp::Node
 {
 public:
@@ -40,54 +40,178 @@ public:
   EdoClassification()
   : Node("edo_Classification")
   {
-     subscription_class = this->create_subscription<vision_msgs::msg::Classification2DArray>(
-      "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
+     subscription_class = this->create_subscription<vision_msgs::msg::Classification2D>(
+      "/detection", 10, std::bind(&EdoVision::classificationCallback, this, _1));
   }
 
 private:
   void detectionCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg) 
   {
-    std::cout << "test" << std::endl;
+    std::cout << "detection msg contents start: " << std::endl;
     for(vision_msgs::msg::Detection2D detection : msg->detections){
       // just for testing. print out values
-      std::cout << "test" << std::endl;
+      std::cout << "detection msg contents end: " << std::endl;
     }    
 
   }
+   void classificationCallback(const vision_msgs::msg::Classification2D::SharedPtr msg) 
+  {
+    std::cout << "classifiation msg contents start: " << std::endl;
+    for(vision_msgs::msg::Classification2D classification : msg->results){
+      // just for testing. print out values
+      std::cout << "classifiation msg contents start:" << std::endl;
+};
 
-}
+//class1 or 2. 1 = Bucket, 2 = Block, 3 = Unknown?
+class Blocks
+{
+  int classification;
+  double block_curr_position;
+  std::string blockColor;
+  
+   Block( int classification, double curr_position, std::string blockColor)
+  {
+    this->classification = classification;
+    this->block_curr_position = curr_position;
+    this->std::string blockColor;
+  }
+
+  boolean isBlock(int classification)
+  {
+    if(classification == 2)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  double getBlockPosition()
+  {
+    return curr_position;
+  }
+  
+  void setBlockPostion( int p)
+  {
+    p = curr_position;
+  }
+
+  std::string getBlockColor()
+  {
+    return blockColor;
+  }
+
+  setBlockColor(std::string c)
+  {
+    c = blockColor;
+  }
+
+};
+
+class Buckets
+{
+  int classification;
+  double bucket_curr_position;
+  std::string blockColor;  
+
+
+  Bucket( int classification, double curr_position, std::string bucketColor)
+  {
+    this->classification = classification;
+    this->curr_position = curr_position;
+    this->std::string blockColor; 
+  }
+
+ boolean isBucket( int classification)
+ {
+   if(classification == 1)
+   {
+     return true;
+   }
+   else 
+   {
+     return false;
+   }
+ }
+
+  double getBucketPosition()
+  {
+    return curr_position;
+  }
+
+  setBucketPosition(double pos)
+  {
+    pos = curr_position;
+  }
+
+ std::string getBucketColor()
+  {
+    return bucketColor;
+  }
+
+  setBucketColor(std::string col)
+  {
+    col = bucketColor;
+  }
+};
+
 
 
 class EdoSorting
 {
 public:
 
-  void readEnvironment()
-  {
-    Blocks block; 
-    detections = vision_msgs::msg::Detection2DArray;
+   //to save Buckets
+  std::vector<Blocks> BucketVector;
+  //to save Blocks
+  std::vector<Buckets> BlockVector;
 
-    if(detections =! NULL)
+  void readEnvironment(int classification)
+  
+  {    
+    //if the camera has detected something// cant use this in if
+    if(vision_msgs::msg::Detection2D detection : msg->detections =! NULL)
     {
       //loop thru detection array
-      for (i=0; i<1;i++)
+      for (i = 0, i<vision_msgs::msg::Detection2D detection : msg->detections; i++)
       {
-        //if(detection == block)
-        //create block obj
-        //get block lcoation
-        //block class
-        detections[i] = Blocks block;
+        //check if Block or bucket
+        if(isBlock()==true)
+        {
+          //if is block, create block obj
+          //get block location
+          //get block classification
+          Blocks block;
+          block.setBlockPositon(i);
+          for(j = 0; j < vision_msgs::msg::Classification2D classification : msg->results)
+          {
+            block.setBlockColor
+          }
+          else{
+             //if(detection == bucket)
+            // create bucket obj
+            //get bucket location
+            //get bucket classfication
+            Buckets bucket;
+            bucket.setBucketPositon(i);
+            for(j = 0; j < vision_msgs::msg::Classification2D classification : msg->results)
+              {
+                bucket.setBucketColor
+              }
+
+          }
+        }
+      
       }
-      //if(detection == bucket)
-      // create bucket obj
-      //get bucket location
-      //bucket class
+     
 
     }
-  }
+  };
 
 
-  void ExecuteCommand(Blocks block, Buckets bucket)
+  void ExecuteCommand(std::vector BucketVector, std::vector BlockVector)
   {
      //take in all buckets, blocks from readEnvironment
    
