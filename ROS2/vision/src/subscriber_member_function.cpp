@@ -21,33 +21,24 @@
 
 using std::placeholders::_1;
 
-class EdoVision : public rclcpp::Node
+class EdoObjDetection : public rclcpp::Node
 {
 public:
-  EdoVision()
-  : Node("edo_vision")
+  EdoObjDetection()
+  : Node("edo_ObjectDetection")
   {
     subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
-      "/detection", 10, std::bind(&EdoVision::detectionCallback, this, _1));
+      "/detection", 10, std::bind(&EdoObjDetection::detectionCallback, this, _1));
   }
-
-
-private:
-  void detectionCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg) 
+class EdoClassification : public rclcpp::Node
+{
+public:
+  EdoClassification()
+  : Node("edo_Classification")
   {
-    std::cout << "test" << std::endl;
-    for(vision_msgs::msg::Detection2D detection : msg->detections){
-      // just for testing. print out values
-      std::cout << "test" << std::endl;
-    }    
-
+    subscription_ = this->create_subscription<vision_msgs::msg::Detection2DArray>(
+      "/detection", 10, std::bind(&EdoClassification::detectionCallback, this, _1));
   }
-  
-  rclcpp::Subscription<vision_msgs::msg::Detection2DArray>::SharedPtr subscription_;
-  
-};
-
-
 
 
 int main(int argc, char * argv[])
@@ -59,7 +50,9 @@ int main(int argc, char * argv[])
   rclcpp::NodeOptions options;
   //auto subscriber_node = std::make_shared<EdoVision>();
 
-  rclcpp::spin(std::make_shared<EdoVision>());
+  rclcpp::spin(std::make_shared<EdoObjDetection>());
+  //exec.add_node(subscriber_node);
+   rclcpp::spin(std::make_shared<EdoClassification>());
   //exec.add_node(subscriber_node);
 
   std::chrono::nanoseconds timeout;
