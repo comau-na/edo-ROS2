@@ -18,8 +18,16 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(roscpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(cv_bridge REQUIRED)
+
+add_executable(calibrate src/calibrate.cpp)
+ament_target_dependencies(calibrate std_msgs sensor_msgs rclcpp cv_bridge)
+
+install(TARGETS
+  calibrate
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
