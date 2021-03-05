@@ -696,7 +696,7 @@
           <update_rate>30</update_rate>
           <visualize>true</visualize>
           <camera name="head">
-            <horizontal_fov>1.3962634</horizontal_fov>
+            <horizontal_fov>1.22173</horizontal_fov>
             <image>
               <width>800</width>
               <height>800</height>
