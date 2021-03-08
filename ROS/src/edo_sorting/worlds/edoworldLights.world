@@ -298,6 +298,36 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
+      <model name='cube_blue'>
+        <pose frame=''>-0.487574 -0.251305 1.03885 -1.7e-05 9e-06 0.000444</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>-0.487574 -0.251305 1.03885 -1.7e-05 9e-06 0.000444</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0.029484 0.029512 -0.059 -1.31165 1.31047 0</acceleration>
+          <wrench>0.029484 0.029512 -0.059 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='cube_green'>
+        <pose frame=''>-0.464856 0.111915 1.03883 -4.2e-05 3e-06 0.000452</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>-0.464856 0.111915 1.03883 -4.2e-05 3e-06 0.000452</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0.029484 0.029512 -0.059 -1.31168 1.31045 -0</acceleration>
+          <wrench>0.029484 0.029512 -0.059 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='cube_red'>
+        <pose frame=''>-0.681699 0.008192 1.03884 -0.000236 1.3e-05 0.000441</pose>
+        <scale>0.045 0.045 0.045</scale>
+        <link name='link'>
+          <pose frame=''>-0.681699 0.008192 1.03884 -0.000236 1.3e-05 0.000441</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.029492 -0.029504 -0.058991 1.31134 -1.31045 1e-06</acceleration>
+          <wrench>-0.029492 -0.029504 -0.058991 0 -0 0</wrench>
+        </link>
+      </model>
       <model name='ground_plane'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -652,7 +682,7 @@
           <update_rate>30</update_rate>
           <visualize>1</visualize>
           <camera name='head'>
-            <horizontal_fov>1.22173</horizontal_fov>
+            <horizontal_fov>1.0</horizontal_fov>
             <image>
               <width>800</width>
               <height>800</height>
@@ -908,6 +938,58 @@
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
               <name>Gazebo/Blue</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <model name='cube_green'>
+      <pose frame=''>-0.845523 0.111744 1.03885 -9e-05 -8e-06 0.00045</pose>
+      <link name='link'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.045 0.045 0.045</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.045 0.045 0.045</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Green</name>
             </script>
           </material>
         </visual>
