@@ -21,7 +21,5 @@ class GestureSubscriber : public rclcpp::Node
 
 /* TO DO:
 	Add functions to initialize movement commands/movement queue
-
 */
 }
-
