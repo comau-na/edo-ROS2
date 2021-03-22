@@ -9,6 +9,8 @@ from vision_msgs.msg._detection2_d import Detection2D
 
 from geometry_msgs.msg import Pose2D
 
+
+
 class edo_obj_detection(Node):
 
     def __init__(self):
@@ -93,7 +95,14 @@ def readEnvironment():
             new_bucket.setClassification(Detection2D.id)
             bucket_list.append(new_bucket)
 
-    
+
+#take in all buckets, blocks from readEnvironment lists
+#recieve block and bucket positions
+#loop through block list, guide robot to block location
+#pick up block
+#guide robot to corresponding bucket
+#repeat until no blocks
+
 def executeCommanmd():
     
 
