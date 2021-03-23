@@ -1,6 +1,8 @@
 
 import rclpy
 
+import re
+
 from rclpy.node import Node
 
 from vision_msgs.msg._detection2_d_array import Detection2DArray
@@ -103,7 +105,47 @@ def readEnvironment():
 #guide robot to corresponding bucket
 #repeat until no blocks
 
-def executeCommanmd():
+def executeCommanmd(block_list, bucket_list):
+
+    #loop through block list
+    count = 0
+    for i in block_list:
+        count = count +1
+        #recieve the block coordinates
+        print('Retrieving Coordinates...')
+        print('Block number: ' , count)
+        curr_block_x = 0.0
+        curr_block_y = 0.0
+        curr_block_class = "none"
+        curr_block = Block()
+        block_list[i] = curr_block
+        curr_block.center_x = curr_block_x
+        curr_block.center_y = curr_block_y
+        curr_block.classification = curr_block_class
+        print('Block current x position: ', curr_block_x)
+        print('Block current y posiiton: ', curr_block_y)
+        #loop through bucket list
+        for i in bucket_list:
+            curr_bucket = Bucket()
+            curr_bucket = bucket_list[i]
+            #match block with bucket classification
+            for word in curr_block_class:
+                check_class = re.match(string=curr_bucket.classification)
+                if (check_class == True):
+                    #receive corresponding bucket coordinates, set as destination
+                    destination_x = 0.0
+                    destination_y = 0.0
+                    curr_bucket.center_x = destination_x
+                    curr_bucket.center_y = destination_y
+                    print('Bucket destination x: ', destination_x)
+                    print('Bucket destination y: ', destination_y)
+                    print('Commence sorting operation')
+
+        #start navigation from current block coordinates to destination coordinates
+
+
+        
+    
     
 
 
