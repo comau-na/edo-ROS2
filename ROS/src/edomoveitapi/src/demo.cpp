@@ -9,23 +9,47 @@
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
+geometry_msgs::Pose target_pose;
+static const std::string PLANNING_GROUP = "edo";
+
+void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
+  moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+  target_pose = *msg.get();
+  std::cout << "Pose published" << std::endl;
+  move_group.setPoseTarget(target_pose);
+  ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  std::cout << "im here1" << std::endl;
+  //bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);  
+  std::cout << "im here2" << std::endl;
+  move_group.move();
+  std::cout << "im here3" << std::endl;
+}
+
 int main(int argc, char** argv)
 {
-  std::cout << "Joe" << std::endl;
-   ros::init(argc, argv, "demo");
-   ros::NodeHandle node_handle;
-   ros::AsyncSpinner spinner(1);
-   spinner.start();
+  ros::init(argc, argv, "demo");
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
 
-  //initializes the planning group
-  static const std::string PLANNING_GROUP = "edo";
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   const robot_state::JointModelGroup* joint_model_group =
-      move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+    move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
 
+  spinner.stop();
+
+  std::cout << "Ready to listen" << std::endl;
   
-  //move_group.setRandomTarget();
 
+  //initializes the planning group
+  //move_group.setRandomTarget();
+  
+  ros::NodeHandle n;
+  ros::Subscriber sub = n.subscribe("edoMove", 1000, edomoveCallback);
+
+  ros::spin();
+
+  /*
   //set pose 
   geometry_msgs::Pose target_pose;
   target_pose.position.x = -0.6847;
@@ -40,6 +64,6 @@ int main(int argc, char** argv)
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
   bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);  
   move_group.move();
-  ros::shutdown();
+  ros::shutdown();*/
   return 0;
 }
