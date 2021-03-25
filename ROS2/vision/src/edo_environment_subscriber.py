@@ -1,4 +1,5 @@
 
+from geometry_msgs import msg
 import rclpy
 
 import re
@@ -10,6 +11,8 @@ from vision_msgs.msg._detection2_d_array import Detection2DArray
 from vision_msgs.msg._detection2_d import Detection2D
 
 from geometry_msgs.msg import Pose2D
+
+from geometry_msgs.msg import Pose
 
 
 
@@ -40,6 +43,23 @@ class obj_location(Node):
 
     def listener_callback(self, msg):
         self.get_logger().info('I heard: "%s"' % msg.data)
+
+class navigation_publisher(Node):
+    def __init__(self):
+        super().__init__('edoMove')
+        self.publisher_ = self.create_publisher(Pose, 'edoMove',10)
+        timer_period = 0.5
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = Pose() 
+        msg._orientation.x = 'Pose x: %d ' % self.i
+        msg._orientation.y = 'Pose y: %d ' % self.i
+        msg._orientation.z  = 'Pose z: %d ' % self.i 
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
 
 class Block:
     def __init__(self,center_x,center_y, classification):
@@ -105,7 +125,7 @@ def readEnvironment():
 #guide robot to corresponding bucket
 #repeat until no blocks
 
-def executeCommanmd(block_list, bucket_list):
+def executeCommand(block_list, bucket_list):
 
     #loop through block list
     count = 0
