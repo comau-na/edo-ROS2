@@ -30,7 +30,7 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner(2);
 
   spinner.start();
-  geometry_msgs::
+
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   const robot_state::JointModelGroup* joint_model_group =
     move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
