@@ -3,6 +3,7 @@
   <arg name="gui" default="false" doc="We disable empty world in edo.launch file to load our custom sorting world"/>
   <arg name="origin_xyz" default="'0 0 1.02'"/>
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
+  <env name="GAZEBO_MODEL_PATH" value="$(find edo_sorting)/models" />
 
   <!-- startup simulated world -->
   <include file="$(find edo_gripper)/launch/edo_gripper_dummy.launch">
