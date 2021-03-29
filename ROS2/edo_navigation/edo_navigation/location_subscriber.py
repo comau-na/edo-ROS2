@@ -22,25 +22,7 @@ class loc_subscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        msg = Pose2D()
         self.get_logger().info('x: "%s"' % msg.x,
                                'y: "%s"' % msg.y,
         )
 
-
-def main(args=None):
-    rclpy.init(args=args)
-
-    location =  loc_subscriber()
-
-
-    rclpy.spin(location)
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    location.destroy_node()
-    rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()

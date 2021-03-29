@@ -12,52 +12,16 @@ from geometry_msgs.msg import Pose2D
 
 from geometry_msgs.msg import Pose
 
+from edo_navigation.obj_detection_subscriber import obj_subscriber
+
+from edo_navigation.location_subscriber import loc_subscriber
+
+from edo_navigation.classification_subscriber import classification_subscriber
 
 
-class obj_subscriber(Node):
 
-    def __init__(self):
-        super().__init__('detection')
-        self.subscription = self.create_subscription(
-            Detection2DArray,
-            '/detection',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
 
-    def listener_callback(self, msg):
-        msg = Detection2DArray()
-        self.get_logger().info('I heard: "%s"' % len(msg.detections))
 
-class loc_subscriber(Node):
-    
-    def __init__(self):
-        super().__init__('detection')
-        self.subscription = self.create_subscription(
-            Pose2D,
-            '/detection',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
-
-    def listener_callback(self, msg):
-        msg = Pose2D()
-        self.get_logger().info('I heard: "%s"' % msg.x,msg.y,msg._x,msg._y)
-
-class classification_subscriber(Node):
-    
-    def __init__(self):
-        super().__init__('detection')
-        self.subscription = self.create_subscription(
-            ObjectHypothesis,
-            '/detection',
-            self.listener_callback,
-            10)
-        self.subscription  # prevent unused variable warning
-
-    def listener_callback(self, msg):
-        msg = ObjectHypothesis()
-        self.get_logger().info('I heard: "%s"' % msg._id,msg.id)
 
 class navigation_publisher(Node):
     def __init__(self):
@@ -87,7 +51,7 @@ class Block:
         Pose2D.y = self.center_y
     
     def setClassification(self,id):
-        Detection2D.id = self.classification
+        ObjectHypothesis.id = self.classification
 
 class Bucket:
     def __init__(self,center_x,center_y, classification):
@@ -100,7 +64,7 @@ class Bucket:
         Pose2D.y = self.center_y
     
     def setClassification(self,id):
-        Detection2D.id = self.classification
+        ObjectHypothesis.id = self.classification
         
 def listToString(list1):
     str1 =""
@@ -143,13 +107,13 @@ def readEnvironment():
         if isBlock() == True:
             new_block = Block()
             new_block.setBlockValues(Pose2D.x,Pose2D.y)
-            new_block.setClassification(Detection2D.id)
+            new_block.setClassification(ObjectHypothesis.id)
             block_list.append(new_block)
             print('block detected')
         if isBucket() == True:
             new_bucket = Bucket()
             new_bucket.setBucketValues(Pose2D.x, Pose2D.y)
-            new_bucket.setClassification(Detection2D.id)
+            new_bucket.setClassification(ObjectHypothesis.id)
             bucket_list.append(new_bucket)
             print('bucket detected')
 
@@ -161,70 +125,64 @@ def readEnvironment():
 #guide robot to corresponding bucket
 #repeat until no blocks
 
-def executeCommand(block_list, bucket_list):
+# def executeCommand(block_list, bucket_list):
     
-    #loop through block list
-    count = 0
-    for i in block_list:
-        count = count +1
-        #recieve the block coordinates
-        print('Retrieving Coordinates...')
-        print('Block number: ' , count)
-        curr_block_x = 0.0
-        curr_block_y = 0.0
-        curr_block_class = "none"
-        curr_block = Block()
-        block_list[i] = curr_block
-        curr_block.center_x = curr_block_x
-        curr_block.center_y = curr_block_y
-        curr_block.classification = curr_block_class
-        print('Block current x position: ', curr_block_x)
-        print('Block current y posiiton: ', curr_block_y)
-        #loop through bucket list
-        for i in bucket_list:
-            curr_bucket = Bucket()
-            curr_bucket = bucket_list[i]
-            curr_bucket.classification = curr_bucket_class
-            #match block with bucket classification
-            result = twoStrings(curr_block_class,curr_block_class)
-            if (result == True):
-                #receive corresponding bucket coordinates, set as destination
-                destination_x = 0.0
-                destination_y = 0.0
-                curr_bucket.center_x = destination_x
-                curr_bucket.center_y = destination_y
-                print('Bucket destination x: ', destination_x)
-                print('Bucket destination y: ', destination_y)
-                print('Commence sorting operation')
+#     #loop through block list
+#     count = 0
+#     for i in block_list:
+#         count = count +1
+#         #recieve the block coordinates
+#         print('Retrieving Coordinates...')
+#         print('Block number: ' , count)
+#         curr_block_x = 0.0
+#         curr_block_y = 0.0
+#         curr_block_class = "none"
+#         curr_block = Block()
+#         block_list[i] = curr_block
+#         curr_block.center_x = curr_block_x
+#         curr_block.center_y = curr_block_y
+#         curr_block.classification = curr_block_class
+#         print('Block current x position: ', curr_block_x)
+#         print('Block current y posiiton: ', curr_block_y)
+#         #loop through bucket list
+#         for i in bucket_list:
+#             curr_bucket = Bucket()
+#             curr_bucket = bucket_list[i]
+#             curr_bucket.classification = curr_bucket_class
+#             #match block with bucket classification
+#             result = twoStrings(curr_block_class,curr_block_class)
+#             if (result == True):
+#                 #receive corresponding bucket coordinates, set as destination
+#                 destination_x = 0.0
+#                 destination_y = 0.0
+#                 curr_bucket.center_x = destination_x
+#                 curr_bucket.center_y = destination_y
+#                 print('Bucket destination x: ', destination_x)
+#                 print('Bucket destination y: ', destination_y)
+#                 print('Commence sorting operation')
 
-        #start navigation from current block coordinates to destination coordinates
+#         #start navigation from current block coordinates to destination coordinates
         
 
         
     
 
-        
+      
 def main(args=None):
     rclpy.init(args=args)
 
     Obj_subscriber = obj_subscriber()
-    location =  loc_subscriber()
-    classification_sub = classification_subscriber()
-
-
-    rclpy.spin(Obj_subscriber,location,classification_sub)
-
-
-
+    #location =  loc_subscriber()
+    #classification_sub = classification_subscriber()
+    rclpy.spin(Obj_subscriber)
+    #rclpy.spin(location)
+    #rclpy.spin(classification_sub)
     readEnvironment()
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     Obj_subscriber.destroy_node()
-    location.destroy_node()
+    #location.destroy_node()
+    #classification_sub.destroy_node()
     rclpy.shutdown()
-
+    
 
 if __name__ == '__main__':
     main()
