@@ -2,6 +2,7 @@
 <launch>
   <arg name="gui" default="false" doc="We disable empty world in edo.launch file to load our custom sorting world"/>
   <arg name="origin_xyz" default="'0 0 1.02'"/>
+  <arg name="origin_rpy" default="'0 0 0.5235988'" doc="rotate 30 degress in radian"/> 
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <env name="GAZEBO_MODEL_PATH" value="$(find edo_sorting)/models" />
 
@@ -9,6 +10,7 @@
   <include file="$(find edo_gripper)/launch/edo_gripper_dummy.launch">
     <arg name="gui" value="$(arg gui)"/>
     <arg name="origin_xyz" value="$(arg origin_xyz)"/>
+    <arg name="origin_rpy" value="$(arg origin_rpy)"/>
     <arg name="paused" value="$(arg paused)"/>
   </include>
 
