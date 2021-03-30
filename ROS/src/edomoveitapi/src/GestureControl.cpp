@@ -83,7 +83,7 @@ void handPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 
     pose_pub.publish(pose);
   }
-
+    ros::shutdown();
 }
 
 int main(int argc, char **argv)
