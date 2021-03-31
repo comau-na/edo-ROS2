@@ -3,12 +3,8 @@ import numpy as np
 from scipy.spatial import distance as dist
 import imutils
 
-
-# Reading an image
-
-# img = cv2.imread("../Resources/lena.png")
-# cv2.imshow("My pic", img)
-# cv2.waitKey(0)
+robot_width = 0.270
+robot_center_from_edge = 0.230
 
 def stackImages(scale, imgArray):
     rows = len(imgArray)
@@ -44,22 +40,27 @@ def stackImages(scale, imgArray):
 
 
 def getBase(imgSrc, imgContour):
-    contours, hierarchy = cv2.findContours(imgSrc, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Important! img.shape is y(height), x(width) for some reason  
+    topQuarterY = int(imgSrc.shape[0] * .25)
+    croppedImg = imgSrc[:][:topQuarterY]
+    # print("cropped image shape", croppedImg.shape)
+    contours, hierarchy = cv2.findContours(croppedImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # tempImgCopy = imgContour.copy()
+    # for contour in contours:
+    #     print(cv2.contourArea(contour))
+    #     cv2.drawContours(tempImgCopy, contour, -1, (0, 255, 0), 3)
+    #     cv2.imshow("deleteme", tempImgCopy)
+    #     cv2.waitKey(0)
 
-    worthyContours = []  # contains approximated contours
-    yCordAverages = []  # contains indecies to the approximated contours
-    for cnt in contours:
-        if cv2.contourArea(cnt) > 600:
-            peri = cv2.arcLength(cnt, False)
-            approx = cv2.approxPolyDP(cnt, 0.05 * peri, False)
-            worthyContours.append(approx)
-            sum = 0
-            for pnt in approx:
-                sum += pnt[0][1]  # Add y value to sum
-            yCordAverages.append(sum // len(approx))
-    minIndex = yCordAverages.index(min(yCordAverages))
-    baseContour = worthyContours[minIndex]
-    print(cv2.contourArea(baseContour))
+    # Get the biggest contour which should be the edo base
+    contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
+    baseContour = contours[0]
+
+    peri = cv2.arcLength(baseContour, False)
+    baseContour = cv2.approxPolyDP(baseContour, 0.05 * peri, False)
+
+    print("Base area", cv2.contourArea(baseContour))
     cv2.drawContours(imgContour, baseContour, -1, (255, 255, 0), 5)
 
     print("len of cnt", len(baseContour))
@@ -101,18 +102,20 @@ def getBase(imgSrc, imgContour):
 def draw_circle(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDBLCLK:
         
+        # Translate the origin to the robots center
+        # We are basing this off the 
         worldx = pixelsToWolrd * (x - midpoint)
-        worldy = (0.230 - ycord*pixelsToWolrd) + (pixelsToWolrd * y)  
+        worldy = (robot_center_from_edge - ycord * pixelsToWolrd) + (pixelsToWolrd * y)  
         print('pixle cords', x, y)
         print('world cords {}m, {}m'.format(round(worldx, 5),round(worldy,5)))
         # add half way to robot
-        # translate backwards to robot origin
-        # cv2.circle(img, (x, y), 100, (255, 0, 0), -1)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 kernal = np.ones((4, 4), np.uint8)
 
-img = cv2.imread("gazeboPose.png")
+# img = cv2.imread("gazeboPose.png")
+img = cv2.imread("defaultPose.png")
 imgCnt = img.copy()
 
 grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -126,7 +129,7 @@ midpoint = (xmin + xmax) //2
 print(xmin,midpoint, xmax)
 
 baseDistance = dist.euclidean((xmin, ycord), (xmax, ycord))
-pixelsToWolrd = 0.270 / baseDistance # 27.0cm / base distance
+pixelsToWolrd = robot_width / baseDistance # 27.0cm / base distance
 
 imgStack = stackImages(0.9, ([img, eroidedImg, imgCnt]))
 cv2.imshow("stack", imgStack)
