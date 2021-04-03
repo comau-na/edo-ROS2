@@ -39,7 +39,7 @@ class WebcamClassifier(Node):
     def __init__(self):
         super().__init__('webcam_classification')
         # Create a subscriber to the Image topic
-        self.image_subscriber = self.create_subscription(Image, 'image', self.listener_callback, 10)
+        self.image_subscriber = self.create_subscription(Image, 'edo/camera/image_raw', self.listener_callback, 10)
         self.image_subscriber
 
         # create a publisher onto the vision_msgs 2D classification topic
@@ -61,30 +61,24 @@ class WebcamClassifier(Node):
         self.bridge = CvBridge()
 
         # Find the location of the ImageNet labels text and open it
-        with open(os.getenv("HOME") + '/ros2_models/imagenet_classes.txt') as f:
+        with open(os.getenv("HOME") + '/ros2_models/classlabels.txt') as f:
            self.labels = [line.strip() for line in f.readlines()]      
  
     
 
     def create_classification_model(self, model_name):
         
-        if(str(model_name.value) == "squeezenet"):
-            return torchvision.models.squeezenet1_1(pretrained=True)
-        
-        elif(str(model_name.value) == "alexnet"):
-            return torchvision.models.alexnet(pretrained=True)
-            
-        elif(str(model_name.value) == "resnet18"):
-            return torchvision.models.resnet18(pretrained=True)
-            
-        elif(str(model_name.value) == "resnet50"):
-            return torchvision.models.resnet50(pretrained=True)
-            
-        print("Invalid model selection. Select amongst alexnet, squeezenet, resnet18 and resnet50")
-      
+        if(str(model_name.value) == "resnet18"):
+            model_path = os.getenv("HOME") + '/ros2_models/model_best.pth'
+            sd = torch.load(model_path)
+            model = models.resnet18()
+            model.fc = torch.nn.Linear(512,6)
+            model.load_state_dict(sd['state_dict'])
+            return model
+
+        print("Only valid model option currently is resnet18")
 
 
- 
     def classify_image(self,img):
         
         transform = transforms.Compose([           
