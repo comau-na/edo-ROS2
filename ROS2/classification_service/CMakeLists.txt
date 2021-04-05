@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(edo_calibration)
+project(classification_service)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -17,17 +17,13 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(cv_bridge REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(vision_msgs REQUIRED)
 
-add_executable(calibrate src/calibrate.cpp)
-ament_target_dependencies(calibrate std_msgs sensor_msgs rclcpp cv_bridge)
-
-install(TARGETS
-  calibrate
-  DESTINATION lib/${PROJECT_NAME})
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/GetClassification.srv"
+  DEPENDENCIES vision_msgs
+ )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

@@ -150,10 +150,14 @@ def getObjects(imgSrc):
         # box
         box = perspective.order_points(box)
         # print("box", box)
+        side1, side2 = dist.euclidean(box[0], box[1]), dist.euclidean(box[1], box[2])
+
         for pnt in box:
-            # print(pnt[0])
             pnt[1] += topQuarterY
-        cv2.drawContours(imgCnt, [box.astype("int")], -1, (0, 255, 0), 2)
+        
+        # Check if the lengths of the sides are within +-25% of each other 
+        if  side2 * 0.75 < side1 < side2 * 1.25:
+            cv2.drawContours(imgCnt, [box.astype("int")], -1, (0, 255, 0), 2)
         # cv2.imshow("detections", orig)
         # cv2.waitKey(0)
 
