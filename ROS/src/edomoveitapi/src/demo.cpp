@@ -17,6 +17,7 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   target_pose = *msg.get();
   std::cout << "Pose published" << std::endl;
   move_group.setPoseTarget(target_pose);
+  move_group.setGoalTolerance(0.01);
   ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
   bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);  

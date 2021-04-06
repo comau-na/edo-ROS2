@@ -19,5 +19,7 @@
     <arg name="world_name" value="$(find edo_sorting)/worlds/edoworldLights.world"/>
     <!-- more default parameters can be changed here -->
   </include>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="edo_transformation" args="0 0 1.02 -1.570796 0 0 world edo/world" />
+
   <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find baxter_description)/urdf/baxter.urdf -urdf -z 1 -model baxter" /> -->
 </launch>
