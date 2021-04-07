@@ -27,6 +27,7 @@ import torch
 import torchvision
 from torchvision import models
 from torchvision import transforms
+from PIL import Image
 import numpy as np
 from timeit import default_timer as timer
 
@@ -61,7 +62,8 @@ class WebcamClassifier(Node):
 
         # Find the location of the ImageNet labels text and open it
         with open(os.getenv("HOME") + '/ros2_models/classlabels.txt') as f:
-           self.labels = [line.strip() for line in f.readlines()]      
+           self.labels = [line.strip() for line in f.readlines()]
+           print("Labels loaded:", self.labels)
  
     
 
@@ -80,18 +82,18 @@ class WebcamClassifier(Node):
 
     def classify_image(self,img):
         
-        transform = transforms.Compose([           
-        transforms.Resize(256),                    
-        transforms.CenterCrop(224),                
-        transforms.ToTensor(),                     
-        transforms.Normalize(                      
-        mean=[0.485, 0.456, 0.406],                
-        std=[0.229, 0.224, 0.225]                  
-        )])
-        tensor_to_image = transforms.ToPILImage()
-        img = tensor_to_image(img)
-        img_t = transform(img).cuda()
-        batch_t = torch.unsqueeze(img_t, 0)
+        transform = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize
+                ([0.485, 0.456, 0.406],
+                [0.229, 0.224, 0.225])
+        ])
+        # tensor_to_image = transforms.ToPILImage()
+        # img = tensor_to_image(img)
+        #img_t = transform(img).cuda()
+        batch_t = transform(img).cuda().unsqueeze_(0)
 	
         # Classify the image
         start = timer() 
@@ -108,10 +110,19 @@ class WebcamClassifier(Node):
         
 
     def listener_callback(self, request, response):
-        img_data = np.asarray(request.img.data)
-        img_reshaped = np.reshape(img_data,(request.img.height, request.img.width, 3))
+         # Use OpenCV to visualize the images being classified from webcam 
         start = timer()
-        classified, confidence = self.classify_image(img_reshaped)
+
+        try:
+            cv_image = self.bridge.imgmsg_to_cv2(request.img, "bgr8")
+            cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(cv_image)
+        except CvBridgeError as e:
+            print(e)
+
+        # img_data = np.asarray(request.img.data)
+        # img_reshaped = np.reshape(img_data,(request.img.height, request.img.width, 3))
+        classified, confidence = self.classify_image(im_pil)
         end = timer()
         time = str(end-start)
         to_display = "Classification: " + classified + " ,confidence: " + str(confidence) + " time: " + time
@@ -124,10 +135,12 @@ class WebcamClassifier(Node):
         result.score = confidence
         response.classification.results.append(result)
         print('Returning the response')
+        #cv2.imwrite(os.path.join('/home/khalid/Downloads/temp/cvimages', classified + str(confidence)) + '.jpeg', cv_image)
       
         # Use OpenCV to visualize the images being classified from webcam 
         # try:
         #   cv_image = self.bridge.imgmsg_to_cv2(request.img, "bgr8")
+        #   cv2.imwrite(os.path.join('/home/khalid/Downloads/temp/cvimages', classified + str(confidence)) + '.jpeg', cv_image)
         # except CvBridgeError as e:
         #   print(e)
         # cv2.imshow('webcam_window', cv_image)

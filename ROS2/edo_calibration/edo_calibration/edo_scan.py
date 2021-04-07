@@ -103,7 +103,7 @@ class image_classifier(Node):
                 xmin, ymin = box[0] 
                 xmax, ymax = box[2]
                 # Scale the boundaries by 2% on each side
-                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.98), int(ymin * 0.98), int(xmax * 1.02), int(ymax * 1.02)
+                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.94), int(ymin * 0.94), int(xmax * 1.04), int(ymax * 1.04)
                 #print(xmin, xmax, ymin, ymax)
                 croppedImg = imgSrc[:][yminC:ymaxC, xminC:xmaxC]
                 try:
