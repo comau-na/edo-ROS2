@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-		'edo_nav = edo_navigation.edo_environment_subscriber:main'
+	'edo_navigation = edo_navigation.edo_environment_subscriber:main'
         ],
     },
 )
