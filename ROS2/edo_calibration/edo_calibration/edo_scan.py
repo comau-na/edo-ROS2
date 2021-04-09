@@ -13,6 +13,7 @@ import numpy as np
 from scipy.spatial import distance as dist
 import imutils
 from imutils import perspective
+from math import atan
 
 recievedImage = False
 msg = None
@@ -21,11 +22,12 @@ robot_width = 0.270
 robot_center_from_edge = 0.230
 
 class Detection:
-    def __init__(self, classification, coordinateCenter, confidence, box):
+    def __init__(self, classification, coordinateCenter, confidence, box, angle):
         self.classification = classification
         self.coordinateCenter = coordinateCenter
         self.confidence = confidence
         self.box = box
+        self.angle = angle
 
 
 class image_converter(Node):
@@ -120,10 +122,19 @@ class image_classifier(Node):
                     except Exception as e:
                         self.get_logger().info('Service call failed %r' % (e,e.what()))
 
+                    # Find the rotation of the cube in radians 
+                    deltaX = box[0][1] - box[1][1]
+                    deltaY = box[1][0] - box[0][0]
+                    angle = atan(deltaY / deltaX)
+                    print(angle)
+
                     # print(response.classification)
                     detection = Detection(response.classification.results[0].id, ((xmin + xmax) // 2,(ymin + ymax) //2),
-                                         response.classification.results[0].score, box)
+                                         response.classification.results[0].score, box, angle)
+                    print(detection.classification, detection.angle)
+
                     self.detections.append(detection)
+
                 except CvBridgeError as e:
                     print(e)
 
