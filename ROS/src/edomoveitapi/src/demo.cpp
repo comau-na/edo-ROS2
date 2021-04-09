@@ -9,12 +9,23 @@
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
+#include <tf2/LinearMath/Quaternion.h>
+
 geometry_msgs::Pose target_pose;
 static const std::string PLANNING_GROUP = "edo";
 
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   target_pose = *msg.get();
+  if(target_pose.orientation.w == 62){
+    tf2::Quaternion quaternion;
+    quaternion.setRPY(target_pose.orientation.x, target_pose.orientation.y, target_pose.orientation.z);
+    quaternion.normalize();
+    target_pose.orientation.x = quaternion.getX();
+    target_pose.orientation.y = quaternion.getY();
+    target_pose.orientation.z = quaternion.getZ();
+    target_pose.orientation.w = quaternion.getW();
+  }
   std::cout << "Pose published" << std::endl;
   move_group.setPoseTarget(target_pose);
   move_group.setGoalTolerance(0.01);
