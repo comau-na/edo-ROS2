@@ -52,6 +52,8 @@ class WebcamClassifier(Node):
         print(model_name.value)
 
         # Use the SqueezeNet model for classification
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
         self.classification_model = self.create_classification_model(model_name)
 
         # Load it onto the GPU and set it to evaluation mode
@@ -71,7 +73,7 @@ class WebcamClassifier(Node):
         
         if(str(model_name.value) == "resnet18"):
             model_path = os.getenv("HOME") + '/ros2_models/model_best.pth'
-            sd = torch.load(model_path)
+            sd = torch.load(model_path, map_location=self.device)
             model = models.resnet18()
             model.fc = torch.nn.Linear(512,6)
             model.load_state_dict(sd['state_dict'])
