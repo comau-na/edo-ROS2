@@ -4,17 +4,12 @@ import rclpy
 
 from rclpy.node import Node
 
-from vision_msgs.msg import Detection2DArray
-
-from vision_msgs.msg import ObjectHypothesis
-
-from geometry_msgs.msg import Pose2D
-
 from geometry_msgs.msg import Pose
 
-from baseDetection import detection, getObjects
+from edo_calibration.edo_scan import image_classifier,image_converter
 
-
+msg = None
+recievedImage = False
 
 
 
@@ -24,7 +19,7 @@ class navigation_publisher(Node):
         self.publisher_ = self.create_publisher(Pose, 'edoMove',10)
         timer_period = 0.5
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0
+
 
     def timer_callback(self,p_x,p_y,p_z,o_x,o_y,o_z,o_w):
         msg = Pose() 
@@ -43,8 +38,8 @@ class Cube:
         self.center_y = center_y
         self.classification = classification
 
-    def setCubeValues(self,coordianteCenter):
-        self.coordinateCenter = coordianteCenter
+    def setCubeValues(self,coordinateCenter):
+        self.coordinateCenter = coordinateCenter
     
     def setClassification(self,classification):
         self.classification = classification
@@ -55,14 +50,14 @@ class Bucket:
         self.center_y = center_y
         self.classification = classification
 
-    def setCubeValues(self,coordianteCenter):
-        self.coordinateCenter = coordianteCenter
+    def setBucketValues(self,coordinateCenter):
+        self.coordinateCenter = coordinateCenter
     
     def setClassification(self,classification):
         self.classification = classification
 
 
-def colorcheck(Cube,Bucket) :
+def colorCheck(Cube,Bucket) :
     cube_color_classification = Cube.classification
     bucket_color_classification  = Bucket.classification
 
@@ -73,35 +68,37 @@ def colorcheck(Cube,Bucket) :
     
     
 def isCube(self,classification):
-    result = self.classification
-    if result == "cube":
-        return True
+    result = self.classification.split('_')[0]
+    return(result == "cube")
 
 def isBucket(self):
-    result = self.classification
-    if result == "bucket":
-        return True
+    result = self.classification.split('_')[0]
+    return(result == "bucket")
 
 
 def readEnvironment():
 
-    bucket_list = []
+    Bucket_list = []
     Cube_list = []
-    detection_array = getObjects()
+    classifier =  image_classifier()
+    detection_array = classifier.detections
 
     for obj in detection_array:
-        if isCube() == True:
+        if isCube(obj) == True:
+            print('Cube detected')
             new_Cube = Cube()
             new_Cube.setCubeValues(obj.coordinateCenter) 
             new_Cube.setClassification(obj.classification)
             Cube_list.append(new_Cube)
-            print('Cube detected')
-        if isBucket() == True:
+            
+        if isBucket(obj) == True:
+            print('bucket detected')
             new_bucket = Bucket()
             new_bucket.setBucketValues(obj.coordinateCenter)
             new_bucket.setClassification(obj.classification)
-            bucket_list.append(new_bucket)
-            print('bucket detected')
+            Bucket_list.append(new_bucket)
+            
+            return(Bucket_list,Cube_list)
 
 
 # take in all buckets, Cubes from readEnvironment lists
@@ -111,41 +108,15 @@ def readEnvironment():
 # guide robot to corresponding bucket
 # repeat until no Cubes
 
-def executeCommand(Cube_list, bucket_list):
-    
-    #loop through Cube list
-    count = 0
-    for i in Cube_list:
-        count = count +1
-        #recieve the Cube coordinates
-        print('Retrieving Coordinates...')
-        print('Cube number: ' , count)
-        curr_Cube_x = 0.0
-        curr_Cube_y = 0.0
-        curr_Cube_class = "none"
-        curr_Cube = Cube()
-        Cube_list[i] = curr_Cube
-        curr_Cube.center_x = curr_Cube_x
-        curr_Cube.center_y = curr_Cube_y
-        curr_Cube.classification = curr_Cube_class
-        print('Cube current x position: ', curr_Cube_x)
-        print('Cube current y posiiton: ', curr_Cube_y)
-        #loop through bucket list
-        for i in bucket_list:
-            curr_bucket = Bucket()
-            curr_bucket = bucket_list[i]
-            curr_bucket.classification = curr_bucket_class
-            #match Cube with bucket classification
-            result = twoStrings(curr_Cube_class,curr_Cube_class)
-            if (result == True):
-                #receive corresponding bucket coordinates, set as destination
-                destination_x = 0.0
-                destination_y = 0.0
-                curr_bucket.center_x = destination_x
-                curr_bucket.center_y = destination_y
-                print('Bucket destination x: ', destination_x)
-                print('Bucket destination y: ', destination_y)
-                print('Commence sorting operation')
+# def executeCommand(Cube_list, Bucket_list):   
+#     #loop through Cube list 
+
+#     for cube in Cube_list:
+#         print("Number of Cubes: " , len(Cube_list))
+#         for bucket in Bucket_list:
+#             if(colorCheck(cube,bucket) == True):
+#                 #start navigation
+           
 
         #start navigation from current Cube coordinates to destination coordinates
         
@@ -156,17 +127,20 @@ def executeCommand(Cube_list, bucket_list):
       
 def main(args=None):
     rclpy.init(args=args)
+    global msg
+    ic = image_converter()
 
-    #Obj_subscriber = obj_subscriber()
-    #location =  loc_subscriber()
-    classification_sub = classification_subscriber()
-    #rclpy.spin(Obj_subscriber)
-    #rclpy.spin(location)
-    rclpy.spin(classification_sub)
+    while rclpy.ok() and recievedImage is False:
+        rclpy.spin_once(ic)
+    
+    classifier = image_classifier()
+    classifier.classify_objects(msg)
+    print(classifier.detections)
+
+    rclpy.spin(navigation_publisher)
+
     readEnvironment()
-    #Obj_subscriber.destroy_node()
-    #location.destroy_node()
-    classification_sub.destroy_node()
+    rclpy.destroy_node(navigation_publisher)
     rclpy.shutdown()
     
 
