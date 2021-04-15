@@ -122,6 +122,7 @@ class WebcamClassifier(Node):
         except CvBridgeError as e:
             print(e)
 
+        # im_pil = np.frombuffer(image_data.data, dtype=np.uint8).reshape(image_data.height, image_data.width, -1)
         # img_data = np.asarray(request.img.data)
         # img_reshaped = np.reshape(img_data,(request.img.height, request.img.width, 3))
         classified, confidence = self.classify_image(im_pil)
