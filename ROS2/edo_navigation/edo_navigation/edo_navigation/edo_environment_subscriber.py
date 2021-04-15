@@ -10,7 +10,7 @@ from geometry_msgs.msg import Pose
 
 from std_msgs.msg import Bool
 
-from edo_calibration.edo_scan import image_classifier,image_converter
+from edo_navigation.edo_scan import image_classifier,image_converter
 
 msg = None
 recievedImage = False
@@ -20,7 +20,7 @@ angle = 0
 
 class navigation_publisher(Node):
     def __init__(self):
-        super().__init__("edoNav")
+        super().__init__("edo_navigation")
         self.publisher_ = self.create_publisher(Pose, "/edo/edo_move",10)
 
 
@@ -108,8 +108,9 @@ def readEnvironment():
     
     classifier =  image_classifier()
     detection_array = classifier.detections
-
+    print(detection_array)
     for obj in detection_array:
+        print(isCube(obj))
         if isCube(obj) == True:
             print('Cube detected')
             new_Cube = Cube()
@@ -136,16 +137,17 @@ def readEnvironment():
 # repeat until no Cubes
 
 
-pub = navigation_publisher()
-
-grip = gripper_publisher()
 
 def executeCommand(Cube_list, Bucket_list):   
     #loop through Cube list 
+    pub = navigation_publisher()
+    grip = gripper_publisher()
 
     for cube in Cube_list:
         for bucket in Bucket_list:
             if(colorCheck(cube,bucket) == True):
+                print(colorCheck(cube,bucket))
+                print("starting navigation")
                 #start navigation
                 
                 p_x = 0
@@ -223,9 +225,7 @@ def executeCommand(Cube_list, Bucket_list):
         # start navigation from current Cube coordinates to destination coordinates
         
 
-        
     
-
       
 def main(args=None):
     rclpy.init(args=args)
@@ -236,18 +236,18 @@ def main(args=None):
         rclpy.spin_once(ic)
     msg = ic.msg 
     
+    #getbase here takes in raw image
+    
+
     classifier = image_classifier()
     classifier.classify_objects(msg)
 
-    navpublisher = navigation_publisher()
-    # gripperpublisher = gripper_publisher()
+    readEnvironment()
     
-    while rclpy.ok():
+     
+    executeCommand(Cube_list,Bucket_list)    
 
-        readEnvironment()
-        executeCommand(Cube_list,Bucket_list)    
-
-    rclpy.destroy_node(navigation_publisher)
+    
     # rclpy.destroy_node(gripper_publisher)
     rclpy.shutdown()
     
