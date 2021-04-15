@@ -10,12 +10,16 @@
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
 #include <tf2/LinearMath/Quaternion.h>
+#include "std_msgs/Bool.h" 
+#include "std_msgs/String.h" 
 
 geometry_msgs::Pose target_pose;
 static const std::string PLANNING_GROUP = "edo";
+ros::Publisher pub;
 
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+  ros::NodeHandle n;
   target_pose = *msg.get();
   if(target_pose.orientation.w == 62){
     tf2::Quaternion quaternion;
@@ -31,7 +35,10 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   move_group.setGoalTolerance(0.01);
   ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);  
+  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  std_msgs::Bool move_success;
+  move_success.data = success;
+  pub.publish(move_success);
   move_group.move();
   std::cout << "Ready to listen" << std::endl;
 }
@@ -50,10 +57,9 @@ int main(int argc, char** argv)
   spinner.stop();
   spinner.start();
   std::cout << "Ready to listen" << std::endl;
-  
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("edoMove", 1000, edomoveCallback);
-  
+  pub = n.advertise<std_msgs::Bool>("move_success", 1000);
+  ros::Subscriber sub = n.subscribe("edo_move", 1000, edomoveCallback);
   ros::waitForShutdown();
 
   return 0;
