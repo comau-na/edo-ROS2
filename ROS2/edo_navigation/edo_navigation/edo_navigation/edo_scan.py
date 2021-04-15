@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.7
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -13,6 +15,7 @@ import numpy as np
 from scipy.spatial import distance as dist
 import imutils
 from imutils import perspective
+from math import atan
 
 recievedImage = False
 msg = None
@@ -21,11 +24,12 @@ robot_width = 0.270
 robot_center_from_edge = 0.230
 
 class Detection:
-    def __init__(self, classification, coordinateCenter, confidence, box):
+    def __init__(self, classification, coordinateCenter, confidence, box, angle):
         self.classification = classification
         self.coordinateCenter = coordinateCenter
         self.confidence = confidence
         self.box = box
+        self.angle = angle
 
 
 class image_converter(Node):
@@ -36,16 +40,18 @@ class image_converter(Node):
         self.image_subscriber = self.create_subscription(Image, 'edo/camera/image_raw', self.callback, 10)
         self.image_subscriber
 
+        self.msg = None
+        self.recievedImage = False
+
         self.bridge = CvBridge()
 
     def callback(self, img):
-        global msg, recievedImage
         print('got an image')
         try:
-            msg = self.bridge.imgmsg_to_cv2(img, "bgr8")
+            self.msg = self.bridge.imgmsg_to_cv2(img, "bgr8")
         except CvBridgeError as e:
             print(e)
-        recievedImage = True
+        self.recievedImage = True
 
 
 class image_classifier(Node):
@@ -103,7 +109,7 @@ class image_classifier(Node):
                 xmin, ymin = box[0] 
                 xmax, ymax = box[2]
                 # Scale the boundaries by 2% on each side
-                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.98), int(ymin * 0.98), int(xmax * 1.02), int(ymax * 1.02)
+                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.94), int(ymin * 0.94), int(xmax * 1.04), int(ymax * 1.04)
                 #print(xmin, xmax, ymin, ymax)
                 croppedImg = imgSrc[:][yminC:ymaxC, xminC:xmaxC]
                 try:
@@ -120,41 +126,50 @@ class image_classifier(Node):
                     except Exception as e:
                         self.get_logger().info('Service call failed %r' % (e,e.what()))
 
+                    # Find the rotation of the cube in radians 
+                    deltaX = box[0][1] - box[1][1]
+                    deltaY = box[1][0] - box[0][0]
+                    angle = atan(deltaY / deltaX)
+                    print(angle)
+
                     # print(response.classification)
                     detection = Detection(response.classification.results[0].id, ((xmin + xmax) // 2,(ymin + ymax) //2),
-                                         response.classification.results[0].score, box)
+                                         response.classification.results[0].score, box, angle)
+                    print(detection.classification, detection.angle)
+
                     self.detections.append(detection)
+
                 except CvBridgeError as e:
                     print(e)
 
 
-def main(args=None):
-    global msg
-    rclpy.init(args=args)
-    ic = image_converter()
+# def main(args=None):
+#     global msg
+#     rclpy.init(args=args)
+#     ic = image_converter()
 
-    while rclpy.ok() and recievedImage is False:
-        rclpy.spin_once(ic)
+#     while rclpy.ok() and recievedImage is False:
+#         rclpy.spin_once(ic)
     
-    classifier = image_classifier()
-    classifier.classify_objects(msg)
-    print(classifier.detections)
-    #rclpy.spin(classifier)
+#     classifier = image_classifier()
+#     classifier.classify_objects(msg)
+#     print(classifier.detections)
+#     #rclpy.spin(classifier)
 
-    print("exiting while loop")
-    for label in classifier.detections:
-        cv2.putText(msg, label.classification,
-                    (label.coordinateCenter[0]+20, label.coordinateCenter[1]+40),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,  # font scale
-                    (255, 0, 255), 2)  # line type
-        cv2.drawContours(msg, [label.box], -1, (0, 255, 0), 2)
+#     print("exiting while loop")
+#     for label in classifier.detections:
+#         cv2.putText(msg, label.classification,
+#                     (label.coordinateCenter[0]+20, label.coordinateCenter[1]+40),
+#                     cv2.FONT_HERSHEY_SIMPLEX,
+#                     1,  # font scale
+#                     (255, 0, 255), 2)  # line type
+#         cv2.drawContours(msg, [label.box], -1, (0, 255, 0), 2)
 
 
-    cv2.imshow("testwindow", msg)
-    cv2.waitKey(0) 
-    #cv2.destroyAllWindows()
-    rclpy.shutdown()
+#     cv2.imshow("testwindow", msg)
+#     cv2.waitKey(0) 
+#     #cv2.destroyAllWindows()
+#     rclpy.shutdown()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
