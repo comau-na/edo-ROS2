@@ -19,7 +19,6 @@ ros::Publisher pub;
 
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
-  ros::NodeHandle n;
   target_pose = *msg.get();
   if(target_pose.orientation.w == 62){
     tf2::Quaternion quaternion;
