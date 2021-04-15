@@ -116,7 +116,7 @@ class image_classifier(Node):
                     try:
                         response = future.result()
                     except Exception as e:
-                        self.get_logger().info('Service call failed %r' % (e,e.what()))
+                        self.get_logger().info('Service call failed %r' % e)
 
                     # Find the rotation of the cube in radians 
                     deltaX = box[0][1] - box[1][1]
@@ -149,10 +149,11 @@ class base_detection(Node):
 
         if self.is_simulation:
             self.ROBOT_CENTER_FROM_EDGE = 0.070
-        else 
+        else:
             self.ROBOT_CENTER_FROM_EDGE = 0.230
 
     def getBase(self, imgSrc):
+        kernal = np.ones((4, 4), np.uint8)
         imgContour = imgSrc.copy()     
 
         # Important! img.shape is y(height), x(width) for some reason  
@@ -225,7 +226,7 @@ class base_detection(Node):
         self.robot_midpoint = (xmin + xmax) //2
         print(xmin, self.robot_midpoint, xmax)
 
-        baseDistance = dist.euclidean((xmin, ycord), (xmax, ycord))
+        baseDistance = dist.euclidean((xmin, self.robot_ycord), (xmax, self.robot_ycord))
         self.pixelsToWolrd = self.ROBOT_WIDTH / baseDistance # get pixle to meters ratio
 
     def get_world_coordinates(self, imagex, imagey):
@@ -238,5 +239,5 @@ class base_detection(Node):
         # Simulation environment has different cooridante system then Gazebo environment
         if self.is_simulation:
             return worldx, worldy
-        else 
+        else:
             return worldy, worldx
