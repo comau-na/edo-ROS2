@@ -1,5 +1,3 @@
-#!/usr/bin/env python2.7
-
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -16,12 +14,6 @@ from scipy.spatial import distance as dist
 import imutils
 from imutils import perspective
 from math import atan
-
-recievedImage = False
-msg = None
-
-robot_width = 0.270
-robot_center_from_edge = 0.230
 
 class Detection:
     def __init__(self, classification, coordinateCenter, confidence, box, angle):
@@ -141,35 +133,110 @@ class image_classifier(Node):
 
                 except CvBridgeError as e:
                     print(e)
-
-
-# def main(args=None):
-#     global msg
-#     rclpy.init(args=args)
-#     ic = image_converter()
-
-#     while rclpy.ok() and recievedImage is False:
-#         rclpy.spin_once(ic)
     
-#     classifier = image_classifier()
-#     classifier.classify_objects(msg)
-#     print(classifier.detections)
-#     #rclpy.spin(classifier)
+class base_detection(Node):
+    def __init__(self):
+        super().__init__('edo_base_detection')
 
-#     print("exiting while loop")
-#     for label in classifier.detections:
-#         cv2.putText(msg, label.classification,
-#                     (label.coordinateCenter[0]+20, label.coordinateCenter[1]+40),
-#                     cv2.FONT_HERSHEY_SIMPLEX,
-#                     1,  # font scale
-#                     (255, 0, 255), 2)  # line type
-#         cv2.drawContours(msg, [label.box], -1, (0, 255, 0), 2)
+        self.robot_ycord = 0
+        self.robot_midpoint = 0
+        self.pixelsToWolrd = 0.0
 
+        self.declare_parameter('sim', True)
+        self.is_simulation = self.get_parameter('sim')
 
-#     cv2.imshow("testwindow", msg)
-#     cv2.waitKey(0) 
-#     #cv2.destroyAllWindows()
-#     rclpy.shutdown()
+        self.ROBOT_WIDTH = 0.270
 
-# if __name__ == '__main__':
-#     main()
+        if self.is_simulation:
+            self.ROBOT_CENTER_FROM_EDGE = 0.070
+        else 
+            self.ROBOT_CENTER_FROM_EDGE = 0.230
+
+    def getBase(self, imgSrc):
+        imgContour = imgSrc.copy()     
+
+        # Important! img.shape is y(height), x(width) for some reason  
+        topQuarterY = int(imgSrc.shape[0] * .25)
+        xCordStart = int(imgSrc.shape[1]* 0.25)
+        xCordEnd = int(imgSrc.shape[1]*0.75)
+        croppedImg = imgSrc[:][:topQuarterY, xCordStart:xCordEnd]
+
+        grayImg = cv2.cvtColor(croppedImg, cv2.COLOR_BGR2GRAY)
+        blurImg = cv2.GaussianBlur(grayImg, (9, 9), 0)
+        cannyImg = cv2.Canny(blurImg, 100, 150)
+        dialatedImg = cv2.dilate(cannyImg, kernal, iterations=2)
+        croppedImg = cv2.erode(dialatedImg, kernal, iterations=1)
+
+        #print("cropped image shape", croppedImg.shape, xCordStart, xCordEnd)
+        contours, hierarchy = cv2.findContours(croppedImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Get the biggest contour which should be the edo base
+        contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
+        baseContour = contours[0]
+
+        peri = cv2.arcLength(baseContour, False)
+        baseContour = cv2.approxPolyDP(baseContour, 0.05 * peri, False)
+
+        print("Base area", cv2.contourArea(baseContour))
+        for point in baseContour:
+            cv2.circle(imgContour, (xCordStart + point[0][0], point[0][1]), 3, (255, 255, 0), cv2.FILLED)
+        # cv2.drawContours(imgContour, baseContour, -1, , 5)
+
+        print("len of cnt", len(baseContour))
+        # print("printing base: ", baseContour)
+        # get the y coordinates
+        yCords = []
+        for point in baseContour:
+            yCords.append(point[0][1])
+        yCords.sort()
+        thirdQuartile = int(len(yCords) * .75)
+        print("median", thirdQuartile, ":", yCords[thirdQuartile])
+
+        worthyYCord = []
+        # next get the base length
+        for ypoint in yCords:
+            # we want +-5% from 3rd quartile
+            if yCords[thirdQuartile] * 1.05 > ypoint > yCords[thirdQuartile] * 0.95:
+                worthyYCord.append(ypoint)
+        print(worthyYCord)
+
+        leadingBaseEdge = []
+        for point in baseContour:
+            if point[0][1] in worthyYCord:
+                leadingBaseEdge.append(point)
+        print(leadingBaseEdge)
+
+        basexCords = []
+        baseyCords = []
+        for point in leadingBaseEdge:
+            basexCords.append(point[0][0])
+            baseyCords.append(point[0][1])
+        minValue = min(basexCords)
+        maxValue = max(basexCords)
+        cv2.line(imgContour, pt1=(xCordStart + minValue, yCords[thirdQuartile]), pt2=(xCordStart + maxValue, yCords[thirdQuartile]),
+                color=(0, 0, 255), thickness=2)
+
+        cv2.imshow("base_detection", imgContour)
+        cv2.waitKey(0)
+
+        xmin = xCordStart + minValue
+        xmax =  xCordStart + maxValue
+        self.robot_ycord = yCords[thirdQuartile]
+        self.robot_midpoint = (xmin + xmax) //2
+        print(xmin, self.robot_midpoint, xmax)
+
+        baseDistance = dist.euclidean((xmin, ycord), (xmax, ycord))
+        self.pixelsToWolrd = self.ROBOT_WIDTH / baseDistance # get pixle to meters ratio
+
+    def get_world_coordinates(self, imagex, imagey):
+        # Translate the origin to the robots center 
+        worldx = self.pixelsToWolrd * (imagex - self.robot_midpoint)
+        worldy = (self.ROBOT_CENTER_FROM_EDGE - self.robot_ycord * self.pixelsToWolrd) + (self.pixelsToWolrd * imagey)  
+        print('pixle cords', imagex, imagey)
+        print('world cords {}m, {}m'.format(round(worldx, 5),round(worldy,5)))
+
+        # Simulation environment has different cooridante system then Gazebo environment
+        if self.is_simulation:
+            return worldx, worldy
+        else 
+            return worldy, worldx
