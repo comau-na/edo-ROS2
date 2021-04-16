@@ -146,8 +146,8 @@ def executeCommand(Cube_list, Bucket_list):
                 #cube position (grab)
                 
                 
-                p_x = cube.center_x
-                p_y = cube.center_y
+                p_x = float(cube.center_x)
+                p_y = float(cube.center_y)
                 p_z = 1.04000
                 o_x = -3.139559138676179
                 o_y = -0.015483082006265326
@@ -236,17 +236,17 @@ def main(args=None):
     print("cubes: ", Cube_list)
     print("buckets: ", Bucket_list)
     
-    print("start read environment")
-    # readEnvironment(detection_array, Bucket_list, Cube_list)    
+    print("start read environment") 
     #take in cubelist, bucketlist 
     print("start executeCommand")
-    while rclpy.ok():
-        navpublisher = navigation_publisher()
+    
+    navpublisher = navigation_publisher()
+    
         
-        for cube in Cube_list:
-            for bucket in Bucket_list:
-                if colorCheck(cube,bucket) == True:
-                    #start navigation
+    for cube in Cube_list:
+        for bucket in Bucket_list:
+            if colorCheck(cube,bucket) == True:
+                #start navigation
                 #initialize coordinates
                     p_x = float(0)
                     p_y = float(0)
@@ -281,6 +281,12 @@ def main(args=None):
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
                     time.sleep(10)
                     print("second move finished")
+
+
+                      #gripper open
+                
+                    input = True
+                    grip.open_close(input)
 
 
 
