@@ -2,14 +2,14 @@
 #include "std_msgs/String.h"
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Point.h>
-#include "std_msgs/Float32.h"
+#include "std_msgs/Bool.h"
 #include <string>
 
 ros::Publisher pose_pub;
 ros::Publisher gripper_pub;
 geometry_msgs::Pose pose;
-std_msgs::Float32 gripper_open;
-std_msgs::Float32 gripper_close;
+std_msgs::Bool gripper_open;
+std_msgs::Bool gripper_close;
 
 int setPose = 0;
 
@@ -124,6 +124,7 @@ while (gesture == "stop") {
 }
 
   
+  
     ros::shutdown();
 }
 
@@ -133,10 +134,10 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "gesture_listener");
   ros::NodeHandle n;
 
-  gripper_open.data = 0.10;
-  gripper_close.data = 0.035;
+  gripper_open.data = true;
+  gripper_close.data = false;
   pose_pub = n.advertise<geometry_msgs::Pose>("/edoMove", 100);
-  gripper_pub =n.advertise<std_msgs::Float32>("set_gripper_span", 1000);
+  gripper_pub =n.advertise<std_msgs::Bool>("/open_gripper", 1000);
 
   ros::Subscriber sub = n.subscribe("gesture_class", 100, handPoseMsgCallback);
   
