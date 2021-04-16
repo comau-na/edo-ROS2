@@ -12,10 +12,12 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include "std_msgs/Bool.h" 
 #include "std_msgs/String.h" 
+#include "std_msgs/Float32.h" 
 
 geometry_msgs::Pose target_pose;
 static const std::string PLANNING_GROUP = "edo";
 ros::Publisher pub;
+double positionTolerance, orientationTolerance;
 
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
@@ -31,7 +33,9 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   }
   std::cout << "Pose published" << std::endl;
   move_group.setPoseTarget(target_pose);
-  move_group.setGoalTolerance(0.01);
+  //move_group.setGoalTolerance(0.01);
+  move_group.setGoalPositionTolerance(positionTolerance);
+  move_group.setGoalOrientationTolerance(orientationTolerance);
   ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
   bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
@@ -46,6 +50,12 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "demo");
   ros::AsyncSpinner spinner(2);
+
+  std::cout << "Set position tolerance: ";
+  std::cin >> positionTolerance;
+  
+  std::cout << "Set orientation tolerance: ";
+  std::cin >> orientationTolerance;
 
   spinner.start();
 
