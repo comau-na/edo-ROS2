@@ -106,7 +106,8 @@ class WebcamClassifier(Node):
         # Classify the image
         start = timer()
         tensor = self.transform(img).unsqueeze(0).to(self.device)  # transform and add batch dimension
-        out = self.model(tensor)
+        with torch.no_grad():
+            out = self.model(tensor)
         end = timer()
 
         print("Live classifier time: ", (end - start))
