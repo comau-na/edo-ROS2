@@ -1,3 +1,12 @@
+/** 
+ *  ROS node created to modify Gazebo e.DO model robot pose using MoveIt.
+ *  Movements are determined by gesture recognitition and classification 
+ *  using NVIDIA deep learning models for hand pose estimation.
+ *  @file GestureControl.cpp
+ *  @author Laura Gipson
+ *  @version 1.1 March 29, 2021
+ */
+
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <geometry_msgs/Pose.h>
@@ -6,11 +15,18 @@
 ros::Publisher pose_pub;
 geometry_msgs::Pose pose;
 
+/** 
+ *  Called when a new message has arrived on the gesture_class topic.
+ *  @param msg ROS std_msgs/String with classification data.
+ *  @return void
+ */
+
 void handPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
   ROS_INFO("The Position of the hand is : [%s]", msg->data.c_str());
   std::string gesture = msg->data.c_str();
-
+  
+  // conditional statement decides which pose to publish based on gesture
   if(gesture == "no hand")
   {
     pose.position.x = 0.397283811145;
@@ -83,18 +99,25 @@ void handPoseMsgCallback(const std_msgs::String::ConstPtr& msg)
 
     pose_pub.publish(pose);
   }
+    // after pose executed, shut down node and kill pubs/subs
     ros::shutdown();
 }
 
 int main(int argc, char **argv)
 {
+  // initialize ROS and specify node name
   ros::init(argc, argv, "gesture_listener");
+
+  // create handle for and initialize node 
   ros::NodeHandle n;
 
+  // notify master Pose message to be published on edo_move topic
   pose_pub = n.advertise<geometry_msgs::Pose>("edo/edoMove", 100);
 
+  // subscribe to ‘gesture_class’ topic and callback whenever new message arrives
   ros::Subscriber sub = n.subscribe("gesture_class", 100, handPoseMsgCallback);
   
+  // loop message callbacks as fast as possible
   ros::spin();
 
   return 0;
