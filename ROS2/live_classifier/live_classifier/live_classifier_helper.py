@@ -75,7 +75,7 @@ class WebcamClassifier(Node):
 
         if str(model_name.value) == "efficientnet_b3a":
             model_path = os.getenv("HOME") + '/ros2_models/effecient.pth'
-            model = create_model('efficientnet_b3a', False, model_path=model_path, num_classes=6)
+            model = create_model('efficientnet_b3a', False, model_path, num_classes=6)
 
             config = resolve_data_config({}, model=model)
             self.transform = create_transform(**config)
