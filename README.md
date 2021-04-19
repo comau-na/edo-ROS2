@@ -18,12 +18,12 @@
 
 
 ## Goals / Objectives
-- Dec 2020
+
 * Convert wrapper class for e.DO robot previously developed by Jack Shelata
 [Link to Jack's GitHub](https://github.com/jshelata/eDO_manual_ctrl)
 * Confirm manual control capabilities on the COMAU e.DO robot using the NVIDIA Jetson control module
 
-- Apr 2021
+
 * Implement NVIDA AI packages with e.DO Robot in ROS2
 
 # edo-ROS2
