@@ -138,6 +138,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/edo_gesture_ctrl_node.cpp)
 add_executable(gazebo_move src/GestureControlGZ.cpp)
 add_executable(eDO_move src/GestureControleDO.cpp)
+add_executable(gesture_ctrl src/GestureControlPhysicalRobot_v2.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +151,7 @@ add_executable(eDO_move src/GestureControleDO.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(gazebo_move ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(eDO_move ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(gesture_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -157,6 +159,7 @@ add_dependencies(eDO_move ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 # )
 target_link_libraries(gazebo_move ${roscpp_LIBRARIES} ${std_msgs_LIBRARIES} ${catkin_LIBRARIES})
 target_link_libraries(eDO_move ${roscpp_LIBRARIES} ${std_msgs_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries(gesture_ctrl ${roscpp_LIBRARIES} ${std_msgs_LIBRARIES} ${catkin_LIBRARIES})
 
 
 #############
