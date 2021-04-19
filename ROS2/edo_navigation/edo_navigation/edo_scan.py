@@ -56,6 +56,7 @@ class image_classifier(Node):
         self.req = GetClassification.Request()
         self.bridge = CvBridge()
         self.contourImg = None
+        self.robot_ycord = 0
 
         self.detections = []      
 
@@ -63,10 +64,9 @@ class image_classifier(Node):
         kernal = np.ones((4, 4), np.uint8)
 
         img = imgSrc.copy()
-        self.contourImg = imgSrc.copy()
        
-        topQuarterY = int(imgSrc.shape[0] * .20)
-        img = img[:][topQuarterY:, :]
+        # topQuarterY = int(imgSrc.shape[0] * .20)
+        img = img[:][self.robot_ycord:, :]
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         img = cv2.GaussianBlur(img, (9, 9), 0)
         img = cv2.Canny(img, 40, 100)
@@ -96,7 +96,7 @@ class image_classifier(Node):
             side1, side2 = dist.euclidean(box[0], box[1]), dist.euclidean(box[1], box[2])
 
             for pnt in box:
-                pnt[1] += topQuarterY
+                pnt[1] += self.robot_ycord
             
             # Check if the lengths of the sides are within +-25% of each other 
             if  side2 * 0.75 < side1 < side2 * 1.25:
@@ -143,6 +143,8 @@ class image_classifier(Node):
                 except CvBridgeError as e:
                     print(e)
 
+        cv2.imshow("base_detection", self.contourImg)
+        cv2.waitKey(0)
     
 class base_detection(Node):
     def __init__(self):
@@ -165,7 +167,6 @@ class base_detection(Node):
 
     def getBase(self, imgSrc):
         kernal = np.ones((4, 4), np.uint8)
-        imgContour = self.contourImg
 
         # Important! img.shape is y(height), x(width) for some reason  
         topQuarterY = int(imgSrc.shape[0] * .25)
@@ -191,7 +192,7 @@ class base_detection(Node):
 
         print("Base area", cv2.contourArea(baseContour))
         for point in baseContour:
-            cv2.circle(imgContour, (xCordStart + point[0][0], point[0][1]), 3, (255, 255, 0), cv2.FILLED)
+            cv2.circle(self.contourImg, (xCordStart + point[0][0], point[0][1]), 3, (255, 255, 0), cv2.FILLED)
         # cv2.drawContours(imgContour, baseContour, -1, , 5)
 
         print("len of cnt", len(baseContour))
@@ -225,11 +226,8 @@ class base_detection(Node):
             baseyCords.append(point[0][1])
         minValue = min(basexCords)
         maxValue = max(basexCords)
-        cv2.line(imgContour, pt1=(xCordStart + minValue, yCords[thirdQuartile]), pt2=(xCordStart + maxValue, yCords[thirdQuartile]),
+        cv2.line(self.contourImg, pt1=(xCordStart + minValue, yCords[thirdQuartile]), pt2=(xCordStart + maxValue, yCords[thirdQuartile]),
                 color=(0, 0, 255), thickness=2)
-
-        cv2.imshow("base_detection", imgContour)
-        cv2.waitKey(0)
 
         xmin = xCordStart + minValue
         xmax =  xCordStart + maxValue

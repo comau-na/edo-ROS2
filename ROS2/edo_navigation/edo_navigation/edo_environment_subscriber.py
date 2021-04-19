@@ -122,14 +122,15 @@ def main(args=None):
     while rclpy.ok() and ic.recievedImage is False:
         rclpy.spin_once(ic)
 
+    #getbase here takes in raw image
+    base.contourImg = ic.msg
+    base.getBase(ic.msg)
+    classifier.robot_ycord = base.robot_ycord
+
     #save detections within detection array
+    classifier.contourImg = base.contourImg
     classifier.classify_objects(ic.msg)
     detection_array = classifier.detections
-    
-    #getbase here takes in raw image
-    base.contourImg = classifier.contourImg
-    base.getBase(ic.msg)
-    
 
     for obj in detection_array:
         print("center Coordinates: ", obj.coordinateCenter)
