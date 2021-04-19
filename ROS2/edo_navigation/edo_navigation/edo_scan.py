@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -77,8 +76,8 @@ class image_classifier(Node):
         contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         for c in contours:
-            # if cv2.contourArea(c) < 10:
-            #     continue
+            if cv2.contourArea(c) < 200:
+                continue
             # print("area: ", cv2.contourArea(c) * pixelsToWolrd)
             # compute the rotated bounding box of the contour
             box = cv2.minAreaRect(c)
@@ -149,9 +148,9 @@ class base_detection(Node):
         self.ROBOT_WIDTH = 0.270
 
         if self.is_simulation:
-            self.ROBOT_CENTER_FROM_EDGE = 0.070
-        else:
             self.ROBOT_CENTER_FROM_EDGE = 0.230
+        else:
+            self.ROBOT_CENTER_FROM_EDGE = 0.070
 
     def getBase(self, imgSrc):
         kernal = np.ones((4, 4), np.uint8)
