@@ -112,22 +112,24 @@ def main(args=None):
     ic = image_converter()
     base = base_detection()
     navpublisher = navigation_publisher()
+    classifier = image_classifier()
 
+    # Hack to get two images which clears the ghost images
     while rclpy.ok() and ic.recievedImage is False:
         rclpy.spin_once(ic)
 
-    # Hack to get two images which clears the ghost images
     ic.recievedImage = False
     while rclpy.ok() and ic.recievedImage is False:
         rclpy.spin_once(ic)
-    
-    #getbase here takes in raw image
-    base.getBase(ic.msg)
-    
+
     #save detections within detection array
-    classifier = image_classifier()
     classifier.classify_objects(ic.msg)
     detection_array = classifier.detections
+    
+    #getbase here takes in raw image
+    base.contourImg = classifier.contourImg
+    base.getBase(ic.msg)
+    
 
     for obj in detection_array:
         print("center Coordinates: ", obj.coordinateCenter)
