@@ -22,7 +22,15 @@ double positionTolerance, orientationTolerance;
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   target_pose = *msg.get();
-  if(target_pose.orientation.w == 62){
+
+  if(target_pose.orientation.w == 69420.0){
+    std::cout << "Setting orientation to bucket orientation" << std::endl;
+    move_group.setGoalOrientationTolerance(orientationTolerance * 4);
+  }else {
+    move_group.setGoalOrientationTolerance(orientationTolerance);
+  }
+
+  if(target_pose.orientation.w == 62.0 || target_pose.orientation.w == 69420.0){
     tf2::Quaternion quaternion;
     quaternion.setRPY(target_pose.orientation.x, target_pose.orientation.y, target_pose.orientation.z);
     quaternion.normalize();
@@ -31,18 +39,19 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
     target_pose.orientation.z = quaternion.getZ();
     target_pose.orientation.w = quaternion.getW();
   }
+
   std::cout << "Pose published" << std::endl;
   move_group.setPoseTarget(target_pose);
   //move_group.setGoalTolerance(0.01);
   move_group.setGoalPositionTolerance(positionTolerance);
-  move_group.setGoalOrientationTolerance(orientationTolerance);
   ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-  std_msgs::Bool move_success;
-  move_success.data = success;
-  pub.publish(move_success);
-  move_group.move();
+  move_group.plan(my_plan);
+  moveit::planning_interface::MoveItErrorCode error_code = move_group.move();
+  bool status = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  std_msgs::Bool move_status;
+  move_status.data = status;
+  pub.publish(move_status);
   std::cout << "Ready to listen" << std::endl;
 }
 
