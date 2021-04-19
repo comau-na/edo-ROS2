@@ -188,7 +188,7 @@ def main(args=None):
                     o_z = -0.7787520820355616
                     o_w = float(62.00000)
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Starting Position")
 
                     #cube hover 
@@ -200,7 +200,7 @@ def main(args=None):
                     o_z = numpy.pi/4 - numpy.pi/2 + cube.angle
                     o_w = float(62)
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Cube Position")
 
 
@@ -208,7 +208,7 @@ def main(args=None):
                 
                     input = 0.10
                     grip.open_close(input)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Open Gripper")
 
 
@@ -221,13 +221,13 @@ def main(args=None):
                     o_z = numpy.pi/4 - numpy.pi/2 + cube.angle
                     o_w = float(62)
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Cube Position Grab")
 
                       #gripper close
                     input = 0.035
                     grip.open_close(input)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Close Gripper")
 
                     # #cube position (post-grab)
@@ -239,7 +239,7 @@ def main(args=None):
                     o_z = numpy.pi/4 - numpy.pi/2 + cube.angle
                     o_w = float(62)
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Grab Cube")
 
                     # #bucket position hover
@@ -251,7 +251,7 @@ def main(args=None):
                     o_z = numpy.pi/4 - numpy.pi/2 + cube.angle
                     o_w = float(62)
                     navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z,o_w)
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Hover over bucket")
 
                     #gripper open
