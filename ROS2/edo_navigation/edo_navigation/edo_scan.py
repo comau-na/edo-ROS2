@@ -55,6 +55,7 @@ class image_classifier(Node):
             self.get_logger().info('Image Classification service is currently not up...')
         self.req = GetClassification.Request()
         self.bridge = CvBridge()
+        self.contourImg = None
 
         self.detections = []      
 
@@ -62,6 +63,7 @@ class image_classifier(Node):
         kernal = np.ones((4, 4), np.uint8)
 
         img = imgSrc.copy()
+        self.contourImg = imgSrc.copy()
        
         topQuarterY = int(imgSrc.shape[0] * .20)
         img = img[:][topQuarterY:, :]
@@ -129,10 +131,18 @@ class image_classifier(Node):
                                          response.classification.results[0].score, box, angle)
                     print(detection.classification, detection.angle)
 
+                    cv2.putText(self.contourImg, detection.classification,
+                        (detection.coordinateCenter[0]+20, detection.coordinateCenter[1]+40),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,  # font scale
+                        (255, 0, 255), 2)  # line type
+                    cv2.drawContours(self.contourImg, [detection.box], -1, (0, 255, 0), 2)
+
                     self.detections.append(detection)
 
                 except CvBridgeError as e:
                     print(e)
+
     
 class base_detection(Node):
     def __init__(self):
@@ -144,6 +154,7 @@ class base_detection(Node):
 
         self.declare_parameter('sim', True)
         self.is_simulation = self.get_parameter('sim')
+        self.contourImg = None
 
         self.ROBOT_WIDTH = 0.270
 
@@ -154,7 +165,7 @@ class base_detection(Node):
 
     def getBase(self, imgSrc):
         kernal = np.ones((4, 4), np.uint8)
-        imgContour = imgSrc.copy()     
+        imgContour = self.contourImg
 
         # Important! img.shape is y(height), x(width) for some reason  
         topQuarterY = int(imgSrc.shape[0] * .25)
