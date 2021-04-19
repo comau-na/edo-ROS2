@@ -1,0 +1,6 @@
+bucket_blue
+bucket_green
+bucket_red
+cube_blue
+cube_green
+cube_red

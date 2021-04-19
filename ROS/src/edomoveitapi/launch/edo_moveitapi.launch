@@ -1,0 +1,12 @@
+<launch>
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!-- GDB Debug Option -->
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+
+  <node name="edo_moveitapi" pkg="edomoveitapi" type="edomoveitapi" respawn="false" launch-prefix="$(arg launch_prefix)" output="screen" ns="edo">
+  </node>
+
+</launch>
