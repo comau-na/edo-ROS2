@@ -19,6 +19,7 @@ static const std::string PLANNING_GROUP = "edo";
 ros::Publisher pub;
 double positionTolerance, orientationTolerance;
 
+//Callback for movement pose subscriber
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   target_pose = *msg.get();
@@ -29,7 +30,8 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
   }else {
     move_group.setGoalOrientationTolerance(orientationTolerance);
   }
-
+  
+  //If orientation W = 62, convert Euler angles to Quaternion
   if(target_pose.orientation.w == 62.0 || target_pose.orientation.w == 69420.0){
     tf2::Quaternion quaternion;
     quaternion.setRPY(target_pose.orientation.x, target_pose.orientation.y, target_pose.orientation.z);
@@ -42,11 +44,14 @@ void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
 
   std::cout << "Pose published" << std::endl;
   move_group.setPoseTarget(target_pose);
-  //move_group.setGoalTolerance(0.01);
+  
+  //Sets position + orientation tolerance
   move_group.setGoalPositionTolerance(positionTolerance);
   ROS_INFO_NAMED("move_to_pose", "Setting the target position to x=%g, y=%g, z=%g",target_pose.position.x, target_pose.position.y, target_pose.position.z);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
   move_group.plan(my_plan);
+  
+  //Moves robot
   moveit::planning_interface::MoveItErrorCode error_code = move_group.move();
   bool status = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   std_msgs::Bool move_status;
@@ -68,6 +73,7 @@ int main(int argc, char** argv)
 
   spinner.start();
 
+  //Initialize MoveIt!
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   const robot_state::JointModelGroup* joint_model_group =
     move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
@@ -76,7 +82,11 @@ int main(int argc, char** argv)
   spinner.start();
   std::cout << "Ready to listen" << std::endl;
   ros::NodeHandle n;
+
+  //Publisher for move command success return
   pub = n.advertise<std_msgs::Bool>("move_success", 1000);
+
+  //Subscriber for movement poses
   ros::Subscriber sub = n.subscribe("edo_move", 1000, edomoveCallback);
   ros::waitForShutdown();
 
