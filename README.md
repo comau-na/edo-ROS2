@@ -13,7 +13,7 @@
 **Allen Paul - Team Lead**  
 **Khalid Awad - Implementation Lead**  
 **Laura Gipson - Documentation Lead**  
-**Sunny Prajapati - QA Lead**
+**Sunny Prajapati - QA Lead**   
 **Wameed Miriako - Integration Lead**
 
 
