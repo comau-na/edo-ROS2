@@ -3,6 +3,7 @@
 import rclpy
 import time 
 import numpy
+import cv2
 
 from std_msgs.msg import Float32
 from rclpy.node import Node
@@ -122,31 +123,30 @@ def main(args=None):
     while rclpy.ok() and ic.recievedImage is False:
         rclpy.spin_once(ic)
 
-    #getbase here takes in raw image
+    # getbase here takes in raw image to draw contours on
     base.contourImg = ic.msg
     base.getBase(ic.msg)
     classifier.robot_ycord = base.robot_ycord
 
-    #save detections within detection array
+    # After drawing base contours pass it off to draw classifications
     classifier.contourImg = base.contourImg
     classifier.classify_objects(ic.msg)
     detection_array = classifier.detections
+    cv2.imshow("detections and base", classifier.contourImg)
+    cv2.waitKey(0)
 
     for obj in detection_array:
-        print("center Coordinates: ", obj.coordinateCenter)
+        # print("center Coordinates: ", obj.coordinateCenter)
         obj.coordinateCenter = base.get_world_coordinates(obj.coordinateCenter[0],obj.coordinateCenter[1])
-        print("world space coordinates: " , obj.coordinateCenter)
+        # print("world space coordinates: " , obj.coordinateCenter)
 
     for obj in detection_array:
-        print(obj.classification)
         if isCube(obj) == False:
             new_bucket = Bucket(center_x = obj.coordinateCenter[0], 
                                 center_y = obj.coordinateCenter[1],
                                 classification= obj.classification)
             Bucket_list.append(new_bucket)
-            print("cube", isCube(obj))
         else:
-            print("bucket",isCube(obj))
             new_Cube = Cube(center_x = obj.coordinateCenter[0],
                             center_y = obj.coordinateCenter[1],
                             classification= obj.classification,
@@ -157,10 +157,10 @@ def main(args=None):
     #take in cubelist, bucketlist 
     print("start executeCommand")
 
-    for obj in Cube_list:
-        print("class: ", obj.classification)
-        print("X: ", obj.center_x)
-        print("Y: ", obj.center_y)
+    # for obj in Cube_list:
+    #     print("class: ", obj.classification)
+    #     print("X: ", obj.center_x)
+    #     print("Y: ", obj.center_y)
     
     o_x = -3.139559138676179
     o_y = -0.015483082006265326
@@ -169,47 +169,48 @@ def main(args=None):
         for bucket in Bucket_list:
             if colorCheck(cube,bucket) == True:
                 #start navigation
-                #initialize coordinates
                 print("moving cube", cube.classification, "into bucket", bucket.classification)
-                o_z = numpy.pi/4 - numpy.pi/2 + cube.angle
+                # If the angle is negative make it positive
+                if cube.angle < 0:
+                    cube.angle * -1.0
+                o_z = (numpy.pi/2 - cube.angle) - numpy.pi/4 
 
-                temp = cube.center_x 
-                cube.center_x = -cube.center_y
-                cube.center_y = -temp
 
-                temp = bucket.center_x 
-                bucket.center_x = -bucket.center_y
-                bucket.center_y = -temp
+                #initialize coordinates
+                cube.center_x = cube.center_x * -1.0 
+                cube.center_y = cube.center_y * -1.0
+
+                bucket.center_x = bucket.center_x * -1.0
+                bucket.center_y = bucket.center_y * -1.0
             
                 #cube hover 
-                print("Hover over cube position")
+                print("Hover over cube position\n")
                 p_x = cube.center_x
                 p_y = cube.center_y
                 p_z = 1.10756253284
                 print("Going to", p_x, p_y)
-                status = navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "open")
+                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "open")
                 
                 # cube position (grab)
-                print("Lowering position")
+                print("Lowering position\n")
                 p_x = cube.center_x
                 p_y = cube.center_y
                 p_z = 1.040006
                 navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "close")
-                print("main loop status", status)
       
                 # cube position (post-grab)
-                print("Rise up")
+                print("Rise up\n")
                 p_x = cube.center_x
                 p_y = cube.center_y
                 p_z = 1.20756253284
                 navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0)
 
                 # bucket position hover
-                print("Hover over bucket")
+                print("Hover over bucket\n")
                 p_x = bucket.center_x
                 p_y = bucket.center_y
                 p_z = 1.20756253284
-                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 69420.0, "open")
+                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 69.0, "open")
 
     
     # Return home

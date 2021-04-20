@@ -20,17 +20,19 @@ ros::Publisher pub;
 double positionTolerance, orientationTolerance;
 
 void edomoveCallback(const geometry_msgs::Pose::ConstPtr& msg){
-  moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   target_pose = *msg.get();
 
-  if(target_pose.orientation.w == 69420.0){
+  moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+  move_group.setPlannerId("LBTRRTkConfigDefault");
+  move_group.setPlanningTime(3.0);
+  if(target_pose.orientation.w == 69.0){
     std::cout << "Setting orientation to bucket orientation" << std::endl;
     move_group.setGoalOrientationTolerance(orientationTolerance * 4);
   }else {
     move_group.setGoalOrientationTolerance(orientationTolerance);
   }
 
-  if(target_pose.orientation.w == 62.0 || target_pose.orientation.w == 69420.0){
+  if(target_pose.orientation.w == 62.0 || target_pose.orientation.w == 69.0){
     tf2::Quaternion quaternion;
     quaternion.setRPY(target_pose.orientation.x, target_pose.orientation.y, target_pose.orientation.z);
     quaternion.normalize();
@@ -67,7 +69,6 @@ int main(int argc, char** argv)
   std::cin >> orientationTolerance;
 
   spinner.start();
-
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
   const robot_state::JointModelGroup* joint_model_group =
     move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);

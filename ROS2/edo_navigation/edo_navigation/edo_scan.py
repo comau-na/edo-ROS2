@@ -13,7 +13,7 @@ import numpy as np
 from scipy.spatial import distance as dist
 import imutils
 from imutils import perspective
-from math import atan
+import math
 
 class Detection:
     def __init__(self, classification, coordinateCenter, confidence, box, angle):
@@ -46,106 +46,6 @@ class image_converter(Node):
         self.recievedImage = True
 
 
-class image_classifier(Node):
-    def __init__(self):
-        super().__init__('edo_classifier')
-
-        self.classification_client = self.create_client(GetClassification, 'classify_image')
-        while not self.classification_client.wait_for_service(timeout_sec=1.5):
-            self.get_logger().info('Image Classification service is currently not up...')
-        self.req = GetClassification.Request()
-        self.bridge = CvBridge()
-        self.contourImg = None
-        self.robot_ycord = 0
-
-        self.detections = []      
-
-    def classify_objects(self, imgSrc):
-        kernal = np.ones((4, 4), np.uint8)
-
-        img = imgSrc.copy()
-       
-        # topQuarterY = int(imgSrc.shape[0] * .20)
-        img = img[:][self.robot_ycord:, :]
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        img = cv2.GaussianBlur(img, (9, 9), 0)
-        img = cv2.Canny(img, 40, 100)
-        img = cv2.dilate(img, kernal, iterations=2)
-        img = cv2.erode(img, kernal, iterations=1)
-        # cv2.imshow("source", img)
-        # cv2.waitKey(0)
-
-        contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        for c in contours:
-            if cv2.contourArea(c) < 200:
-                continue
-            # print("area: ", cv2.contourArea(c) * pixelsToWolrd)
-            # compute the rotated bounding box of the contour
-            box = cv2.minAreaRect(c)
-            box = cv2.boxPoints(box)
-            box = np.array(box, dtype="int")
-            # order the points in the contour such that they appear
-            # in top-left, top-right, bottom-right, and bottom-left
-            # order, then draw the outline of the rotated bounding
-            # box
-            box = perspective.order_points(box)
-            box = np.array(box, dtype="int")
-
-            # print("box", box)
-            side1, side2 = dist.euclidean(box[0], box[1]), dist.euclidean(box[1], box[2])
-
-            for pnt in box:
-                pnt[1] += self.robot_ycord
-            
-            # Check if the lengths of the sides are within +-25% of each other 
-            if  side2 * 0.75 < side1 < side2 * 1.25:
-                xmin, ymin = box[0] 
-                xmax, ymax = box[2]
-                # Scale the boundaries by 2% on each side
-                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.94), int(ymin * 0.94), int(xmax * 1.04), int(ymax * 1.04)
-                #print(xmin, xmax, ymin, ymax)
-                croppedImg = imgSrc[:][yminC:ymaxC, xminC:xmaxC]
-                try:
-                #publishing using cv bridge
-                    # cv2.imshow("xd", croppedImg)
-                    # cv2.waitKey(0)
-                    # call service here
-                    self.req.img = self.bridge.cv2_to_imgmsg(croppedImg, "bgr8")
-                    future = self.classification_client.call_async(self.req)
-                    # Spin!!!!! weeeeee
-                    rclpy.spin_until_future_complete(self, future)
-                    try:
-                        response = future.result()
-                    except Exception as e:
-                        self.get_logger().info('Service call failed %r' % e)
-
-                    # Find the rotation of the cube in radians 
-                    deltaX = box[0][1] - box[1][1]
-                    deltaY = box[1][0] - box[0][0]
-                    angle = atan(deltaY / deltaX)
-                    print(angle)
-
-                    # print(response.classification)
-                    detection = Detection(response.classification.results[0].id, ((xmin + xmax) // 2,(ymin + ymax) //2),
-                                         response.classification.results[0].score, box, angle)
-                    print(detection.classification, detection.angle)
-
-                    cv2.putText(self.contourImg, detection.classification,
-                        (detection.coordinateCenter[0]+20, detection.coordinateCenter[1]+40),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        1,  # font scale
-                        (255, 0, 255), 2)  # line type
-                    cv2.drawContours(self.contourImg, [detection.box], -1, (0, 255, 0), 2)
-
-                    self.detections.append(detection)
-
-                except CvBridgeError as e:
-                    print(e)
-
-        cv2.imshow("base_detection", self.contourImg)
-        cv2.waitKey(0)
-    
 class base_detection(Node):
     def __init__(self):
         super().__init__('edo_base_detection')
@@ -240,8 +140,8 @@ class base_detection(Node):
 
     def get_world_coordinates(self, imagex, imagey):
         # Translate the origin to the robots center 
-        worldx = self.pixelsToWolrd * (imagex - self.robot_midpoint)
-        worldy = (self.ROBOT_CENTER_FROM_EDGE - self.robot_ycord * self.pixelsToWolrd) + (self.pixelsToWolrd * imagey)  
+        worldy = self.pixelsToWolrd * (imagex - self.robot_midpoint)
+        worldx = (self.ROBOT_CENTER_FROM_EDGE - self.robot_ycord * self.pixelsToWolrd) + (self.pixelsToWolrd * imagey)  
         print('pixle cords', imagex, imagey)
         print('world cords {}m, {}m'.format(round(worldx, 5),round(worldy,5)))
 
@@ -250,3 +150,114 @@ class base_detection(Node):
             return worldx, worldy
         else:
             return worldy, worldx
+
+class image_classifier(Node):
+    def __init__(self):
+        super().__init__('edo_classifier')
+
+        self.classification_client = self.create_client(GetClassification, 'classify_image')
+        while not self.classification_client.wait_for_service(timeout_sec=1.5):
+            self.get_logger().info('Image Classification service is currently not up...')
+        self.req = GetClassification.Request()
+        self.bridge = CvBridge()
+        self.contourImg = None
+        self.robot_ycord = 0
+
+        self.detections = []      
+
+    def classify_objects(self, imgSrc):
+        kernal = np.ones((3, 3), np.uint8)
+
+        img = imgSrc.copy()
+       
+        # topQuarterY = int(imgSrc.shape[0] * .20)
+        img = img[:][self.robot_ycord + 5:, :]
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        img = cv2.GaussianBlur(img, (9, 9), 0)
+        img = cv2.Canny(img, 80, 160)
+        img = cv2.dilate(img, kernal, iterations=2)
+        img = cv2.erode(img, kernal, iterations=1)
+        cv2.imshow("source", img)
+        cv2.waitKey(0)
+
+        contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for c in contours:
+
+
+            #Filter out noise
+            if cv2.contourArea(c) < 200 or cv2.minAreaRect(c)[2] == 0.0:
+                continue
+
+            skip = False
+            for point in cv2.boxPoints(cv2.minAreaRect(c)):
+                print(point[0], point[1])
+                if point[0] == 0.0 or point[1] == 0.0:
+                    skip = True
+            if skip:
+                continue
+
+            # print("area: ", cv2.contourArea(c) * pixelsToWolrd)
+            # compute the rotated bounding box of the contour
+            box = cv2.minAreaRect(c)
+            box = cv2.boxPoints(box)
+            box = np.array(box, dtype="int")
+            # order the points in the contour such that they appear
+            # in top-left, top-right, bottom-right, and bottom-left
+            # order, then draw the outline of the rotated bounding
+            # box
+            box = perspective.order_points(box)
+            box = np.array(box, dtype="int")
+
+            # print("box", box)
+            side1, side2 = dist.euclidean(box[0], box[1]), dist.euclidean(box[1], box[2])
+
+            for pnt in box:
+                pnt[1] += self.robot_ycord + 5
+            
+            # Check if the lengths of the sides are within +-25% of each other 
+            if  side2 * 0.75 < side1 < side2 * 1.25:
+                xmin, ymin = box[0] 
+                xmax, ymax = box[2]
+                # Scale the boundaries by 2% on each side
+                xminC, yminC, xmaxC, ymaxC = int(xmin * 0.94), int(ymin * 0.94), int(xmax * 1.04), int(ymax * 1.04)
+                #print(xmin, xmax, ymin, ymax)
+                croppedImg = imgSrc[:][yminC:ymaxC, xminC:xmaxC]
+                try:
+                #publishing using cv bridge
+                    # cv2.imshow("xd", croppedImg)
+                    # cv2.waitKey(0)
+                    # call service here
+                    self.req.img = self.bridge.cv2_to_imgmsg(croppedImg, "bgr8")
+                    future = self.classification_client.call_async(self.req)
+                    # Spin!!!!! weeeeee
+                    rclpy.spin_until_future_complete(self, future)
+                    try:
+                        response = future.result()
+                    except Exception as e:
+                        self.get_logger().info('Service call failed %r' % e)
+
+                    # Find the rotation of the cube in radians 
+                    deltaX = box[0][1] - box[1][1]
+                    deltaY = box[1][0] - box[0][0]
+                    angle = math.atan(deltaY / deltaX)
+                    degrees = math.degrees(angle)
+
+                    # print(response.classification)
+                    detection = Detection(response.classification.results[0].id, ((xmin + xmax) // 2,(ymin + ymax) //2),
+                                         response.classification.results[0].score, box, angle)
+                    print(detection.classification, detection.angle, math.degrees(detection.angle))
+
+                    cv2.putText(self.contourImg, detection.classification,
+                        (detection.coordinateCenter[0]+20, detection.coordinateCenter[1]+40),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,  # font scale
+                        (40, 40, 255), 2)  # line type
+                    cv2.drawContours(self.contourImg, [detection.box], -1, (0, 255, 0), 2)
+                    print("Size of", detection.classification, ":" ,cv2.contourArea(c) / (img.shape[0]*img.shape[1]) * 100, "area", cv2.contourArea(c), "rect", cv2.minAreaRect(c))
+                    print("points on box", cv2.boxPoints(cv2.minAreaRect(c)))
+                    # print("contour points", c)
+                    self.detections.append(detection)
+
+                except CvBridgeError as e:
+                    print(e)
