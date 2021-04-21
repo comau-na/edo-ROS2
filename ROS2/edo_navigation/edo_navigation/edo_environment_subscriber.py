@@ -165,6 +165,7 @@ def main(args=None):
     o_x = -3.139559138676179
     o_y = -0.015483082006265326
 
+    first_run = True
     for cube in Cube_list:
         for bucket in Bucket_list:
             if colorCheck(cube,bucket) == True:
@@ -189,28 +190,32 @@ def main(args=None):
                 p_y = cube.center_y
                 p_z = 1.10756253284
                 print("Going to", p_x, p_y)
-                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "open")
-                
+                if first_run:
+                    navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "open")
+                    first_run = False
+                else:
+                    navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 65.0, "open")
+
                 # cube position (grab)
                 print("Lowering position\n")
                 p_x = cube.center_x
                 p_y = cube.center_y
                 p_z = 1.040006
-                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0, "close")
+                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 65.0, "close")
       
                 # cube position (post-grab)
                 print("Rise up\n")
                 p_x = cube.center_x
                 p_y = cube.center_y
                 p_z = 1.20756253284
-                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 62.0)
+                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 65.0)
 
                 # bucket position hover
                 print("Hover over bucket\n")
                 p_x = bucket.center_x
                 p_y = bucket.center_y
                 p_z = 1.20756253284
-                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 69.0, "open")
+                navpublisher.publish_coordinates(p_x,p_y,p_z,o_x,o_y,o_z, 65.0, "open")
 
     
     # Return home
