@@ -66,7 +66,7 @@ def getBase(imgSrc, imgContour):
     #     cv2.waitKey(0)
 
     # Get the biggest contour which should be the edo base
-    contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
+    contours = sorted(contours, key=lambda x: cv2.arcLength(x, True), reverse=True)
     baseContour = contours[0]
 
     peri = cv2.arcLength(baseContour, False)
