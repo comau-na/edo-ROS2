@@ -15,7 +15,7 @@
 **Adam Erdman - Integration Lead**  
 **Seth Buchinger - Documentation Lead** 
 
-## Tutorials and Usage
+## Tutorials and Usage for eDO-ROS2 control
 
 There are tutorials to help set up this project located in the tutorials and documentation folder.
 The following videos also provide examples of how to build and run this package.
@@ -42,6 +42,15 @@ The following videos also provide examples of how to build and run this package.
 **Laura Gipson - Documentation Lead**  
 **Sunny Prajapati - QA Lead**   
 **Wameed Miriako - Integration Lead**
+
+## Tutorials and Usage for Gesture and Sorting
+
+There are tutorials to help set up this project located in the tutorials and documentation folder.
+The following videos also provide examples of how to build and run this package.
+
+**Demo of sorting:** https://youtu.be/KuTI88DBrp0
+
+**Explanation of sorting:** https://youtu.be/jmedsHACDJY
 
 # Dependencies
 
