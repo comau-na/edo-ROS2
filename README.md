@@ -48,6 +48,8 @@ The following videos also provide examples of how to build and run this package.
 There are tutorials to help set up this project located in the tutorials and documentation folder.
 The following videos also provide examples of how to build and run this package.
 
+**Demo and Explanation of MoveIt! Integration:** https://youtu.be/PFj-qI9juJk
+
 **Demo of sorting:** https://youtu.be/KuTI88DBrp0
 
 **Explanation of sorting:** https://youtu.be/jmedsHACDJY
