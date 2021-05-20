@@ -1,32 +1,4 @@
 # e.DO Manual Control using ROS2 with NVIDIA AI Packages
-
-# December 2020 Team
-
-## Goals / Objectives
-
-* Convert wrapper class for e.DO robot previously developed by Jack Shelata
-[Link to Jack's GitHub](https://github.com/jshelata/eDO_manual_ctrl)
-* Confirm manual control capabilities on the COMAU e.DO robot using the NVIDIA Jetson control module
-
-## Team Members
-
-**Ayush Shrestha - Team Lead**  
-**Scott Howard - Implementation Lead**  
-**Adam Erdman - Integration Lead**  
-**Seth Buchinger - Documentation Lead** 
-
-## Tutorials and Usage for eDO-ROS2 control
-
-There are tutorials to help set up this project located in the tutorials and documentation folder.
-The following videos also provide examples of how to build and run this package.
-
-**Building the package:** https://youtu.be/r9rDI4yP-Us
-
-**Using the package:** https://youtu.be/egTKGkaJMBs
-
-**Explanation of code base:** https://youtu.be/z64mXXk3P70
-
-
 # April 2021 Team
 
 
@@ -66,3 +38,32 @@ The following videos also provide examples of how to build and run this package.
 - timm
 - ros2_torch_trt: https://github.com/NVIDIA-AI-IOT/ros2_torch_trt
 - vision_msgs: https://github.com/ros-perception/vision_msgs/tree/foxy
+
+# December 2020 Team
+
+## Goals / Objectives
+
+* Convert wrapper class for e.DO robot previously developed by Jack Shelata
+[Link to Jack's GitHub](https://github.com/jshelata/eDO_manual_ctrl)
+* Confirm manual control capabilities on the COMAU e.DO robot using the NVIDIA Jetson control module
+
+## Team Members
+
+**Ayush Shrestha - Team Lead**  
+**Scott Howard - Implementation Lead**  
+**Adam Erdman - Integration Lead**  
+**Seth Buchinger - Documentation Lead** 
+
+## Tutorials and Usage for eDO-ROS2 control
+
+There are tutorials to help set up this project located in the tutorials and documentation folder.
+The following videos also provide examples of how to build and run this package.
+
+**Building the package:** https://youtu.be/r9rDI4yP-Us
+
+**Using the package:** https://youtu.be/egTKGkaJMBs
+
+**Explanation of code base:** https://youtu.be/z64mXXk3P70
+
+
+
