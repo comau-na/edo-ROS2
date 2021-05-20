@@ -8,7 +8,7 @@
 * Use live classification to detect different colored cubes and buckets and sort them. Also use gesture input to control the e.DO with different hand gestures. 
 
 ## Team Members
-
+** Supervisor: Kamel Rushaidat, Ph.D. https://www.linkedin.com/in/kamelr/
 **Allen Paul - Team Lead**  
 **Khalid Awad - Implementation Lead**  
 **Laura Gipson - Documentation Lead**  
